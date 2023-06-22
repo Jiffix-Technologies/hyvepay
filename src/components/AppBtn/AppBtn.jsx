@@ -1,10 +1,21 @@
 import React from "react";
+import loading from "../../assets/images/Loading.json";
+import Lottie from "lottie-react";
 
-const AppBtn = ({ onClick, title, showIcon, image, className }) => {
+const AppBtn = ({
+  onClick,
+  title,
+  showIcon,
+  showSpinner = false,
+  image,
+  className,
+}) => {
   return (
     <button
       className={
-        `btn text-[#000] bg-[#FAA21B] flex items-center justify-center
+        `btn   ${
+          showSpinner && "loadingBtn"
+        }      text-[#000] bg-[#FAA21B] flex h-16 items-center justify-center
       ` + className
       }
       onClick={onClick}

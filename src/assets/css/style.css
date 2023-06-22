@@ -14,13 +14,25 @@
   color: var(--primary-color);
 }
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .bg-primary {
   background-color: var(--primary-color);
 }
 
 .heading-two {
   font-family: "HK Grotesk", sans-serif;
-  font-size: 25px;
+  font-size: 32px;
   font-weight: 700;
   line-height: 71px;
   letter-spacing: -0.005em;
@@ -65,14 +77,7 @@ table td {
 }
 
 .overlay {
-  z-index: 9999;
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  z-index: 3000;
 }
 
 .tab:hover {
@@ -108,7 +113,47 @@ input {
   padding: 14px 24px;
   transition: all 300ms ease-out;
   border-radius: 20px;
+  position: relative;
 }
+
+.loadingBtn::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border: 5px solid #fff;
+  border-top-color: #faa21b;
+  border-radius: 50%;
+  animation: loading 0.75s ease infinite;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@keyframes loading {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* .btn::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: red;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+} */
+
 .btn.disabled {
   cursor: not-allowed !important;
   opacity: 0.5;
@@ -120,9 +165,9 @@ input {
   padding: 25px 32px;
 }
 
-/* .btn-primary {
+.btn-primary {
   background-color: var(--primary-color);
-} */
+}
 
 .btn-primary:hover {
   background-color: var(--primary-hover);
@@ -138,10 +183,8 @@ input {
 }
 
 .modal {
-  max-width: 45%;
-  overflow-y: auto;
-  position: fixed;
-  z-index: 9999;
+  /* max-width: 45%; */
+  overflow-y: scroll;
 }
 .modal label,
 .modal select,
@@ -169,14 +212,9 @@ input {
 
 .switch-tab {
   border: 1px solid #cacaca;
-  background-color: red;
   width: max-content;
   padding: 4px;
   border-radius: 20px;
-}
-
-.tabWrapper {
-  margin: 0 auto;
 }
 
 .rotate-180 {
@@ -210,6 +248,7 @@ input[type="file"] {
   cursor: pointer;
 }
 
+ul.autbor-dropdown,
 ul.option-dropdown {
   background-color: #d9d9d9;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
@@ -217,20 +256,47 @@ ul.option-dropdown {
   position: absolute;
   right: 0px;
 }
+ul.autbor-dropdown li:hover,
 ul.option-dropdown li:hover {
   color: var(--primary-color);
 }
+ul.autbor-dropdown li button,
 ul.option-dropdown li button {
   padding: 8px 16px;
   width: 100%;
   text-align: left;
 }
 
+ul.author-dropdown {
+  position: absolute;
+  width: 200px;
+}
+ul.author-dropdown a,
+ul.author-dropdown button {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  border-radius: 5px;
+}
+ul.author-dropdown a:hover,
+ul.author-dropdown button:hover {
+  background-color: rgba(202, 202, 202, 0.5137254902);
+}
+
+.setting-tabs {
+  border: 1px solid #cacaca;
+  width: max-content;
+  padding: 8px;
+  border-radius: 20px;
+}
+.setting-tabs button {
+  width: 250px;
+}
+
 textarea,
 select.none,
 input {
-  padding: 15px;
-  padding-left: 15px;
+  padding: 18px;
   border-radius: 20px;
   border: 1px solid #cacaca;
   color: #000000;
@@ -267,8 +333,7 @@ input:focus-within {
   position: relative;
 }
 .prepend input {
-  padding-left: 20px;
-  font-size: 15px;
+  padding-left: 40px;
 }
 .prepend.phone input {
   padding-left: 30%;
@@ -319,6 +384,9 @@ input:focus-within {
   border-radius: 20px;
   overflow: hidden;
 }
+.modal.reset-pword {
+  max-width: 500px;
+}
 
 .text-link {
   color: var(--gray-color);
@@ -334,16 +402,11 @@ input:focus-within {
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
-  position: fixed;
-  width: 50%;
-  right: 0;
-  top: 0;
-  bottom: 0;
 }
 
 .slider-text {
   font-weight: 500;
-  line-height: 30px;
+  line-height: 40px;
   letter-spacing: 0.0025em;
 }
 
@@ -469,18 +532,34 @@ input:focus-within {
     padding-left: 12px;
     overflow-y: "scroll";
   }
-
   .placeholderText::placeholder {
-    font-size: 12px;
+    font-size: 12px !important;
   }
-  .account-information {
-    width: 100%;
-  }
-
   .transact-card {
-    border-radius: 20px;
+    max-width: 180px;
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+  .transact-card h5 {
+    font-size: 14px;
+  }
+  .transact-card p {
+    font-size: 13px;
+  }
+}
+@media screen and (max-width: 400px) {
+  .transact-card {
+    max-width: 170px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .transact-card {
     max-width: 160px;
-    cursor: pointer;
+  }
+}
+@media screen and (max-width: 360px) {
+  .transact-card {
+    max-width: 150px;
   }
 
   .bg-notification {

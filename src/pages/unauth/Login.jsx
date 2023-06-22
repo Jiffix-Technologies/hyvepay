@@ -174,8 +174,8 @@ import { useNavigate } from "react-router-dom";
 const Login = ({ setModal, setShowCurrent }) => {
   const navigate = useNavigate();
   return (
-    <div className="w-full flex flex-col justify-center mt-10  px-10 md:px-28   items-center h-[100%]">
-      <div className="text-center md:mt-40 mt-20">
+    <div className="w-full flex flex-col justify-center   px-10 md:px-28 max-w-prose mx-auto  items-center h-[100%]">
+      <div className="text-center mt-36 md:mt-0">
         <h2 className="text-[40px] font-montserrat font-semibold text-center">
           Hello there!
         </h2>

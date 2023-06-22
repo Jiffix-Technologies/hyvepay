@@ -29,7 +29,7 @@ const AppInput = ({
         <input
           type={type}
           className={
-            `w-full placeholder-[#A5A5A5] placeholderText
+            `placeholderText w-full  placeholder-[#A5A5A5] 
           } ` + className
           }
           placeholder={placeholder}

@@ -33,17 +33,13 @@ const FundAccountModal = ({
 
   return (
     <>
-      {/* <ConfirmPaymentModal
-        confirmationmodal={confirmationmodal}
-        closeConfirmModal={closeConfirmModal}
-      /> */}
       {openSingleModal && (
         <div
           id="modalWrapperId"
           className="fixed top-0 inset-0 bg-black bg-opacity-70 flex justify-center items-center customModal"
           onClick={toggleModal}
         >
-          <div className="bg-white p-2 relative h-[90%] w-[80%] md:w-[50%] overflow-y-auto pb-10  rounded-md">
+          <div className="bg-white p-2 relative h-[700px] max-h-full md:max-h-screen max-w-prose mx-auto overflow-y-auto pb-10  rounded-md">
             <div className="body">
               <div className="flex justify-end w-full">
                 <button onClick={() => setOpenSingleModal(false)}>

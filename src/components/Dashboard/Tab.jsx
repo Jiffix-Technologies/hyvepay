@@ -39,18 +39,17 @@ const Tab = ({ name, link, collapse }) => {
 
   return (
     <>
-      <Link to={link} className="mt-60">
-        <div
-          className={
-            url === link
-              ? "py-4 px-8 tab active text-white flex gap-4"
-              : "py-4 px-8 tab text-white flex gap-4"
-          }
-        >
-          <img src={icons[name]} alt="" />
-          {!collapse && name}
-        </div>
-      </Link>
+
+        <Link to={link} onClick={() => closeSidebar()}>
+            <div className={ url === link ? 'py-4 px-8 tab active text-white flex gap-4' 
+            : 'py-4 px-8 tab text-white flex gap-4'}>
+                <img src={icons[name]} alt="" />
+                {!collapse && name}
+            </div>
+        </Link>
+
+      
+
     </>
   );
 };

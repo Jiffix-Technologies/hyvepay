@@ -54,9 +54,7 @@ const Sidebar = () => {
                   }
                 >
                   <img src={item.icon} alt="" />
-                  <span>{item.name}</span>
-
-                  {/* {!collapse && name} */}
+                  <span>{!collapse && item.name}</span>
                 </div>
               </Link>
             );

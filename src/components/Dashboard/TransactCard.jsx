@@ -28,7 +28,7 @@ const TransactCard = ({ name, accountnum, bankName, phone }) => {
       <div className="p-8 py-4 transact-card bg-gray-100">
         <div className="w-full flex justify-end">
           <div style={{ position: "relative" }}>
-            <button onClick={() => setOption(!option)}>
+            <button className="px-4 py-3" onClick={() => setOption(!option)}>
               <img src={OptionIcon} alt="" style={{ width: 20 }} />
             </button>
 

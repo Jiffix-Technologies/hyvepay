@@ -22,6 +22,7 @@ import NewTransaction from "./pages/auth/NewTransaction.jsx";
 import SavedBeneficiaries from "./pages/auth/SavedBeneficiaries.jsx";
 import WelcomeAuthenticationPage from "./pages/unauth/WelcomeAuthenticationPage.jsx";
 import LoginPage from "./pages/unauth/LoginPage.jsx";
+import Settings from "./pages/auth/Settings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
       {
         path: "/hyvepay/saved-beneficiaries",
         element: <SavedBeneficiaries />,
+      },
+      {
+        path: "/settings",
+        element: <Settings />,
       },
     ],
   },

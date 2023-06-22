@@ -55,14 +55,6 @@ const Hyvepay = () => {
           <h5 className="heading-five font-montserrat">Account Information</h5>
 
           <div className="flex flex-col md:flex-row  mt-3 md:mt-0 gap-4 account-information">
-            {/* <button
-              onClick={() => setModal(!modal)}
-              style={{ minWidth: "max-content", height: "max-content" }}
-              className="btn btn-primary text-sm disabled"
-            >
-              Processing Account
-            </button> */}
-
             <AppBtn
               title="Activate Account"
               className="bg-[#FAA21B] text-[#000]"

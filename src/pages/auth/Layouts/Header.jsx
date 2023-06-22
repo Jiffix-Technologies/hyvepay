@@ -1,22 +1,26 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import NotificationIcon from "../../../assets/svgs/vuesax/linear/notification-bing.svg";
 import BackIcon from "../../../assets/svgs/back.svg";
 import MenuIcon from "../../../assets/svgs/menu.svg";
 import settings from "../../../assets/images/settings.png";
 import MobileSidebar from "./MobileSidebar";
+import UserIcon from '../../../assets/svgs/user.svg'
+import SettingIcon from '../../../assets/svgs/Setting-2.svg'
+
 
 const Header = () => {
   let name = "David,";
   let workshop = "Demo workshop";
 
-  const [author, setAuthor] = React.useState("");
+  const [authorDropdown, setAuthorDropdown] = React.useState("");
   const [sidebar, toggleSidebar] = React.useState(false);
   const closeSidebar = () => toggleSidebar(!sidebar);
 
-  const trim = (name, workshop) => {
-    let text = name + ", " + workshop;
-    return text.substring(0, text.length - 8) + "...";
-  };
+  // const trim = (name, workshop) => {
+  //   let text = name + ", " + workshop;
+  //   return text.substring(0, text.length - 8) + "...";
+  // };
 
   return (
     <>
@@ -59,19 +63,36 @@ const Header = () => {
             <img src={NotificationIcon} alt="" style={{ height: 24 }} />
           </button>
           |
-          <button className="">
-            <div className="flex  items-center gap-2">
-              <span>{name}</span>
-              <span>{workshop}</span>
-              <img src={settings} alt="" className="w-[30px] h-[30px]" />
-              {/* {window.outerWidth < 768
-                ? trim(name, workshop)
-                : name + ", " + workshop}
+          <div className="">
+            <button className="" onClick={() => setAuthorDropdown(!authorDropdown)}>
+              <div className="flex  items-center gap-2">
+                <span>{name}</span>
+                <span>{workshop}</span>
+                <img src={settings} alt="" className="w-[30px] h-[30px]" />
+                {/* {window.outerWidth < 768
+                  ? trim(name, workshop)
+                  : name + ", " + workshop}
 
-              <img src={settings} alt="" className="w-[30px] h-[30px]" /> */}
-              {/* <img src={NotificationIcon} alt="" /> */}
+                <img src={settings} alt="" className="w-[30px] h-[30px]" /> */}
+                {/* <img src={NotificationIcon} alt="" /> */}
+              </div>
+            </button>
+
+            {authorDropdown && (
+                <ul className="author-dropdown rounded-xl bg-white shadow p-2">
+                <li><Link to={'#'} className="flex gap-2">
+                    <img src={UserIcon} alt="" style={{width : 20}} />
+                    Profile
+                  </Link></li>
+  
+                  <li><Link to={'/settings'} className="flex gap-2">
+                  <img src={SettingIcon} alt="" style={{width : 20}} />
+                    Settings
+                  </Link></li>
+              </ul>
+            )}
+            
             </div>
-          </button>
         </div>
       </div>
     </>
