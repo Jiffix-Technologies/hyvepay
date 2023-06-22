@@ -1,7 +1,4 @@
 import React from "react";
-import loading from "../../assets/images/Loading.json";
-import Lottie from "lottie-react";
-
 const AppBtn = ({
   onClick,
   title,
