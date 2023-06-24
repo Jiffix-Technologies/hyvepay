@@ -67,6 +67,14 @@ const NewTransaction = () => {
         setOpenSingleModal={setOpenSingleModal}
         currentModal={currentModal}
       />
+
+      {/* <FundModal
+        modal={modal}
+        setModal={setModal}
+        closeModal={closeModal}
+        modalType={modalType}
+
+      /> */}
     </>
   );
 };

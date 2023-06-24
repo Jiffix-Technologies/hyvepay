@@ -13,24 +13,21 @@ export default function ResetPasswordModal({ setOpenModal, openModal }) {
     document.body.classList.remove("active-modal");
   }
 
-  const toggleModal = (e) => {
-    if (e.target.id === "modalWrapperId") {
-      setModal(!modal);
-    }
+  const toggleModal = () => {
+    setOpenModal(!openModal);
   };
 
   return (
     <>
       {openModal && (
         <div
-          id="modalWrapperId"
           className="overlay h-screen w-screen flex fixed justify-center items-center"
           onClick={toggleModal}
         >
           <div className="modal bg-white py-8 px-20 reset-pword">
             <div className="modal-header bg-white p-8 py-2 relative">
               <button
-                onClick={() => setOpenModal(false)}
+                onClick={toggleModal}
                 className="flex justify-end w-full absolute  -top-3 right-3 md:-right-10"
               >
                 <img src={CloseIcon} alt="" />
@@ -60,9 +57,7 @@ export default function ResetPasswordModal({ setOpenModal, openModal }) {
               <AppBtn
                 title="GET RESET OTP"
                 className="text-[#000] w-full bg-[#FAA21B] mt-1"
-                onClick={() => {
-                  setOpenOtp(true), setOpenModal(false);
-                }}
+                onClick={() => setOpenOtp(true)}
               />
             </div>
           </div>

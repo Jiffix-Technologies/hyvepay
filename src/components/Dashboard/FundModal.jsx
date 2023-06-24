@@ -29,7 +29,7 @@ const FundModal = ({ modal = false, closeModal, setModal, modalType = 0 }) => {
                 </button>
               </div>
               <div>
-                <h5 className="text-center heading-five">Transfer Fundsss</h5>
+                <h5 className="text-center heading-five">Transfer Fund</h5>
               </div>
             </div>
             <div className="body">

@@ -28,7 +28,7 @@ const AddNewBeneficiaryModal = ({
           className="fixed top-0 inset-0 bg-black bg-opacity-70 flex justify-center items-center customModal"
           onClick={toggleModal}
         >
-          <div className="bg-white  p-2 relative  pt-10 h-[550px] max-w-prose mx-auto  overflow-y-auto pb-10  rounded-md">
+          <div className="bg-white p-2 relative h-[70%] pt-10 w-[80%] md:w-[50%] overflow-y-auto pb-10  rounded-md">
             <div className="modal-header pt-0 bg-white px-8">
               <div className="flex justify-end w-full relative -top-5">
                 <button onClick={() => setnewBeneficiary(!newBeneficiary)}>
@@ -54,14 +54,30 @@ const AddNewBeneficiaryModal = ({
                       type="text"
                     />
                   </div>
-                  <div className="w-full -mb-5 md:mb-6">
-                    <AppInput
-                      hasPLaceHolder={true}
-                      placeholder="NG (+234)"
-                      placeholderTop="Phone Number"
-                      className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      type="text"
-                    />
+
+                  <div className="w-full mb-5 md:mb-6">
+                    <label htmlFor="" className="base-text font-montserrat">
+                      Phone Number*
+                    </label>
+                    <div
+                      className="prepend phone w-full bg-[#F5F5F5]"
+                      style={{ borderRadius: 20 }}
+                    >
+                      <select
+                        name="country-code"
+                        className="bg-[#F5F5F5]"
+                        id=""
+                      >
+                        <option value="+234">NG (+234)</option>
+                      </select>
+
+                      <input
+                        type="number"
+                        className="w-full mt-1 bg-[#F5F5F5]"
+                        style={{ border: 0 }}
+                        placeholder="Phone number"
+                      />
+                    </div>
                   </div>
                 </div>
 

@@ -66,6 +66,7 @@ const Register = ({ setShowCurrent }) => {
         color: "#A5A5A5",
         fontSize: "16px",
         fontWeight: 400,
+        paddingLeft: "23px",
       };
     },
 
@@ -108,7 +109,7 @@ const Register = ({ setShowCurrent }) => {
 
         <div className="text-center">
           <h2 className=" text-center text-[30px] font-montserrat">
-            Create AutoHyve Account
+            Create HyvePay Account
           </h2>
           <h5 className="text-[10px] md:text-[12px] gray-color font-montserrat">
             Fill in the information below to create your account
@@ -146,11 +147,12 @@ const Register = ({ setShowCurrent }) => {
                 Phone Number*
               </label>
               <div className="prepend phone w-full">
-                <select name="country-code" id="">
+                <select
+                  name="country-code"
+                  className="text-[12px] md:ml-8"
+                  id=""
+                >
                   <option value="+234">NG (+234)</option>
-                  <option value="+233">GH (+233)</option>
-                  <option value="+254">KE (+254)</option>
-                  <option value="+55">BR (+55)</option>
                 </select>
 
                 <input

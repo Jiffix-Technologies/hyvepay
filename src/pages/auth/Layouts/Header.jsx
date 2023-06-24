@@ -5,7 +5,9 @@ import BackIcon from "../../../assets/svgs/back.svg";
 import MenuIcon from "../../../assets/svgs/menu.svg";
 import settings from "../../../assets/images/settings.png";
 import MobileSidebar from "./MobileSidebar";
-import UserIcon from "../../../assets/svgs/user.svg";
+import UserIcon from '../../../assets/svgs/user.svg'
+import SettingIcon from '../../../assets/svgs/Setting-2.svg'
+
 
 const Header = () => {
   let name = "David,";
@@ -62,10 +64,7 @@ const Header = () => {
           </button>
           |
           <div className="">
-            <button
-              className=""
-              onClick={() => setAuthorDropdown(!authorDropdown)}
-            >
+            <button className="" onClick={() => setAuthorDropdown(!authorDropdown)}>
               <div className="flex  items-center gap-2">
                 <span>{name}</span>
                 <span>{workshop}</span>
@@ -80,23 +79,20 @@ const Header = () => {
             </button>
 
             {authorDropdown && (
-              <ul className="author-dropdown rounded-xl bg-white shadow p-2">
-                <li>
-                  <Link to={"#"} className="flex gap-2">
-                    <img src={UserIcon} alt="" style={{ width: 20 }} />
+                <ul className="author-dropdown rounded-xl bg-white shadow p-2">
+                <li><Link to={'#'} className="flex gap-2">
+                    <img src={UserIcon} alt="" style={{width : 20}} />
                     Profile
-                  </Link>
-                </li>
-
-                <li>
-                  <Link to={"/settings"} className="flex gap-2">
-                    <img src={SettingIcon} alt="" style={{ width: 20 }} />
+                  </Link></li>
+  
+                  <li><Link to={'/settings'} className="flex gap-2">
+                  <img src={SettingIcon} alt="" style={{width : 20}} />
                     Settings
-                  </Link>
-                </li>
+                  </Link></li>
               </ul>
             )}
-          </div>
+            
+            </div>
         </div>
       </div>
     </>

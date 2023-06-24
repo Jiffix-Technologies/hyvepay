@@ -3,18 +3,26 @@ import CloseIcon from "../../assets/svgs/close-circle.svg";
 import SuccessfulPaymentModal from "./SuccessfulPaymentModal";
 import AppBtn from "../AppBtn/AppBtn";
 
-const ConfirmPaymentModal = ({ confirmationmodal, setConfirmationmodal }) => {
+const ConfirmPaymentModal = ({
+  confirmationmodal,
+  setConfirmationmodal,
+  closeConfirmModal,
+}) => {
   const [successModal, setSuccessModal] = useState(false);
 
   const closeSuccessModal = () => setSuccessModal(!successModal);
   return (
     <>
+      <SuccessfulPaymentModal
+        successModal={successModal}
+        closeSuccessModal={closeSuccessModal}
+      />
       {confirmationmodal && (
         <div
           className="overlay h-screen w-screen flex fixed justify-center items-center"
           style={{ zIndex: 4000 }}
         >
-          <div className="modal max-w-prose mx-auto bg-white py-8 px-3">
+          <div className="modal bg-white py-8 px-3">
             <div className="modal-header pt-0 bg-white px-8">
               <div className="flex justify-end w-full">
                 <button onClick={() => setConfirmationmodal(false)}>
@@ -61,11 +69,6 @@ const ConfirmPaymentModal = ({ confirmationmodal, setConfirmationmodal }) => {
           </div>
         </div>
       )}
-
-      <SuccessfulPaymentModal
-        successModal={successModal}
-        closeSuccessModal={closeSuccessModal}
-      />
     </>
   );
 };

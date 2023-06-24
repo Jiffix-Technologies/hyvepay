@@ -1,18 +1,10 @@
 import React from "react";
-const AppBtn = ({
-  onClick,
-  title,
-  showIcon,
-  showSpinner = false,
-  image,
-  className,
-}) => {
+
+const AppBtn = ({ onClick, title, showIcon, image, className }) => {
   return (
     <button
       className={
-        `btn   ${
-          showSpinner && "loadingBtn"
-        }      text-[#000] bg-[#FAA21B] flex h-16 items-center justify-center
+        `btn text-[#000] bg-[#FAA21B] flex items-center justify-center
       ` + className
       }
       onClick={onClick}

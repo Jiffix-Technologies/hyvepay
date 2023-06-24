@@ -29,7 +29,7 @@ const AppDropDown = ({ className }) => {
       </span>
       <button
         className={
-          `bg-[#F5F5F5] flex items-center justify-between text-[#A5A5A5] text-left pl-5 py-2 h-[60px] w-full rounded-[15px] border-[#CACACA] border-[1px] focus:outline-none
+          `bg-[#F5F5F5] flex items-center justify-between text-[#A5A5A5] text-left pl-5 py-2 h-[52px] w-full rounded-[15px] border-[#CACACA] border-[1px] focus:outline-none
 } ` + className
         }
         onClick={toggleDropdown}

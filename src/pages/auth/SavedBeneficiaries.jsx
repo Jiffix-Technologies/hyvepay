@@ -43,7 +43,12 @@ const SavedBeneficiaries = () => {
           </div>
         </div>
 
+
+        {/* <div className="grid grid-cols-2 md:grid-cols-5  w-[100%] gap-1  mt-14 "> */}
         <div className="flex justify-start gap-3 flex-wrap mt-14 ">
+          
+        {/* <div className="grid pb-20 grid-cols-2 md:grid-cols-3  w-[100%] md:w-[60%] gap-3 md:gap-16 mt-14 "> */}
+
           <TransactCard
             name={"David James"}
             accountnum={"0578358735"}
@@ -69,6 +74,7 @@ const SavedBeneficiaries = () => {
         newBeneficiary={newBeneficiary}
         setnewBeneficiary={setnewBeneficiary}
       />
+    
     </>
   );
 };

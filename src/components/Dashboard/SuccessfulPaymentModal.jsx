@@ -12,7 +12,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }) => {
           style={{ zIndex: 5000 }}
         >
           <div
-            className="modal bg-white max-w-prose mx-auto py-8 px-3"
+            className="modal bg-white py-8 px-3"
             style={{ maxHeight: "90%", overflowY: "scroll" }}
           >
             <div className="modal-header pt-0 bg-white px-8">

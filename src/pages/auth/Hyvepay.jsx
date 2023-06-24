@@ -4,40 +4,43 @@ import Card from "../../components/Dashboard/Card";
 import SearchIcon from "../../assets/svgs/vuesax/linear/search-normal.svg";
 import DownloadIcon from "../../assets/svgs/download-icon.svg";
 import DocumentIcon from "../../assets/svgs/document.svg";
+import ActivateModal from "../../components/Dashboard/ActivateModal";
 import AppBtn from "../../components/AppBtn/AppBtn";
 import ActivateAccountModal from "../../components/modals/ActivateAccountModal";
-import "react-date-picker/dist/DatePicker.css";
-import "react-calendar/dist/Calendar.css";
-import DatePicker from "react-date-picker";
-
+import CustomModal from "../../components/modals/CustomModal";
+import CustomDatePickerModal from "../../components/modals/CustomDatePickerModal";
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
   const [activate, setActivate] = useState(false);
+  const [headerText, setHeaderText] = useState(0);
   const [openDate, setOpenDate] = useState(false);
-  const [value, onChange] = useState(new Date());
 
   const [modal, setModal] = useState(false);
-  const closeModal = () => setModal(!modal);
+  const closeModal = () => setModal(!modal); //close modal
   const activation = () => {
-    setActivate(!activate);
+    setActivate(!activate); //start activation
     setModal(!modal);
   };
 
   useEffect(() => {
+    // Disable scrolling on the background when the modal is open
     if (modal) {
       document.body.style.overflow = "hidden";
     }
 
+    // Enable scrolling on the background when the modal is closed
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [modal]);
 
   useEffect(() => {
+    // Disable scrolling on the background when the modal is open
     if (openDate) {
       document.body.style.overflow = "hidden";
     }
 
+    // Enable scrolling on the background when the modal is closed
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -52,6 +55,14 @@ const Hyvepay = () => {
           <h5 className="heading-five font-montserrat">Account Information</h5>
 
           <div className="flex flex-col md:flex-row  mt-3 md:mt-0 gap-4 account-information">
+            {/* <button
+              onClick={() => setModal(!modal)}
+              style={{ minWidth: "max-content", height: "max-content" }}
+              className="btn btn-primary text-sm disabled"
+            >
+              Processing Account
+            </button> */}
+
             <AppBtn
               title="Activate Account"
               className="bg-[#FAA21B] text-[#000]"
@@ -176,11 +187,17 @@ const Hyvepay = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="btn btn-secondary font-montserrat">
+            <button
+              className="btn btn-secondary font-montserrat"
+              onClick={() => setOpenDate(true)}
+            >
               Start Date
             </button>
             -
-            <button className="btn btn-secondary font-montserrat">
+            <button
+              className="btn btn-secondary font-montserrat"
+              onClick={() => setOpenDate(true)}
+            >
               End Date
             </button>
           </div>
@@ -252,6 +269,8 @@ const Hyvepay = () => {
         closeModal={closeModal}
         activation={activation}
       />
+
+      <CustomDatePickerModal openDate={openDate} setOpenDate={setOpenDate} />
     </>
   );
 };
