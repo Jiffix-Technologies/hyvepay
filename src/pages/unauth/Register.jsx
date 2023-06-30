@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "../../assets/svgs/hyve_logo.svg";
+import hyveLogo from "../../assets/images/hyveLogo.png";
 import Quote from "../../assets/svgs/blockquote.svg";
 
 import Eye from "../../assets/svgs/eye.svg";
@@ -9,6 +9,8 @@ import AppBtn from "../../components/AppBtn/AppBtn";
 import cloudColor from "../../assets/images/cloudColor.png";
 import AppInput from "../../components/AppInput/AppInput";
 import { stateLga } from "../../contsants/states";
+import AppInputWithPhone from "../../components/AppInputWithPhone/AppInputWithPhone";
+import TextHeader from "../../components/TextHeader/TextHeader";
 
 const Register = ({ setShowCurrent }) => {
   const [pwdfield, setPwdfield] = useState(false);
@@ -64,7 +66,7 @@ const Register = ({ setShowCurrent }) => {
       return {
         ...defaultStyles,
         color: "#A5A5A5",
-        fontSize: "16px",
+        fontSize: "14px",
         fontWeight: 400,
         paddingLeft: "23px",
       };
@@ -104,19 +106,17 @@ const Register = ({ setShowCurrent }) => {
     <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-0">
       <div className="w-full flex flex-col justify-center mt-20 px-10 md:px-28  mb-20 items-center h-[100%]">
         <div className="w-[100%] md:w-[50%] top-0 right-0 left-0 flex bg-white z-50 fixed justify-center md:justify-start py-5 pl-8">
-          <img src={Logo} alt="logo" className="" />
+          <img src={hyveLogo} alt="logo" className=" w-[150px]" />
         </div>
 
-        <div className="text-center">
-          <h2 className=" text-center text-[30px] font-montserrat">
-            Create HyvePay Account
-          </h2>
-          <h5 className="text-[10px] md:text-[12px] gray-color font-montserrat">
-            Fill in the information below to create your account
-          </h5>
-        </div>
+        <TextHeader
+          title="Create HyvePay Account"
+          subTitle="Fill in the information below to create your account"
+          className="text-center"
+          subTextCassName="text-center"
+        />
 
-        <div className="form w-full mt-14">
+        <div className="form w-full mt-10">
           <form onSubmit={submitForm}>
             <div className="form-group flex-col md:flex-row">
               <div>
@@ -142,26 +142,12 @@ const Register = ({ setShowCurrent }) => {
               />
             </div>
 
-            <div className="mt-5 md:mt-10">
-              <label htmlFor="" className="base-text">
-                Phone Number*
-              </label>
-              <div className="prepend phone w-full">
-                <select
-                  name="country-code"
-                  className="text-[12px] md:ml-8"
-                  id=""
-                >
-                  <option value="+234">NG (+234)</option>
-                </select>
+            <AppInputWithPhone
+              placeholderTop="Phone Number*"
+              placeholder="Number* (WhatsApp)"
+              hasPLaceHolder={true}
+            />
 
-                <input
-                  type="number"
-                  className="w-full mt-1"
-                  placeholder="Number* (WhatsApp)"
-                />
-              </div>
-            </div>
             <div className="mt-5 md:mt-10">
               <AppInput
                 hasPLaceHolder={true}
@@ -197,12 +183,21 @@ const Register = ({ setShowCurrent }) => {
                 rightImg={Eye}
                 leftImg={Lock}
                 hasPLaceHolder={true}
-                placeholderTop="Email Address*"
-                placeholder="Set a password (at least 8 characters)"
+                placeholderTop="Password *"
+                placeholder="Min of 8 characters"
+              />
+            </div>
+            <div className="mt-5 md:mt-10">
+              <AppInput
+                rightImg={Eye}
+                leftImg={Lock}
+                hasPLaceHolder={true}
+                placeholderTop="Confirm Password *"
+                placeholder="password must match"
               />
             </div>
 
-            <span className="text-[15px] gray-color mt-12 inline-block font-montserrat italic">
+            <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">
               By clicking ‘Proceed’ you agree with the AutoHyve Terms and
               Policies
             </span>
@@ -222,7 +217,7 @@ const Register = ({ setShowCurrent }) => {
         </p>
       </div>
 
-      <div className="login_bg hidden md:flex sticky top-0 flex-col justify-between py-24 items-center px-24">
+      <div className="login_bg hidden md:flex fixed right-0 w-[50%] top-0 flex-col justify-between py-24 items-center px-24">
         <div className="w-full flex justify-between items-center">
           <img src={Quote} alt="" />
           <hr style={{ borderWidth: 0.5, width: 100 }} />

@@ -1,13 +1,10 @@
 import React from "react";
-
-const AppInput = ({
-  rightImg,
-  leftImg,
+const AppInputWithPhone = ({
   placeholderTop,
   hasPLaceHolder,
   placeholder,
   className,
-  type = "text",
+  type,
 }) => {
   const [pwdfield, setPwdfield] = React.useState(false);
 
@@ -24,22 +21,19 @@ const AppInput = ({
         </span>
       )}
 
-      <div className="prepend w-full mb-5">
-        <img src={leftImg} alt="" />
+      <div className=" w-full flex items-center justify-center relative mb-5">
+        <span className="absolute  left-10 text-xs">NG(+234)</span>
         <input
-          type={pwdfield ? "password" : type}
+          type={type}
           className={
-            `w-full placeholder-[#A5A5A5] placeholderText
+            `w-full placeholder-[#A5A5A5] placeholderText pl-28
           } ` + className
           }
           placeholder={placeholder}
         />
-        <button onClick={(e) => togglePassword(e, !pwdfield)}>
-          <img src={rightImg} alt="" />
-        </button>
       </div>
     </>
   );
 };
 
-export default AppInput;
+export default AppInputWithPhone;

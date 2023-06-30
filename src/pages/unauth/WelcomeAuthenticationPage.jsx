@@ -5,6 +5,8 @@ import User from "../../assets/svgs/user.svg";
 import Lock from "../../assets/svgs/lock.svg";
 import Eye from "../../assets/svgs/eye.svg";
 import Logo from "../../assets/svgs/hyve_logo.svg";
+
+import hyveLogo from "../../assets/images/hyveLogo.png";
 import Quote from "../../assets/svgs/blockquote.svg";
 import AppBtn from "../../components/AppBtn/AppBtn";
 import LoginModal from "../../components/modals/LoginModal";
@@ -21,7 +23,7 @@ const WelcomeAuthenticationPage = () => {
         {/* login form */}
         <div className="flex  w-full flex-col">
           <div className="w-[100%] md:w-[50%] flex bg-white z-50 fixed justify-center md:justify-start py-5 pl-8">
-            <img src={Logo} alt="logo" className="" />
+            <img src={hyveLogo} alt="logo" className=" w-[150px]" />
           </div>
 
           <Login setModal={setModal} setShowCurrent={setShowCurrent} />

@@ -9,8 +9,8 @@ import { Link } from "react-router-dom";
 const HighCloudSignIn = () => {
   return (
     <div className="flex flex-col items-center mt-28 px-10 md:px-28 justify-center">
-      <h2 className="font-montserrat font-bold text-[20px]">
-        Sign in to HyveCloud
+      <h2 className="font-montserrat  text-4xl font-medium">
+        Sign in to HyvePay
       </h2>
       <span className="text-[14px] font-light font-montserrat inline-block mb-[43px]">
         Enter your information below to log into your account

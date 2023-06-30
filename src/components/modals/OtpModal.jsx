@@ -42,7 +42,7 @@ export default function OtpModal({ openOtp, setOpenOtp }) {
 
             <div className="flex flex-col items-center justify-center">
               <h2 className="font-montserrat font-bold text-[20px]">
-                Enter OTP
+                Confirm OTP
               </h2>
               <span className="text-[14px] text-center font-light font-montserrat inline-block mb-[43px]">
                 We sent you an OTP, check your email address and provide the
@@ -63,7 +63,7 @@ export default function OtpModal({ openOtp, setOpenOtp }) {
               </div>
 
               <AppBtn
-                title="confirm otp"
+                title="CONFIRM OTP"
                 className="text-[#000] w-full bg-[#FAA21B] mt-1"
               />
             </div>
