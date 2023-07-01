@@ -15,7 +15,7 @@ const Sidebar = () => {
     <>
       <div
         className={
-          "md:w-2/5 h-screen sticky  top-0 hidden md:block overflow-y-scroll"
+          "md:w-2/5 h-screen fixed  top-0 hidden md:block overflow-y-scroll"
         }
         style={{
           backgroundColor: "#494949",
@@ -25,7 +25,7 @@ const Sidebar = () => {
         }}
       >
         <div className="px-8 flex gap-4 mt-4 mb-8 items-center text-white">
-          <img src={hyvePay} alt="" style={{ height: 50 }} />
+          <img src={hyvePay} alt="" style={{ height: 50 }} className="" />
           {!collapse && (
             <h5 className="heading-five font-montserrat">HyvePay</h5>
           )}

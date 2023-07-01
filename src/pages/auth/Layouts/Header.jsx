@@ -1,32 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NotificationIcon from "../../../assets/svgs/vuesax/linear/notification-bing.svg";
 import BackIcon from "../../../assets/svgs/back.svg";
 import MenuIcon from "../../../assets/svgs/menu.svg";
 import settings from "../../../assets/images/settings.png";
 import MobileSidebar from "./MobileSidebar";
-import UserIcon from '../../../assets/svgs/user.svg'
-import SettingIcon from '../../../assets/svgs/Setting-2.svg'
-
+import UserIcon from "../../../assets/svgs/user.svg";
+import SettingIcon from "../../../assets/svgs/Setting-2.svg";
+import ProfileDropDown from "../../../components/ProfileDropDown/ProfileDropDown";
 
 const Header = () => {
   let name = "David,";
   let workshop = "Demo workshop";
 
-  const [authorDropdown, setAuthorDropdown] = React.useState("");
-  const [sidebar, toggleSidebar] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [sidebar, toggleSidebar] = useState(false);
   const closeSidebar = () => toggleSidebar(!sidebar);
-
-  // const trim = (name, workshop) => {
-  //   let text = name + ", " + workshop;
-  //   return text.substring(0, text.length - 8) + "...";
-  // };
 
   return (
     <>
       <MobileSidebar toggle={sidebar} closeSidebar={closeSidebar} />
       <div
-        className="flex items-center justify-between fixed w-full header py-5 px-4 md:px-8 md:pr-72"
+        className="flex items-center ml-[0%] md:ml-[17.5%] justify-between px-10 pr-5 md:pr-72 fixed w-full header py-5"
         style={{ zIndex: 4000 }}
       >
         <div className="hidden md:block">
@@ -41,8 +36,6 @@ const Header = () => {
               alt=""
               style={{ height: 20 }}
             />
-
-            {}
 
             <h5 className="heading-five font-montserrat">HyvePay</h5>
           </button>
@@ -64,35 +57,16 @@ const Header = () => {
           </button>
           |
           <div className="">
-            <button className="" onClick={() => setAuthorDropdown(!authorDropdown)}>
+            <button className="" onClick={() => setOpen(!open)}>
               <div className="flex  items-center gap-2">
                 <span>{name}</span>
                 <span>{workshop}</span>
                 <img src={settings} alt="" className="w-[30px] h-[30px]" />
-                {/* {window.outerWidth < 768
-                  ? trim(name, workshop)
-                  : name + ", " + workshop}
-
-                <img src={settings} alt="" className="w-[30px] h-[30px]" /> */}
-                {/* <img src={NotificationIcon} alt="" /> */}
               </div>
             </button>
 
-            {authorDropdown && (
-                <ul className="author-dropdown rounded-xl bg-white shadow p-2">
-                <li><Link to={'#'} className="flex gap-2">
-                    <img src={UserIcon} alt="" style={{width : 20}} />
-                    Profile
-                  </Link></li>
-  
-                  <li><Link to={'/settings'} className="flex gap-2">
-                  <img src={SettingIcon} alt="" style={{width : 20}} />
-                    Settings
-                  </Link></li>
-              </ul>
-            )}
-            
-            </div>
+            {open && <ProfileDropDown setOpen={setOpen} open={open} />}
+          </div>
         </div>
       </div>
     </>

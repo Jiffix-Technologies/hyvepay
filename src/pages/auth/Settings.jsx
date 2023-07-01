@@ -15,7 +15,7 @@ const Settings = () => {
 
   return (
     <>
-      <div className="mb-20 mt-24 bg-black">
+      <div className="mb-20 mt-24">
         <div className="flex justify-between flex-wrap items-center mt-10 my-4 setting-tabs">
           {/* <h5 className="heading-five font-montserrat">Settings</h5> */}
 

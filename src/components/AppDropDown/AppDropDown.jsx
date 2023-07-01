@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
-const AppDropDown = ({ className }) => {
+const AppDropDown = ({ className, title = "Recipient’s Bank Name" }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const banks = [
@@ -24,12 +24,10 @@ const AppDropDown = ({ className }) => {
     <div className="relative">
       {/* Dropdown toggle button */}
 
-      <span className="inline-block font-montserrat">
-        Recipient’s Bank Name
-      </span>
+      <span className="inline-block font-montserrat">{title}</span>
       <button
         className={
-          `bg-[#F5F5F5] flex items-center justify-between text-[#A5A5A5] text-left pl-5 py-2 h-[52px] w-full rounded-[15px] border-[#CACACA] border-[1px] focus:outline-none
+          `bg-[#F5F5F5] flex items-center justify-between text-[#A5A5A5] text-left pl-5 py-2 h-[58px] w-full rounded-[15px] border-[#CACACA] border-[1px] focus:outline-none
 } ` + className
         }
         onClick={toggleDropdown}

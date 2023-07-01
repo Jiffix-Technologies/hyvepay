@@ -23,6 +23,7 @@ import SavedBeneficiaries from "./pages/auth/SavedBeneficiaries.jsx";
 import WelcomeAuthenticationPage from "./pages/unauth/WelcomeAuthenticationPage.jsx";
 import LoginPage from "./pages/unauth/LoginPage.jsx";
 import Settings from "./pages/auth/Settings.jsx";
+import Profile from "./pages/auth/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,45 +53,13 @@ const router = createBrowserRouter([
     // DASHBOARD LINKS (AUTH)
     element: <Auth />,
     children: [
-      // {
-      //   path: "/dashboard",
-      //   element: <Dashboard />,
-      // },
-      // {
-      //   path: "/customers",
-      //   element: <Customers />,
-      // },
       {
         path: "/dashboard",
         element: <Hyvepay />,
       },
-      // {
-      //   path: "/items&inventory",
-      //   element: <Inventory />,
-      // },
-      // {
-      //   path: "/service-reminder",
-      //   element: <Service />,
-      // },
-      // {
-      //   path: "/estimates",
-      //   element: <Estimates />,
-      // },
-      // {
-      //   path: "/invoices",
-      //   element: <Invoice />,
-      // },
-      // {
-      //   path: "/payments",
-      //   element: <Payment />,
-      // },
-      // {
-      //   path: "/expenses",
-      //   element: <Expenses />,
-      // },
+
       {
         path: "/logout",
-        // element : <Logout />,
       },
       {
         path: "/hyvepay/initiate-transaction",
@@ -103,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

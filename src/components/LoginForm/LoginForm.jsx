@@ -25,13 +25,6 @@ const LoginForm = () => {
           account"
           />
 
-          {/* <h2 className="font-montserrat mb-3 text-4xl font-medium">
-            Sign in to HyvePay
-          </h2>
-          <span className="text-[14px] font-light font-montserrat inline-block mb-[43px]">
-            Enter your HyveCloud account information below to log into your
-            account
-          </span> */}
           <AppInput placeholder={"Your Email"} leftImg={User} />
           <div className="w-full">
             <AppInput rightImg={Eye} placeholder={"Password"} leftImg={Lock} />
@@ -46,6 +39,7 @@ const LoginForm = () => {
           </div>
 
           <AppBtn
+            onClick={() => navigate("/dashboard")}
             title="Log in"
             className=" w-full bg-[#FAA21B] mt-8 text-black"
           />

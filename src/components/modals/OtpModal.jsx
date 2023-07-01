@@ -3,9 +3,16 @@ import "./modal.css";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import AppBtn from "../AppBtn/AppBtn";
 import OtpInput from "react-otp-input";
+import NewPassword from "./NewPassword";
 
-export default function OtpModal({ openOtp, setOpenOtp }) {
+export default function OtpModal({
+  openOtp,
+  setOpenOtp,
+  headerTitle = "Confirm OTP",
+  subHeader = " We sent you an OTP, check your email address and provide the code",
+}) {
   const [otp, setOtp] = useState("");
+  const [newPasswordModal, setNewPasswordModal] = useState(false);
   if (openOtp) {
     document.body.classList.add("active-modal");
   } else {
@@ -34,19 +41,14 @@ export default function OtpModal({ openOtp, setOpenOtp }) {
               >
                 <img src={CloseIcon} alt="" />
               </button>
-
-              {/* <div>
-                <h5 className="text-center heading-five">Transfer Fund</h5>
-              </div> */}
             </div>
 
             <div className="flex flex-col items-center justify-center">
               <h2 className="font-montserrat font-bold text-[20px]">
-                Confirm OTP
+                {headerTitle}
               </h2>
               <span className="text-[14px] text-center font-light font-montserrat inline-block mb-[43px]">
-                We sent you an OTP, check your email address and provide the
-                code
+                {subHeader}
               </span>
 
               <div className="w-full mb-10 ">
@@ -62,14 +64,30 @@ export default function OtpModal({ openOtp, setOpenOtp }) {
                 </div>
               </div>
 
-              <AppBtn
-                title="CONFIRM OTP"
-                className="text-[#000] w-full bg-[#FAA21B] mt-1"
-              />
+              {headerTitle === "Reset AutoHyve Password" ? (
+                <AppBtn
+                  title="CONFIRM OTP"
+                  onClick={() => {
+                    setNewPasswordModal(!newPasswordModal);
+                    setOpenOtp(!openOtp);
+                  }}
+                  className="text-[#000] font-medium bg-[#FAA21B] mt-1"
+                />
+              ) : (
+                <AppBtn
+                  title="CONFIRM OTP"
+                  className="text-[#000] font-medium bg-[#FAA21B] mt-1"
+                />
+              )}
             </div>
           </div>
         </div>
       )}
+
+      <NewPassword
+        newPasswordModal={newPasswordModal}
+        setNewPasswordModal={setNewPasswordModal}
+      />
     </>
   );
 }
