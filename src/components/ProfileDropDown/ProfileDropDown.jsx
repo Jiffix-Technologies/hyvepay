@@ -1,6 +1,6 @@
 import React from "react";
 import UserIcon from "../../assets/svgs/user.svg";
-import SettingIcon from "../../assets/svgs/Setting-2.svg";
+import SettingIcon from "../../assets/svgs/setting-2.svg";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProfileDropDown = ({ setOpen, open }) => {

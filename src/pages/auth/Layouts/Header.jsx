@@ -5,8 +5,6 @@ import BackIcon from "../../../assets/svgs/back.svg";
 import MenuIcon from "../../../assets/svgs/menu.svg";
 import settings from "../../../assets/images/settings.png";
 import MobileSidebar from "./MobileSidebar";
-import UserIcon from "../../../assets/svgs/user.svg";
-import SettingIcon from "../../../assets/svgs/Setting-2.svg";
 import ProfileDropDown from "../../../components/ProfileDropDown/ProfileDropDown";
 
 const Header = () => {
