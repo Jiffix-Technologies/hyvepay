@@ -5,7 +5,7 @@ const TextHeader = ({ title, subTitle, className, subTextCassName }) => {
     <div className="mb-5">
       <h2
         className={
-          `text-4xl font-medium font-montserrat mb-3
+          `text-2xl  md:text-4xl font-medium font-montserrat mb-3
       } ` + className
         }
       >
