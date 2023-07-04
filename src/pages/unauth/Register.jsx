@@ -11,9 +11,10 @@ import AppInput from "../../components/AppInput/AppInput";
 import { stateLga } from "../../contsants/states";
 import AppInputWithPhone from "../../components/AppInputWithPhone/AppInputWithPhone";
 import TextHeader from "../../components/TextHeader/TextHeader";
+import { customStyles } from "../../contsants/customStyles";
+import InputHeader from "../../components/InputHeader/InputHeader";
 
 const Register = ({ setShowCurrent }) => {
-  const [pwdfield, setPwdfield] = useState(false);
   const [state, setState] = useState([]);
   const [district, setDistrict] = useState([]);
   const [value, setValue] = useState(null);
@@ -50,56 +51,9 @@ const Register = ({ setShowCurrent }) => {
     }
   }, [value]);
 
-  const togglePassword = (e, val) => {
-    e.preventDefault();
-
-    setPwdfield(val);
-  };
-
   const submitForm = (e) => {
     e.preventDefault();
     window.location.href = "/verification";
-  };
-
-  const customStyles = {
-    placeholder: (defaultStyles) => {
-      return {
-        ...defaultStyles,
-        color: "#A5A5A5",
-        fontSize: "14px",
-        fontWeight: 400,
-        paddingLeft: "23px",
-      };
-    },
-
-    control: (base, state) => ({
-      ...base,
-      background: "#fff",
-      // match with the menu
-      borderRadius: "18px",
-      // Overwrittes the different states of border
-      borderColor: state.isFocused ? "#FAA21B" : "#CACACA",
-      height: "55px",
-
-      // Removes weird border around container
-      boxShadow: state.isFocused ? null : null,
-      "&:hover": {
-        // Overwrittes the different states of border
-        borderColor: state.isFocused ? "#FAA21B" : "#CACACA",
-      },
-    }),
-    menu: (base) => ({
-      ...base,
-      // override border radius to match the box
-      borderRadius: 0,
-      // kill the gap
-      marginTop: 0,
-    }),
-    menuList: (base) => ({
-      ...base,
-      // kill the white space on first and last option
-      padding: 0,
-    }),
   };
 
   return (
@@ -134,7 +88,7 @@ const Register = ({ setShowCurrent }) => {
                 />
               </div>
             </div>
-            <div className="mt-0 md:mt-5">
+            <div className="mt-0 md:mt-5 mb-0 md:mb-10">
               <AppInput
                 hasPLaceHolder={true}
                 placeholderTop="Email Address*"
@@ -142,22 +96,25 @@ const Register = ({ setShowCurrent }) => {
               />
             </div>
 
-            <AppInputWithPhone
-              placeholderTop="Phone Number*"
-              placeholder="Number* (WhatsApp)"
-              hasPLaceHolder={true}
-            />
+            <div className="md:mt-5">
+              <AppInputWithPhone
+                placeholderTop="Phone Number*"
+                placeholder="Number* (WhatsApp)"
+                hasPLaceHolder={true}
+              />
+            </div>
 
             <div className="mt-5 md:mt-10">
               <AppInput
                 hasPLaceHolder={true}
-                placeholderTop="Address/Location**"
+                placeholderTop="Address/Location*"
                 placeholder="Enter your address"
               />
             </div>
 
             <div className="mt-5 md:mt-10">
-              <p className="text[10px] inline-block font-montserrat">State</p>
+              <InputHeader text="State" />
+
               <Select
                 options={state}
                 onChange={(item) => {
@@ -168,9 +125,8 @@ const Register = ({ setShowCurrent }) => {
               />
             </div>
             <div className="mt-5 md:mt-10">
-              <p className="text[10px] inline-block font-montserrat">
-                District
-              </p>
+              <InputHeader text="District" />
+
               <Select
                 options={district}
                 styles={customStyles}

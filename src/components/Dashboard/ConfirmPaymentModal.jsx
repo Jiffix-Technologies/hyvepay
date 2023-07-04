@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import SuccessfulPaymentModal from "./SuccessfulPaymentModal";
 import AppBtn from "../AppBtn/AppBtn";
+import AppInput from "../AppInput/AppInput";
 
 const ConfirmPaymentModal = ({
   confirmationmodal,
@@ -44,16 +45,12 @@ const ConfirmPaymentModal = ({
 
               <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
                 <div className="w-full mb-1 md:mb-3">
-                  <label className="text-sm" htmlFor="">
-                    {" "}
-                    Enter your pin
-                  </label>{" "}
-                  <br />
-                  <input
-                    type="password"
+                  <AppInput
+                    type="text"
+                    placeholderTop=" Enter your pin"
                     placeholder="Enter your pin"
-                    className="bg-gray-100 w-full sm"
-                    style={{ border: 0 }}
+                    hasPLaceHolder={true}
+                    className="bg-[#F5F5F5] border-[#F5F5F5] h-14"
                   />
                 </div>
 
@@ -61,7 +58,10 @@ const ConfirmPaymentModal = ({
                   <AppBtn
                     title="Confirm payment"
                     className="text-[#000] w-full bg-[#FAA21B] mt-2"
-                    onClick={() => setSuccessModal(!successModal)}
+                    onClick={() => {
+                      setSuccessModal(!successModal);
+                      setConfirmationmodal(false);
+                    }}
                   />
                 </div>
               </div>

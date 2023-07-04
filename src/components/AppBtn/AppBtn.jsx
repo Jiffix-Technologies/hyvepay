@@ -4,16 +4,14 @@ const AppBtn = ({ onClick, title, showIcon, image, className }) => {
   return (
     <button
       className={
-        `btn text-[#000] bg-[#FAA21B] flex items-center justify-center
+        `btn text-[#000] bg-[#FAA21B] flex items-center justify-center px-6
       ` + className
       }
       onClick={onClick}
     >
       {showIcon && <img src={image} alt="" className="w-[25px] h-[25px]" />}
 
-      <span className="text-[16px] inline-block ml-2 font-montserrat">
-        {title}
-      </span>
+      <span className="text-sm inline-block ml-2 font-montserrat">{title}</span>
     </button>
   );
 };

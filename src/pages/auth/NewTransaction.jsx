@@ -25,14 +25,15 @@ const NewTransaction = () => {
 
   return (
     <>
-      <div className="w-full flex h-10  md:hidden items-center mt-20 cursor-pointer">
-        <FaChevronLeft onClick={() => window.history.back()} />
-        <span className="font-montserrat inline-block ml-5">
-          Initial Transaction
-        </span>
+      <div
+        className="w-full flex h-10  md:hidden items-center mt-20 cursor-pointer"
+        onClick={() => window.history.back()}
+      >
+        <FaChevronLeft />
+        <span className="font-montserrat inline-block ml-5">Back</span>
       </div>
 
-      <div className="flex items-center gap-8 mt-24">
+      <div className="flex items-center gap-8 mt-10 md:mt-24">
         <div
           onClick={() => {
             setOpenSingleModal(true);

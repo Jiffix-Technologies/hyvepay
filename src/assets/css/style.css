@@ -10,6 +10,12 @@
   transition: all 300ms ease-out;
 }
 
+::placeholder {
+  font-weight: 400;
+  font-family: Montserrat, sans-serif;
+  font-size: 14px;
+}
+
 .primary-color {
   color: var(--primary-color);
 }
@@ -75,9 +81,11 @@ table td {
 .account-dropdown {
   position: absolute;
   background-color: #ffffff;
-  right: 0;
+  right: 30px;
   border-radius: 20px;
   box-shadow: 1px 1px 25px rgba(0, 0, 0, 0.2);
+  max-width: 320px;
+  width: 100%;
 }
 
 .overlay {
@@ -123,6 +131,11 @@ input {
   opacity: 0.5;
   pointer-events: none;
   background-color: #e5e5e5;
+}
+
+.btn-tab {
+  max-width: 300px !important;
+  width: 100%;
 }
 
 .btn-lg {
@@ -249,13 +262,12 @@ ul.author-dropdown button:hover {
 
 .setting-tabs {
   border: 1px solid #cacaca;
-  width: max-content;
   padding: 8px;
   border-radius: 20px;
 }
-.setting-tabs button {
+/* .setting-tabs button {
   width: 250px;
-}
+} */
 
 .hyvepay-setting {
   border: 1px solid #cacaca;
@@ -370,7 +382,7 @@ select.none {
 }
 
 .login_bg {
-  background-image: url(../../assets/images/login_bg.png);
+  background-image: url(../../assets/images/slider.png);
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
@@ -461,6 +473,16 @@ select.none {
   left: 0%;
 }
 
+.btn-tabs {
+  width: 200px;
+  /* width: 100%; */
+}
+
+/* .item-wrapper {
+  background-color: red;
+  width: 60%;
+} */
+
 @media screen and (max-width: 480px) {
   .heading-two {
     font-size: 24px;
@@ -468,6 +490,10 @@ select.none {
   .otp-inputs input {
     width: 70px !important;
   }
+  .btn-tabs {
+    width: 100%;
+  }
+
   .modal {
     min-width: 90%;
     max-height: 90%;
@@ -486,10 +512,16 @@ select.none {
   .transact-card p {
     font-size: 13px;
   }
+  .item-wrapper {
+    width: 100% !important;
+  }
 }
 @media screen and (max-width: 400px) {
   .transact-card {
     max-width: 170px;
+  }
+  .setting-tabs {
+    border: none !important;
   }
 }
 @media screen and (max-width: 375px) {

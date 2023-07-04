@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import ConfirmPaymentModal from "./ConfirmPaymentModal";
 import AppBtn from "../AppBtn/AppBtn";
+import InputHeader from "../InputHeader/InputHeader";
 
 const FundModal = ({ modal = false, closeModal, setModal, modalType = 0 }) => {
   const [view, setView] = React.useState(modalType);
@@ -105,7 +106,8 @@ const FundModal = ({ modal = false, closeModal, setModal, modalType = 0 }) => {
 
                   <div className="form-group w-full justify-center">
                     <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor=""> Narration</label> <br />
+                      <InputHeader text="Narration" />
+
                       <textarea
                         name=""
                         id=""
@@ -171,6 +173,7 @@ const FundModal = ({ modal = false, closeModal, setModal, modalType = 0 }) => {
 
                   <div className="form-group flex-col md:flex-row  w-full justify-center">
                     <div className="w-full mb-3 md:mb-6">
+                      <InputHeader text="Narration" />
                       <label htmlFor="">Recipient's Bank Name</label> <br />
                       <select
                         name=""

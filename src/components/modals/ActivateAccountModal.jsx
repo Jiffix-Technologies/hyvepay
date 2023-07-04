@@ -30,7 +30,7 @@ const ActivateAccountModal = ({
           className="fixed top-0 inset-0 bg-black bg-opacity-70 flex justify-center items-center customModal"
           onClick={toggleModal}
         >
-          <div className="bg-white p-2 relative h-[90%] w-[80%] md:w-[30%] overflow-y-auto  rounded-md">
+          <div className="bg-white p-2 relative h-[90%] w-[90%] md:w-[30%] overflow-y-auto  rounded-md">
             <img
               src={CloseIcon}
               alt=""

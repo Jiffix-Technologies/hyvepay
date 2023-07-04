@@ -86,6 +86,13 @@ const Profile = () => {
     }),
   };
 
+  const banks = [
+    "Guaranty Trust Bank (GTBank)",
+    "Access Bank",
+    "First Bank of Nigeria",
+    "United Bank for Africa (UBA)",
+  ];
+
   return (
     <>
       <div className="mb-20 mt-32 h-screen px-0 md:px-20">
@@ -143,7 +150,7 @@ const Profile = () => {
               </div>
 
               <div className="mt-5 md:mt-5  w-full">
-                <AppDropDown title="Account Type" />
+                <AppDropDown title="Account Type" data={banks} />
               </div>
             </div>
 

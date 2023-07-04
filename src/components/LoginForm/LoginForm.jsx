@@ -18,9 +18,9 @@ const LoginForm = () => {
       <div className="flex flex-col h-full items-center mt-28 px-10 md:px-28 justify-center">
         <div style={{ maxWidth: 600, width: "100%" }}>
           <TextHeader
-            className="text-left"
+            className="text-center"
             title="Sign in to HyvePay"
-            subTextCassName="mb-10"
+            subTextCassName="mb-10 text-center"
             subTitle=" Enter your HyveCloud account information below to log into your
           account"
           />

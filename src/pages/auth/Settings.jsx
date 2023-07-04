@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import settings from "../../assets/images/settings.png";
 import DeleteIcon from "../../assets/svgs/delete.svg";
 import DownloadIcon from "../../assets/svgs/download-icon.svg";
@@ -9,94 +9,123 @@ import InactiveToggleIcon from "../../assets/svgs/toggle-inactive.svg";
 import ActiveToggleIcon from "../../assets/svgs/toggle-active.svg";
 
 import { Link } from "react-router-dom";
+import AppBtn from "../../components/AppBtn/AppBtn";
+import TabBtn from "../../components/TabBtn/TabBtn";
+import AppInput from "../../components/AppInput/AppInput";
+import AccountSettings from "../../components/AccountSettings/AccountSettings";
+import { HiChevronDown } from "react-icons/hi";
+import SingleSort from "../../components/SingleSort/SingleSort";
+import DeleteModal from "../../components/modals/DeleteModal";
+import AddRoleModal from "../../components/modals/AddRoleModal";
+import AddUserModal from "../../components/modals/AddUserModal";
+import ReadUserModal from "../../components/modals/ReadUserModal";
+import EditRoleModal from "../../components/modals/EditRoleModal";
 
 const Settings = () => {
   const [view, setView] = useState(0);
+  const [deletemodal, setDeletemodal] = useState(false);
+  const [addrolemodal, setAddrolemodal] = useState(false);
+  const [addusermodal, setAddusermodal] = useState(false);
+  const [readusermodal, setReadusermodal] = useState(false);
+  const [editRole, setEditRole] = useState(false);
+
+  const closeDeleteModal = () => setDeletemodal(!deletemodal);
+
+  const [openSort, setOpenSort] = useState(false);
+  const dropdownRef = useRef(null);
+  const [select, setSelect] = useState("Sort by");
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenSort(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const data = [
+    "Hyvepay",
+    "Account Settings",
+    "User & Role Managment",
+    "Preferences",
+  ];
 
   return (
     <>
-      <div className="mb-20 mt-24">
-        <div className="flex justify-between flex-wrap items-center mt-10 my-4 setting-tabs">
+      <div className="mb-20 mt-24 w-full">
+        <div className="flex justify-between w-[100%] md:w-[90%] items-center mt-10 my-4 setting-tabs">
           {/* <h5 className="heading-five font-montserrat">Settings</h5> */}
 
-          <div className="flex md:flex-row mt-3 md:mt-0 gap-4">
-            <button
-              onClick={() => setView(0)}
-              className={view == 0 ? "btn btn-primary" : "btn btn-secondary"}
-            >
-              Hyvepay
-            </button>
-
-            <button
-              onClick={() => setView(1)}
-              className={view == 1 ? "btn btn-primary" : "btn btn-secondary"}
-            >
-              Account Settings
-            </button>
-
-            <button
-              onClick={() => setView(2)}
-              className={view == 2 ? "btn btn-primary" : "btn btn-secondary"}
-            >
-              User & Role Managment
-            </button>
-
-            <button
-              onClick={() => setView(3)}
-              className={view == 3 ? "btn btn-primary" : "btn btn-secondary"}
-            >
-              Preferences
-            </button>
+          <div className="flex items-center flex-col md:flex-row justify-between w-[100%]  mt-3 md:mt-0 gap-4">
+            {data.map((item, index) => {
+              return (
+                <TabBtn
+                  title={item}
+                  onClick={() => setView(index)}
+                  key={index}
+                  className={view === index ? "btn-primary" : "btn-secondary"}
+                />
+              );
+            })}
           </div>
         </div>
 
         <div>
           {view == 0 ? (
             <>
-              <div className="p-14 hyvepay-setting rounded-3xl">
-                <h5 className="font-bold">HyvePay Pin</h5>
-                <p className="">Please set your password for HyvePay</p>
+              <div className="p-5 md:p-14 hyvepay-setting rounded-3xl">
+                <h5 className="font-bold font-montserrat">HyvePay Pin</h5>
+                <p className="font-montserrat">
+                  Please set your password for HyvePay
+                </p>
 
-                <div className="mt-4 ">
-                  <div className="flex  rounded-none gap-4 w-full">
-                    <div className="w-full">
-                      <label htmlFor="">HyvePay Pin</label>
-                      <br />
-                      <input
-                        type="text"
-                        className="w-full bg-gray-100 border-none"
+                <div className="mt-10 ">
+                  <div className="flex flex-col md:flex-row rounded-none gap-4 w-full">
+                    <div className="w-full relative">
+                      <AppInput
+                        hasPLaceHolder={true}
+                        placeholderTop="HyvePay Pin"
                         placeholder="Enter a pin for your HyvePay account"
+                        className="bg-[#F5F5F5] border-[#F5F5F5]"
                       />
-                      <br />
-                      <small>Your pin must be minimum of 4 digits</small>
+                      <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                        Your pin must be minimum of 4 digits
+                      </small>
                     </div>
 
-                    <div className="w-full">
-                      <label htmlFor="">Confirm HyvePay Pin</label>
-                      <br />
-                      <input
-                        className="w-full bg-gray-100 border-none"
-                        type="text"
+                    <div className="w-full relative">
+                      <AppInput
+                        hasPLaceHolder={true}
+                        placeholderTop="Confirm HyvePay Pin"
                         placeholder="Enter a pin for your HyvePay account"
+                        className="bg-[#F5F5F5] border-[#F5F5F5]"
                       />
-                      <br />
-                      <small>Your pin must be minimum of 4 digits</small>
+                      <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                        Your pin must be minimum of 4 digits
+                      </small>
                     </div>
                   </div>
-                  <div className="w-full mt-8">
-                    <label htmlFor="">AutoHyve Account Password</label>
-                    <br />
-                    <input
-                      className="w-[50%] bg-gray-100 border-none"
-                      type="text"
+
+                  <div className="md:w-[50%] w-full mt-8 relative">
+                    <AppInput
+                      hasPLaceHolder={true}
+                      placeholderTop="AutoHyve Account Password"
                       placeholder="Enter your AutoHyve account password"
+                      className="bg-[#F5F5F5] border-[#F5F5F5]"
                     />
-                    <br />
-                    <small>Your pin must be minimum of 4 digits</small>
+                    <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                      Your pin must be minimum of 4 digits
+                    </small>
                   </div>
 
-                  <div className="flex justify-end">
-                    <button className="btn btn-primary uppercase">
+                  <div className="flex justify-end ">
+                    <button className="btn btn-primary uppercase mt-5">
                       submit
                     </button>
                   </div>
@@ -104,277 +133,38 @@ const Settings = () => {
               </div>
             </>
           ) : view == 1 ? (
-            <>
-              <div className="p-14 hyvepay-setting rounded-3xl">
-                <div className="flex items-center justify-between">
-                  <h5 className="heading-five">Business Profile</h5>
-
-                  <button className="btn btn-primary uppercase">save</button>
-                </div>
-
-                <div className="flex mt-10 justify-between items-center">
-                  <div>
-                    <h5 className="">Your Company’s Logo</h5>
-                    <p>
-                      Kindly upload/update your business logo if you have one
-                    </p>
-                  </div>
-                  <img src={settings} alt="" className="w-[100px] h-[100px]" />
-                </div>
-
-                <hr className="mt-14 mb-14" />
-
-                <div className="flex gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">Company Full Name</label>
-                    <br />
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="Company Name"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Name of Director</label>
-                    <br />
-                    <input
-                      className="w-full bg-gray-100 border-none"
-                      type="text"
-                      placeholder="Director Name"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-
-                <div className="flex mt-8 gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">Business Category</label>
-                    <br />
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Choose business category</option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Business Registration Status</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">
-                        Choose business registration status
-                      </option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-
-                <div className="flex mt-8 gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">Workshop Address</label>
-                    <br />
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="Full Address"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">State</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Choose state</option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-
-                <div className="flex mt-8 gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">District</label>
-                    <br />
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Choose district</option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Tax Identity Number (TIN)</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Enter your TIN</option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-
-                <div className="flex mt-8 gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">Name of Manager</label>
-                    <br />
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="Manager Name"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">CAC Number</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Enter your CAC number</option>
-                    </select>
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-              </div>
-              <div className="p-14 hyvepay-setting rounded-3xl mt-14">
-                <div className="flex items-center justify-between">
-                  <h5 className="heading-five">Employment Information</h5>
-
-                  <button className="btn btn-primary uppercase">save</button>
-                </div>
-
-                <div className="flex mt-8 gap-4 w-full">
-                  <div className="w-full">
-                    <label htmlFor="">Contact Number</label>
-                    <br />
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="Enter Contact Number"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Total Staffs</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="Enter the Total Staffs"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Total Technicians</label>
-                    <br />
-                    <input
-                      className="w-full bg-gray-100 border-none"
-                      type="text"
-                      placeholder="Enter Total Techicans"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-14 hyvepay-setting rounded-3xl mt-14">
-                <div className="flex items-center justify-between">
-                  <h5 className="heading-five">Brands</h5>
-
-                  <button className="btn btn-primary uppercase">save</button>
-                </div>
-
-                <div className="flex mt-8 mb-4 gap-4 w-full items-end">
-                  <div className="w-full">
-                    <label htmlFor="">Make</label>
-                    <br />
-                    <select
-                      name=""
-                      id=""
-                      className="bg-gray-100 none w-full sm border-none"
-                    >
-                      <option value="">Brand Make</option>
-                    </select>
-                    {/* <input type="text" className='w-full bg-gray-100 border-none' placeholder='Enter Contact Number' /> */}
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    <label htmlFor="">Model Year</label>
-                    <br />
-                    {/* <input className='w-full bg-gray-100 border-none' type="text" placeholder='Director Name' /> */}
-                    <input
-                      type="text"
-                      className="w-full bg-gray-100 border-none"
-                      placeholder="From"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <div className="w-full">
-                    {/* <label htmlFor="">Total Technicians</label><br /> */}
-                    <input
-                      className="w-full bg-gray-100 border-none"
-                      type="text"
-                      placeholder="To"
-                    />
-                    {/* <br /><small>Your pin must be minimum of 4 digits</small> */}
-                  </div>
-
-                  <button className="bg-red-500 px-5 rounded-lg">
-                    <img src={DeleteIcon} alt="" style={{ height: 60 }} />
-                  </button>
-                </div>
-                <Link to="/" className="primary-color">
-                  Add New Brand
-                </Link>
-              </div>
-            </>
+            <AccountSettings />
           ) : view == 2 ? (
             <>
               <div className="py-14 border-none rounded-3xl">
-                <h5 className="heading-five block mb-4">Roles</h5>
+                <h5 className="font-bold font-montserrat mb-5">Roles</h5>
                 <div className="flex items-center justify-between">
-                  <select
-                    name=""
-                    id=""
-                    className="btn btn-secondary sm border-1"
-                  >
-                    <option value="">Sort by</option>
-                  </select>
+                  <div className="relative" ref={dropdownRef}>
+                    <div
+                      className="flex items-center border-[1px] cursor-pointer border-[#CACACA] p-3 rounded-[20px] px-5"
+                      onClick={() => setOpenSort(!openSort)}
+                    >
+                      <span className="font-montserrat inline-block mr-2 font-medium ">
+                        Sort by
+                      </span>
+                      <HiChevronDown size={20} />
+                    </div>
+                    {openSort && (
+                      <SingleSort
+                        openSort={openSort}
+                        setOpenSort={setOpenSort}
+                        select={select}
+                        setSelect={setSelect}
+                      />
+                    )}
+                  </div>
 
-                  <button className="btn btn-secondary uppercase">
-                    add role
-                  </button>
+                  <span
+                    onClick={() => setAddrolemodal(!addrolemodal)}
+                    className="flex items-center border-[1px] cursor-pointer border-[#CACACA] p-3 rounded-[20px] px-5"
+                  >
+                    ADD ROLE
+                  </span>
                 </div>
 
                 {/* TABLE */}
@@ -394,7 +184,7 @@ const Settings = () => {
                     </form>
                   </div>
 
-                  <div className="flex items-center gap-4 text-gray-500">
+                  <div className="flex items-center font-montserrat text-sm gap-4 text-gray-500">
                     Showing 12 results out of 56
                   </div>
                 </div>
@@ -424,7 +214,10 @@ const Settings = () => {
                           delete_expense,view_analytics,read_customer
                         </td>
                         <td className="flex gap-3">
-                          <button>
+                          <button
+                            className=""
+                            onClick={() => setEditRole(!editRole)}
+                          >
                             <img src={EditIcon} alt="" />
                           </button>
 
@@ -445,7 +238,11 @@ const Settings = () => {
                         </td>
                         <td className="flex gap-3">
                           <button>
-                            <img src={EditIcon} alt="" />
+                            <img
+                              src={EditIcon}
+                              alt=""
+                              onClick={() => setEditRole(!editRole)}
+                            />
                           </button>
 
                           <button>
@@ -465,7 +262,11 @@ const Settings = () => {
                         </td>
                         <td className="flex gap-3">
                           <button>
-                            <img src={EditIcon} alt="" />
+                            <img
+                              src={EditIcon}
+                              alt=""
+                              onClick={() => setEditRole(!editRole)}
+                            />
                           </button>
 
                           <button>
@@ -492,13 +293,16 @@ const Settings = () => {
                   <h5 className="heading-five block mb-4">User</h5>
 
                   <div className="flex justify-center gap-3 items-center">
-                    <button className="btn btn-secondary uppercase">
-                      read users
-                    </button>
-
-                    <button className="btn btn-secondary uppercase">
-                      add user
-                    </button>
+                    <AppBtn
+                      className="btn-secondary"
+                      title="READ USER"
+                      onClick={() => setReadusermodal(!readusermodal)}
+                    />
+                    <AppBtn
+                      className="btn-secondary"
+                      title="ADD USER"
+                      onClick={() => setAddusermodal(!addusermodal)}
+                    />
                   </div>
                 </div>
 
@@ -507,7 +311,7 @@ const Settings = () => {
                 <div className="flex justify-end mt-8 flex-wrap items-center">
                   <div className="search w-full md:w-2/4 mb-3"></div>
 
-                  <div className="flex items-center gap-4 text-gray-500">
+                  <div className="flex items-center font-montserrat text-sm gap-4 text-gray-500">
                     Showing 12 results out of 56
                   </div>
                 </div>
@@ -521,13 +325,27 @@ const Settings = () => {
                       <th className="font-montserrat text-center w-10">
                         <input type="checkbox" name="" id="" />
                       </th>
-                      <th className="font-montserrat">ID</th>
-                      <th className="font-montserrat w-60">Full Name</th>
-                      <th className="font-montserrat w-30">Email</th>
-                      <th className="font-montserrat">Role</th>
-                      <th className="font-montserrat">Status</th>
-                      <th className="font-montserrat">Phone Number</th>
-                      <th className="font-montserrat">Action</th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        ID
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Full Name
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Email
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Role
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Status
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Phone Number
+                      </th>
+                      <th className="font-montserrat text-xs font-semibold">
+                        Action
+                      </th>
                     </thead>
                     <tbody>
                       <tr>
@@ -579,7 +397,7 @@ const Settings = () => {
                           </span>
                         </td>
                         <td className="font-montserrat">08144246273</td>
-                        <td className="flex gap-3">
+                        <td className="flex gap-3 w-[120px]">
                           <button>
                             <img src={EditIcon} alt="" />
                           </button>
@@ -613,7 +431,7 @@ const Settings = () => {
                         <td className="font-montserrat">08144246273</td>
                         <td className="flex gap-3">
                           <button>
-                            <img src={EditIcon} alt="" />
+                            <img src={EditIcon} alt="" className="w-[]" />
                           </button>
 
                           <button>
@@ -646,6 +464,36 @@ const Settings = () => {
           )}
         </div>
       </div>
+
+      <DeleteModal
+        deletemodal={deletemodal}
+        title={"Are you sure you want to delete this User?"}
+        description=""
+        closeDeleteModal={closeDeleteModal}
+      />
+
+      <AddRoleModal
+        addrolemodal={addrolemodal}
+        title={"Add Role"}
+        description=""
+        setAddrolemodal={setAddrolemodal}
+      />
+
+      <AddUserModal
+        addusermodal={addusermodal}
+        title={"Add User"}
+        description=""
+        setAddusermodal={setAddusermodal}
+      />
+
+      <ReadUserModal
+        readusermodal={readusermodal}
+        title={"Read Users"}
+        description=""
+        setReadusermodal={setReadusermodal}
+      />
+
+      <EditRoleModal editRole={editRole} setEditRole={setEditRole} />
     </>
   );
 };

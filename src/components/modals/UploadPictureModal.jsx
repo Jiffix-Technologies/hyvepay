@@ -26,11 +26,11 @@ export default function UploadPictureModal({ setOpenProfile, opneProfile }) {
           className="overlay h-screen w-screen flex  fixed justify-center items-center"
           onClick={toggleModal}
         >
-          <div className=" bg-white w-[30%] rounded-md py-8 px-20">
+          <div className=" bg-white w-[90%] md:w-[30%] rounded-md py-8 px-20">
             <div className="modal-header bg-white p-8 py-2 relative">
               <button
                 onClick={() => setOpenProfile(!opneProfile)}
-                className="flex justify-end w-full absolute  -top-3 right-3 md:-right-10"
+                className="flex justify-end w-full absolute  -top-3 -right-12 md:-right-10"
               >
                 <img src={CloseIcon} alt="" />
               </button>

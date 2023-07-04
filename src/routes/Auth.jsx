@@ -1,22 +1,34 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Header from "../pages/auth/Layouts/Header";
+import React, { useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+
 import Sidebar from "../pages/auth/Layouts/Sidebar";
+import "../assets/css/layout.css";
+import DashboardHeader from "../pages/auth/Layouts/DashboardHeader";
 
 const Auth = () => {
-  return (
-    <>
-      <div className="flex">
-        <Sidebar />
+  const [show, setShow] = useState(false);
+  const [openNav, setOpenNav] = useState(false);
+  const [open, setOpen] = useState(false);
 
-        <div className="w-full">
-          <Header />
-          <div className="px-4 md:px-8 ml-0 md:ml-[20%]">
-            <Outlet />
-          </div>
-        </div>
-      </div>
-    </>
+  return (
+    <div>
+      <Sidebar
+        show={show}
+        setShow={setShow}
+        openNav={openNav}
+        setOpenNav={setOpenNav}
+      />
+      <DashboardHeader
+        show={show}
+        open={open}
+        setOpen={setOpen}
+        setOpenNav={setOpenNav}
+        openNav={openNav}
+      />
+      <main className={show ? "large-container " : "content-container"}>
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
