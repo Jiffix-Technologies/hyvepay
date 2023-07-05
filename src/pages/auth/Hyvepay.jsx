@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import Card from "../../components/Dashboard/Card";
 import SearchIcon from "../../assets/svgs/vuesax/linear/search-normal.svg";
 import DownloadIcon from "../../assets/svgs/download-icon.svg";
@@ -10,6 +9,8 @@ import ActivateAccountModal from "../../components/modals/ActivateAccountModal";
 import CustomModal from "../../components/modals/CustomModal";
 import CustomDatePickerModal from "../../components/modals/CustomDatePickerModal";
 import AppTabBtn from "../../components/AppTabBtn/AppTabBtn";
+import AppCalender from "../../components/AppCalender/AppCalender";
+import AppCalenderEnd from "../../components/AppCalender/AppCalenderEnd";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -17,6 +18,13 @@ const Hyvepay = () => {
   const [headerText, setHeaderText] = useState(0);
   const [openDate, setOpenDate] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [calender, setCalender] = useState("");
+  const [calenderEnd, setCalenderEnd] = useState("");
+
+  const [openStart, setOpenStart] = useState(false);
+
+  const [openEnd, setOpenEnd] = useState(false);
+  const refOne = useRef(null);
   const navigation = useNavigate();
 
   const [modal, setModal] = useState(false);
@@ -25,6 +33,16 @@ const Hyvepay = () => {
     setActivate(!activate);
     setModal(!modal);
   };
+
+  const hideOnClickOutside = (e) => {
+    if (refOne.current && !refOne.current.contains(e.target)) {
+      setOpenStart(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
 
   useEffect(() => {
     if (modal) {
@@ -131,11 +149,6 @@ const Hyvepay = () => {
                     title=" View saved beneficiaries"
                     className="btn-secondary mt-4 "
                   />
-
-                  {/* <Link
-                    to={"/hyvepay/saved-beneficiaries"}
-                    className="btn btn-secondary mt-4 font-montserrat"
-                  ></Link> */}
                 </div>
               )}
             </div>
@@ -180,20 +193,40 @@ const Hyvepay = () => {
             </form>
           </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              className="btn btn-secondary font-montserrat"
-              onClick={() => setOpenDate(true)}
-            >
-              Start Date
-            </button>
+          <div className="flex items-center gap-4" ref={refOne}>
+            <div className="relative">
+              <button
+                className="btn btn-secondary font-montserrat"
+                onClick={() => setOpenStart(!openStart)}
+              >
+                {calender === "" ? " Start Date" : calender}
+              </button>
+              {openStart && (
+                <AppCalender
+                  calender={calender}
+                  setCalender={setCalender}
+                  setOpenStart={setOpenStart}
+                  openStart={openStart}
+                />
+              )}
+            </div>
             -
-            <button
-              className="btn btn-secondary font-montserrat"
-              onClick={() => setOpenDate(true)}
-            >
-              End Date
-            </button>
+            <div className="relative">
+              <button
+                className="btn btn-secondary font-montserrat"
+                onClick={() => setOpenEnd(!openEnd)}
+              >
+                {calenderEnd === "" ? " End Date" : calenderEnd}
+              </button>
+              {openEnd && (
+                <AppCalenderEnd
+                  calender={calenderEnd}
+                  setCalender={setCalenderEnd}
+                  setOpenStart={setOpenEnd}
+                  openStart={openEnd}
+                />
+              )}
+            </div>
           </div>
         </div>
 

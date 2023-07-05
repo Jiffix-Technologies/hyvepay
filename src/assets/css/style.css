@@ -478,10 +478,23 @@ select.none {
   /* width: 100%; */
 }
 
-/* .item-wrapper {
-  background-color: red;
-  width: 60%;
-} */
+.calenderElement {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 40px;
+  border: 1px solid #ccc;
+  z-index: 999;
+}
+
+.calenderElement2 {
+  position: absolute;
+  left: 0%;
+  transform: translateX(-50%);
+  top: 40px;
+  border: 1px solid #ccc;
+  z-index: 999;
+}
 
 @media screen and (max-width: 480px) {
   .heading-two {
@@ -514,6 +527,24 @@ select.none {
   }
   .item-wrapper {
     width: 100% !important;
+  }
+
+  .calenderElement {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-20%);
+    top: 40px;
+    border: 1px solid #ccc;
+    z-index: 999;
+  }
+
+  .calenderElement2 {
+    position: absolute;
+    left: -65%;
+    transform: translateX(-20%);
+    top: 40px;
+    border: 1px solid #ccc;
+    z-index: 999;
   }
 }
 @media screen and (max-width: 400px) {
