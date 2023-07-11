@@ -213,7 +213,7 @@ const Settings = () => {
                             onClick={() => setEditRole(!editRole)}
                           />
 
-                          <button>
+                          <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
                           </button>
                         </td>
@@ -234,7 +234,7 @@ const Settings = () => {
                             onClick={() => setEditRole(!editRole)}
                           />
 
-                          <button>
+                          <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
                           </button>
                         </td>
@@ -253,9 +253,10 @@ const Settings = () => {
                           <GrEdit
                             size={28}
                             onClick={() => setEditRole(!editRole)}
+                            className="cursor-pointer"
                           />
 
-                          <button>
+                          <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
                           </button>
                         </td>
@@ -352,13 +353,17 @@ const Settings = () => {
                         </td>
                         <td className="font-montserrat">08144246273</td>
                         <td className="flex gap-3">
-                          <GrEdit size={28} />
+                          <GrEdit
+                            size={28}
+                            onClick={() => setEditRole(!editRole)}
+                            className="cursor-pointer"
+                          />
 
                           <button>
                             <AppSwitch />
                           </button>
 
-                          <button>
+                          <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
                           </button>
                         </td>
