@@ -29,7 +29,7 @@ const AppInput = ({
         </span>
       )} */}
 
-      <div className="prepend w-full mb-3">
+      <div className="prepend w-full mb-5">
         <img src={leftImg} alt="" />
         <input
           type={pwdfield ? "password" : type}
