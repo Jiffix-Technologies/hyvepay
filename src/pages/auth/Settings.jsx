@@ -366,7 +366,7 @@ const Settings = () => {
                           <AppSwitch />
 
                           <button onClick={() => setDeletemodal(true)}>
-                            <img src={TrashIcon} alt="" />
+                            <img src={TrashIcon} alt="" className="w-[22px]" />
                           </button>
                         </td>
                       </tr>
@@ -398,7 +398,7 @@ const Settings = () => {
                           <AppSwitch />
 
                           <button onClick={() => setDeletemodal(true)}>
-                            <img src={TrashIcon} alt="" />
+                            <img src={TrashIcon} alt="" className="w-[22px]" />
                           </button>
                         </td>
                       </tr>
