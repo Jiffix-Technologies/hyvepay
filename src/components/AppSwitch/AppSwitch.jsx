@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Switch from "react-switch";
+import styles from "./AppSwitch.module.css";
 
 const AppSwitch = () => {
   const [checked, setChecked] = useState(false);
@@ -7,17 +8,20 @@ const AppSwitch = () => {
     setChecked(!checked);
   };
   return (
-    <label>
-      <Switch
+    <label className={styles.switch}>
+      <input type="checkbox" />
+      <span className={styles.slider} />
+
+      {/* <Switch
         onChange={handleChange}
         checked={checked}
         offColor="#000"
         onColor="#FAA21B"
         uncheckedIcon={false}
         checkedIcon={false}
-        height={25}
-        width={50}
-      />
+        height={10}
+        width={30}
+      /> */}
     </label>
   );
 };

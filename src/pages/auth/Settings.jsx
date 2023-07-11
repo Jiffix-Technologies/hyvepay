@@ -16,6 +16,7 @@ import ReadUserModal from "../../components/modals/ReadUserModal";
 import EditRoleModal from "../../components/modals/EditRoleModal";
 import AppSwitch from "../../components/AppSwitch/AppSwitch";
 import { GrEdit } from "react-icons/gr";
+import EditUserModal from "../../components/modals/EditUserModal";
 
 const Settings = () => {
   const [view, setView] = useState(0);
@@ -24,6 +25,7 @@ const Settings = () => {
   const [addusermodal, setAddusermodal] = useState(false);
   const [readusermodal, setReadusermodal] = useState(false);
   const [editRole, setEditRole] = useState(false);
+  const [editUser, setEditUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const closeDeleteModal = () => setDeletemodal(!deletemodal);
@@ -209,8 +211,9 @@ const Settings = () => {
                         </td>
                         <td className="flex gap-3">
                           <GrEdit
-                            size={28}
+                            size={18}
                             onClick={() => setEditRole(!editRole)}
+                            className="cursor-pointer"
                           />
 
                           <button onClick={() => setDeletemodal(true)}>
@@ -230,8 +233,9 @@ const Settings = () => {
                         </td>
                         <td className="flex gap-3">
                           <GrEdit
-                            size={28}
+                            size={18}
                             onClick={() => setEditRole(!editRole)}
+                            className="cursor-pointer"
                           />
 
                           <button onClick={() => setDeletemodal(true)}>
@@ -251,7 +255,7 @@ const Settings = () => {
                         </td>
                         <td className="flex gap-3">
                           <GrEdit
-                            size={28}
+                            size={18}
                             onClick={() => setEditRole(!editRole)}
                             className="cursor-pointer"
                           />
@@ -352,16 +356,14 @@ const Settings = () => {
                           </span>
                         </td>
                         <td className="font-montserrat">08144246273</td>
-                        <td className="flex gap-3">
+                        <td className="flex items-center gap-3">
                           <GrEdit
-                            size={28}
-                            onClick={() => setEditRole(!editRole)}
+                            size={18}
+                            onClick={() => setEditUser(!editUser)}
                             className="cursor-pointer"
                           />
 
-                          <button>
-                            <AppSwitch />
-                          </button>
+                          <AppSwitch />
 
                           <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
@@ -387,44 +389,15 @@ const Settings = () => {
                         </td>
                         <td className="font-montserrat">08144246273</td>
                         <td className="flex items-center gap-3">
-                          <GrEdit size={28} />
+                          <GrEdit
+                            size={18}
+                            onClick={() => setEditUser(!editUser)}
+                            className="cursor-pointer"
+                          />
 
-                          <button>
-                            <AppSwitch />
-                          </button>
+                          <AppSwitch />
 
-                          <button>
-                            <img src={TrashIcon} alt="" />
-                          </button>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td className="font-montserrat text-center">
-                          <input type="checkbox" name="" id="" />
-                        </td>
-                        <td className="font-montserrat">9</td>
-                        <td className="font-montserrat">Mr Olusola Segun</td>
-                        <td className="font-montserrat">demo@myautohyve.com</td>
-                        <td className="font-montserrat">Garage Admin Role</td>
-                        <td className="font-montserrat">
-                          <span
-                            className="py-2 bg-primary px-4"
-                            style={{ borderRadius: 10 }}
-                          >
-                            Active
-                          </span>
-                        </td>
-                        <td className="font-montserrat">08144246273</td>
-                        <td className="flex items-center gap-3">
-                          <GrEdit size={28} />
-                          {/* <img src={EditIcon} alt="" className="w-[20px]" /> */}
-
-                          <button>
-                            <AppSwitch />
-                          </button>
-
-                          <button>
+                          <button onClick={() => setDeletemodal(true)}>
                             <img src={TrashIcon} alt="" />
                           </button>
                         </td>
@@ -475,6 +448,12 @@ const Settings = () => {
         title={"Read Users"}
         description=""
         setReadusermodal={setReadusermodal}
+      />
+
+      <EditUserModal
+        editUser={editUser}
+        setEditUser={setEditUser}
+        title={"Edit User"}
       />
 
       <EditRoleModal editRole={editRole} setEditRole={setEditRole} />

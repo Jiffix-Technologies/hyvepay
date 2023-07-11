@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import SuccessfulPaymentModal from "../Dashboard/SuccessfulPaymentModal";
 import AppBtn from "../AppBtn/AppBtn";
@@ -12,7 +12,8 @@ const AddUserModal = ({
   // description = 'Are you sure you want to carry out this action? If you proceed, you will not be able to undo this action',
 }) => {
   const [successModal, setSuccessModal] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const closeSuccessModal = () => setSuccessModal(!successModal);
   const data = [
     "Independent Technician",
@@ -20,6 +21,17 @@ const AddUserModal = ({
     "Workshop Chain",
     "Others",
   ];
+
+  const hideOnClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
   return (
     <>
       <SuccessfulPaymentModal
@@ -31,7 +43,7 @@ const AddUserModal = ({
           className="overlay h-screen w-screen flex fixed justify-center items-center"
           style={{ zIndex: 4000 }}
         >
-          <div className="rounded-lg md:w-[40%] w-[90%] h-[700px] md:h-auto overflow-y-auto bg-white py-8 px-3">
+          <div className="rounded-lg md:w-[50%] w-[90%] h-[700px] md:h-auto overflow-y-auto bg-white py-8 px-3">
             <div className="modal-header pt-0 bg-white px-8">
               <div className="flex justify-between w-full">
                 <h5 className="text-center font-semibold font-montserrat">
@@ -98,6 +110,9 @@ const AddUserModal = ({
                       title="Role"
                       data={data}
                       placeholder="Choose Role"
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      dropdownRef={dropdownRef}
                     />
                   </div>
                 </div>
