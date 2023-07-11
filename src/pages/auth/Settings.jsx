@@ -126,9 +126,9 @@ const Settings = () => {
             </>
           )}
 
-          {view == 1 && <AccountSettings />}
+          {/* {view == 1 && <AccountSettings />} */}
 
-          {view == 2 && (
+          {view == 1 && (
             <>
               <div className="py-14 border-none rounded-3xl">
                 <h5 className="font-bold font-montserrat mb-5">Roles</h5>
