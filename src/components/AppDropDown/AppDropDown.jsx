@@ -7,8 +7,10 @@ const AppDropDown = ({
   title = "Recipient’s Bank Name",
   data = [],
   placeholder = "Choose a bank name",
+  dropdownRef,
+  isOpen,
+  setIsOpen,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
 
   const toggleDropdown = () => {
@@ -21,7 +23,7 @@ const AppDropDown = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <InputHeader text={title} />
 
       <button

@@ -3,8 +3,11 @@ import { FaChevronDown } from "react-icons/fa";
 import user from "../../assets/images/user.png";
 import InputHeader from "../InputHeader/InputHeader";
 
-const ChooseBeneficiaryDropDown = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ChooseBeneficiaryDropDown = ({
+  dropdownRef,
+  openBeneficiary,
+  setIsOpenBeneficiary,
+}) => {
   const [selectedOption, setSelectedOption] = useState("");
   const banks = [
     "Beneficiary 1  //  GTBank  //  05347823",
@@ -14,16 +17,16 @@ const ChooseBeneficiaryDropDown = () => {
   ];
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+    setIsOpenBeneficiary(!openBeneficiary);
   };
 
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
-    setIsOpen(false);
+    setIsOpenBeneficiary(!openBeneficiary);
   };
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       {/* Dropdown toggle button */}
       <button
         className="bg-[#F5F5F5] justify-center flex items-center pl-4 text-[#A5A5A5] py-2 h-[53px] w-full rounded-[15px] border-[#CACACA] border-[1px] focus:outline-none"
@@ -42,7 +45,7 @@ const ChooseBeneficiaryDropDown = () => {
       </button>
 
       {/* Dropdown menu */}
-      {isOpen && (
+      {openBeneficiary && (
         <div className="absolute  custom-dropdown-container w-[100%] md:w-[70%] z-50 mt-1 py-2 h-[200px] overflow-y-auto bg-[#CACACA] border border-gray-200 rounded-[25px] shadow-lg">
           {/* Dropdown options */}
 

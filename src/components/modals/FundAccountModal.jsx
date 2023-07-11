@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import add from "../../assets/images/add.png";
 import AppBtn from "../AppBtn/AppBtn";
@@ -15,9 +15,10 @@ const FundAccountModal = ({
 }) => {
   const [confirmationmodal, setConfirmationmodal] = React.useState(false);
   const [selected, setSelected] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [openBeneficiary, setIsOpenBeneficiary] = useState(false);
 
-  //   const closeConfirmModal = () => setConfirmationmodal(!confirmationmodal);
-
+  const dropdownRef = useRef(null);
   const tab = [" New Beneficiary", " Saved Beneficiary"];
 
   if (openSingleModal) {
@@ -38,12 +39,19 @@ const FundAccountModal = ({
     "United Bank for Africa (UBA)",
   ];
 
+  const hideOnClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false);
+      setIsOpenBeneficiary(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
   return (
     <>
-      {/* <ConfirmPaymentModal
-        confirmationmodal={confirmationmodal}
-        closeConfirmModal={closeConfirmModal}
-      /> */}
       {openSingleModal && (
         <div
           id="modalWrapperId"
@@ -61,7 +69,9 @@ const FundAccountModal = ({
                 </button>
               </div>
               <div>
-                <h5 className="text-center heading-five mb-5">Transfer Fund</h5>
+                <h5 className="text-center heading-five mb-5">
+                  Transfer Funds
+                </h5>
               </div>
 
               {currentModal && (
@@ -103,7 +113,7 @@ const FundAccountModal = ({
               {selected === 0 ? (
                 <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
                   <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-0 md:mb-6">
                       <AppInput
                         type="number"
                         placeholderTop="Recipient's Account Number"
@@ -114,12 +124,18 @@ const FundAccountModal = ({
                     </div>
 
                     <div className="w-full mb-3 md:mb-6">
-                      <AppDropDown className="border-[#F5F5F5]" data={banks} />
+                      <AppDropDown
+                        className="border-[#F5F5F5]"
+                        data={banks}
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        dropdownRef={dropdownRef}
+                      />
                     </div>
                   </div>
 
                   <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-0 mt-5 md:mb-6">
                       <AppInput
                         type="text"
                         placeholderTop=" Account Name"
@@ -128,8 +144,7 @@ const FundAccountModal = ({
                         className="bg-[#F5F5F5] border-[#F5F5F5]"
                       />
                     </div>
-
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-0 mt-0 md:mt-5 md:mb-6">
                       <AppInput
                         type="text"
                         placeholderTop="Enter Amount"
@@ -141,7 +156,7 @@ const FundAccountModal = ({
                   </div>
 
                   <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
                       <InputHeader text="Narration" />
 
                       <textarea
@@ -173,11 +188,20 @@ const FundAccountModal = ({
               ) : (
                 <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
                   <div className="w-full mb-3 md:mb-6">
-                    <ChooseBeneficiaryDropDown />
+                    <ChooseBeneficiaryDropDown
+                      dropdownRef={dropdownRef}
+                      openBeneficiary={openBeneficiary}
+                      setIsOpenBeneficiary={setIsOpenBeneficiary}
+                    />
                   </div>
                   <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <AppDropDown data={banks} />
+                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
+                      <AppDropDown
+                        data={banks}
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        dropdownRef={dropdownRef}
+                      />
                     </div>
 
                     <div className="w-full mb-3 md:mb-6">
@@ -192,7 +216,7 @@ const FundAccountModal = ({
                   </div>
 
                   <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full md:mt-0 mt-5 mb-3 md:mb-6">
+                    <div className="w-full md:mt-0 mt-5 mb-0 md:mb-6">
                       <AppInput
                         type="text"
                         placeholderTop="Recipient's Account Number"
@@ -214,7 +238,7 @@ const FundAccountModal = ({
                   </div>
 
                   <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
                       <InputHeader text="Narration" />
 
                       <textarea

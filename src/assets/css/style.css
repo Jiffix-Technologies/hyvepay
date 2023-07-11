@@ -480,23 +480,22 @@ select.none {
 
 .calenderElement {
   position: absolute;
-  left: 50%;
+  left: 5%;
   transform: translateX(-50%);
-  top: 40px;
+  top: 80px;
   border: 1px solid #ccc;
   z-index: 999;
 }
 
-.calenderElement2 {
-  position: absolute;
-  left: 0%;
-  transform: translateX(-50%);
-  top: 40px;
-  border: 1px solid #ccc;
-  z-index: 999;
+.react-date-range-wrapper {
+  width: 100%;
 }
 
-@media screen and (max-width: 480px) {
+.react-date-range {
+  width: 100%;
+}
+
+@media screen and (max-width: 700px) {
   .heading-two {
     font-size: 24px;
   }
@@ -505,6 +504,16 @@ select.none {
   }
   .btn-tabs {
     width: 100%;
+  }
+
+  .calenderElement {
+    position: absolute;
+    /* left: 5% !important; */
+    transform: translateX(-50%);
+    top: 80px !important;
+    border: 1px solid #ccc;
+    z-index: 999;
+    /* max-width: 380px; */
   }
 
   .modal {
@@ -564,6 +573,12 @@ select.none {
   .transact-card {
     max-width: 150px;
   }
+}
+
+.switch {
+  height: 10px !important;
+  width: 10px !important;
+  background-color: #c77f11;
 }
 
 /*# sourceMappingURL=style.css.map */

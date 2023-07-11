@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import settings from "../../assets/images/settings.png";
 import { HiOutlineTrash } from "react-icons/hi";
@@ -10,6 +10,7 @@ import { stateLga } from "../../contsants/states";
 import Select from "react-select";
 import { customStyles } from "../../contsants/customStyles";
 import SearchApiModal from "../modals/SearchApiModal";
+import AppTabBtn from "../AppTabBtn/AppTabBtn";
 
 const AccountSettings = () => {
   const data = [
@@ -22,8 +23,11 @@ const AccountSettings = () => {
   const [state, setState] = useState([]);
   const [district, setDistrict] = useState([]);
   const [value, setValue] = useState(null);
-  const [value2, setValue2] = useState(null);
+
   const [apiModal, setOpenApiModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     let stateyArray = [];
@@ -53,6 +57,17 @@ const AccountSettings = () => {
       setDistrict(distrciyArray);
     }
   }, [value]);
+
+  const hideOnClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false);
+      setIsOpenBeneficiary(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
 
   return (
     <>
@@ -112,6 +127,9 @@ const AccountSettings = () => {
               title="Business Category"
               data={data}
               placeholder="Choose business category"
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              dropdownRef={dropdownRef}
             />
           </div>
 
@@ -120,6 +138,9 @@ const AccountSettings = () => {
               title="Business Registration Status"
               data={data}
               placeholder="Choose business registration status"
+              isOpen={isOpen2}
+              setIsOpen={setIsOpen2}
+              dropdownRef={dropdownRef}
             />
           </div>
         </div>
@@ -231,7 +252,7 @@ const AccountSettings = () => {
         <div className="flex items-center justify-between">
           <h5 className="font-bold font-montserrat">Brands</h5>
 
-          <AppBtn title="SAVE" className="font-medium hidden md:block" />
+          <AppBtn title="SAVE" className="font-medium hidden md:flex" />
         </div>
 
         <div className="flex flex-col md:flex-row   mb-4 gap-4 w-full mt-5">
@@ -257,8 +278,8 @@ const AccountSettings = () => {
             />
           </div>
 
-          <button className="bg-red-500 h-14 w-28 flex items-center justify-center mt-6 rounded-lg hidden md:block">
-            <HiOutlineTrash size={20} color="#fff" />
+          <button className="bg-red-500 h-[50px] w-32  items-center justify-center mt-6 rounded-lg hidden md:flex">
+            <HiOutlineTrash size={20} color="#fff" className="text-center" />
           </button>
         </div>
         <Link to="/" className="primary-color">

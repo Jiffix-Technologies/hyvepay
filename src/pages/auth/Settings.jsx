@@ -1,14 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import settings from "../../assets/images/settings.png";
-import DeleteIcon from "../../assets/svgs/delete.svg";
+
 import DownloadIcon from "../../assets/svgs/download-icon.svg";
 import SearchIcon from "../../assets/svgs/vuesax/linear/search-normal.svg";
-import EditIcon from "../../assets/svgs/edit-icon.svg";
 import TrashIcon from "../../assets/svgs/vuesax/linear/trash.svg";
-import InactiveToggleIcon from "../../assets/svgs/toggle-inactive.svg";
-import ActiveToggleIcon from "../../assets/svgs/toggle-active.svg";
-
-import { Link } from "react-router-dom";
 import AppBtn from "../../components/AppBtn/AppBtn";
 import TabBtn from "../../components/TabBtn/TabBtn";
 import AppInput from "../../components/AppInput/AppInput";
@@ -20,6 +14,8 @@ import AddRoleModal from "../../components/modals/AddRoleModal";
 import AddUserModal from "../../components/modals/AddUserModal";
 import ReadUserModal from "../../components/modals/ReadUserModal";
 import EditRoleModal from "../../components/modals/EditRoleModal";
+import AppSwitch from "../../components/AppSwitch/AppSwitch";
+import { GrEdit } from "react-icons/gr";
 
 const Settings = () => {
   const [view, setView] = useState(0);
@@ -28,6 +24,7 @@ const Settings = () => {
   const [addusermodal, setAddusermodal] = useState(false);
   const [readusermodal, setReadusermodal] = useState(false);
   const [editRole, setEditRole] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const closeDeleteModal = () => setDeletemodal(!deletemodal);
 
@@ -49,20 +46,13 @@ const Settings = () => {
     };
   }, []);
 
-  const data = [
-    "Hyvepay",
-    "Account Settings",
-    "User & Role Managment",
-    "Preferences",
-  ];
+  const data = ["Security", "User & Role Managment"];
 
   return (
     <>
       <div className="mb-20 mt-24 w-full">
-        <div className="flex justify-between w-[100%] md:w-[90%] items-center mt-10 my-4 setting-tabs">
-          {/* <h5 className="heading-five font-montserrat">Settings</h5> */}
-
-          <div className="flex items-center flex-col md:flex-row justify-between w-[100%]  mt-3 md:mt-0 gap-4">
+        <div className="flex justify-between w-[100%] md:w-[60%] items-center mt-10 my-4 setting-tabs">
+          <div className="flex items-center flex-col md:flex-row  w-[100%]  mt-3 md:mt-0 gap-4">
             {data.map((item, index) => {
               return (
                 <TabBtn
@@ -77,8 +67,9 @@ const Settings = () => {
         </div>
 
         <div>
-          {view == 0 ? (
+          {view == 0 && (
             <>
+              {" "}
               <div className="p-5 md:p-14 hyvepay-setting rounded-3xl">
                 <h5 className="font-bold font-montserrat">HyvePay Pin</h5>
                 <p className="font-montserrat">
@@ -125,16 +116,19 @@ const Settings = () => {
                   </div>
 
                   <div className="flex justify-end ">
-                    <button className="btn btn-primary uppercase mt-5">
-                      submit
-                    </button>
+                    <AppBtn
+                      title="submit"
+                      className="font-medium uppercase mt-5"
+                    />
                   </div>
                 </div>
               </div>
             </>
-          ) : view == 1 ? (
-            <AccountSettings />
-          ) : view == 2 ? (
+          )}
+
+          {view == 1 && <AccountSettings />}
+
+          {view == 2 && (
             <>
               <div className="py-14 border-none rounded-3xl">
                 <h5 className="font-bold font-montserrat mb-5">Roles</h5>
@@ -214,12 +208,10 @@ const Settings = () => {
                           delete_expense,view_analytics,read_customer
                         </td>
                         <td className="flex gap-3">
-                          <button
-                            className=""
+                          <GrEdit
+                            size={28}
                             onClick={() => setEditRole(!editRole)}
-                          >
-                            <img src={EditIcon} alt="" />
-                          </button>
+                          />
 
                           <button>
                             <img src={TrashIcon} alt="" />
@@ -237,13 +229,10 @@ const Settings = () => {
                           delete_expense,view_analytics,read_customer
                         </td>
                         <td className="flex gap-3">
-                          <button>
-                            <img
-                              src={EditIcon}
-                              alt=""
-                              onClick={() => setEditRole(!editRole)}
-                            />
-                          </button>
+                          <GrEdit
+                            size={28}
+                            onClick={() => setEditRole(!editRole)}
+                          />
 
                           <button>
                             <img src={TrashIcon} alt="" />
@@ -261,13 +250,10 @@ const Settings = () => {
                           delete_expense,view_analytics,read_customer
                         </td>
                         <td className="flex gap-3">
-                          <button>
-                            <img
-                              src={EditIcon}
-                              alt=""
-                              onClick={() => setEditRole(!editRole)}
-                            />
-                          </button>
+                          <GrEdit
+                            size={28}
+                            onClick={() => setEditRole(!editRole)}
+                          />
 
                           <button>
                             <img src={TrashIcon} alt="" />
@@ -366,12 +352,10 @@ const Settings = () => {
                         </td>
                         <td className="font-montserrat">08144246273</td>
                         <td className="flex gap-3">
-                          <button>
-                            <img src={EditIcon} alt="" />
-                          </button>
+                          <GrEdit size={28} />
 
                           <button>
-                            <img src={InactiveToggleIcon} alt="" />
+                            <AppSwitch />
                           </button>
 
                           <button>
@@ -397,13 +381,11 @@ const Settings = () => {
                           </span>
                         </td>
                         <td className="font-montserrat">08144246273</td>
-                        <td className="flex gap-3 w-[120px]">
-                          <button>
-                            <img src={EditIcon} alt="" />
-                          </button>
+                        <td className="flex items-center gap-3">
+                          <GrEdit size={28} />
 
                           <button>
-                            <img src={ActiveToggleIcon} alt="" />
+                            <AppSwitch />
                           </button>
 
                           <button>
@@ -429,13 +411,12 @@ const Settings = () => {
                           </span>
                         </td>
                         <td className="font-montserrat">08144246273</td>
-                        <td className="flex gap-3">
-                          <button>
-                            <img src={EditIcon} alt="" className="w-[]" />
-                          </button>
+                        <td className="flex items-center gap-3">
+                          <GrEdit size={28} />
+                          {/* <img src={EditIcon} alt="" className="w-[20px]" /> */}
 
                           <button>
-                            <img src={ActiveToggleIcon} alt="" />
+                            <AppSwitch />
                           </button>
 
                           <button>
@@ -459,8 +440,6 @@ const Settings = () => {
                 </div>
               </div>
             </>
-          ) : (
-            <></>
           )}
         </div>
       </div>

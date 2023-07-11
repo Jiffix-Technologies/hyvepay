@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import profilePicx from "../../assets/images/profilePicx.png";
 import AppInput from "../../components/AppInput/AppInput";
 import AppDropDown from "../../components/AppDropDown/AppDropDown";
@@ -16,6 +16,8 @@ const Profile = () => {
   const [value2, setValue2] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [opneProfile, setOpenProfile] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   useEffect(() => {
     let stateyArray = [];
     const newData = Object.entries(stateLga);
@@ -93,6 +95,17 @@ const Profile = () => {
     "United Bank for Africa (UBA)",
   ];
 
+  const hideOnClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      setIsOpen(false);
+      setIsOpenBeneficiary(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
   return (
     <>
       <div className="mb-20 mt-32 h-screen px-0 md:px-20">
@@ -150,7 +163,13 @@ const Profile = () => {
               </div>
 
               <div className="mt-5 md:mt-5  w-full">
-                <AppDropDown title="Account Type" data={banks} />
+                <AppDropDown
+                  title="Account Type"
+                  data={banks}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  dropdownRef={dropdownRef}
+                />
               </div>
             </div>
 

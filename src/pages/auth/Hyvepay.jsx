@@ -11,6 +11,7 @@ import CustomDatePickerModal from "../../components/modals/CustomDatePickerModal
 import AppTabBtn from "../../components/AppTabBtn/AppTabBtn";
 import AppCalender from "../../components/AppCalender/AppCalender";
 import AppCalenderEnd from "../../components/AppCalender/AppCalenderEnd";
+import { format, addDays } from "date-fns";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -20,8 +21,15 @@ const Hyvepay = () => {
   const [copied, setCopied] = useState(false);
   const [calender, setCalender] = useState("");
   const [calenderEnd, setCalenderEnd] = useState("");
-
   const [openStart, setOpenStart] = useState(false);
+
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
 
   const [openEnd, setOpenEnd] = useState(false);
   const refOne = useRef(null);
@@ -37,6 +45,7 @@ const Hyvepay = () => {
   const hideOnClickOutside = (e) => {
     if (refOne.current && !refOne.current.contains(e.target)) {
       setOpenStart(false);
+      showAccountDetails(false);
     }
   };
 
@@ -91,7 +100,10 @@ const Hyvepay = () => {
               />
 
               {accountDetails && (
-                <div className="account-dropdown w-full flex w flex-col justify-center items-center px-8 mt-4 p-6">
+                <div
+                  className="account-dropdown z-50 w-full flex w flex-col justify-center items-center px-8 mt-4 p-6"
+                  ref={refOne}
+                >
                   <div className="w-full">
                     <h5 className="font-bold text-left ">Account Details</h5>
                   </div>
@@ -178,7 +190,7 @@ const Hyvepay = () => {
 
         <h5 className="heading-five font-montserrat">Transaction History</h5>
 
-        <div className="flex justify-between mt-8 flex-wrap items-center">
+        <div className="flex justify-between  mt-8 flex-wrap items-center">
           <div className="search w-full md:w-2/4 mb-3">
             <form action="">
               <div className="prepend">
@@ -193,30 +205,36 @@ const Hyvepay = () => {
             </form>
           </div>
 
-          <div className="flex items-center gap-4" ref={refOne}>
-            <div className="relative">
+          <div
+            className="flex items-center mt-5 md:mt-0 mb-5 gap-4"
+            ref={refOne}
+          >
+            <div className="relative flex flex-col">
+              <span>Start Date</span>
               <button
                 className="btn btn-secondary font-montserrat"
                 onClick={() => setOpenStart(!openStart)}
               >
-                {calender === "" ? " Start Date" : calender}
+                {format(range[0].startDate, "MM/dd/yyyy")}
               </button>
               {openStart && (
                 <AppCalender
-                  calender={calender}
-                  setCalender={setCalender}
                   setOpenStart={setOpenStart}
                   openStart={openStart}
+                  range={range}
+                  setRange={setRange}
                 />
               )}
             </div>
-            -
-            <div className="relative">
+            <span className="mt-5">-</span>
+
+            <div className="relative flex flex-col">
+              <span>End Date</span>
               <button
                 className="btn btn-secondary font-montserrat"
-                onClick={() => setOpenEnd(!openEnd)}
+                onClick={() => setOpenStart(!openStart)}
               >
-                {calenderEnd === "" ? " End Date" : calenderEnd}
+                {format(range[0].endDate, "MM/dd/yyyy")}
               </button>
               {openEnd && (
                 <AppCalenderEnd
