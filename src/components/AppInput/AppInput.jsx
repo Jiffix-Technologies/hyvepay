@@ -18,16 +18,10 @@ const AppInput = ({
 
     setPwdfield(val);
   };
+
   return (
     <>
       {hasPLaceHolder && <InputHeader text={placeholderTop} />}
-
-      {/* 
-      {hasPLaceHolder && (
-        <span className="text[10px] inline-block font-montserrat">
-          {placeholderTop}
-        </span>
-      )} */}
 
       <div className="prepend w-full mb-5">
         <img src={leftImg} alt="" />

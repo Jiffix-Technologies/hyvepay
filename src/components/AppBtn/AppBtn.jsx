@@ -1,6 +1,14 @@
-import React from "react";
-
-const AppBtn = ({ onClick, title, showIcon, image, className }) => {
+import React, { useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+const AppBtn = ({
+  onClick,
+  title,
+  showIcon,
+  image,
+  className,
+  sppiner = false,
+}) => {
+  const [loading, setLoading] = useState(true);
   return (
     <button
       className={
@@ -9,6 +17,15 @@ const AppBtn = ({ onClick, title, showIcon, image, className }) => {
       }
       onClick={onClick}
     >
+      {sppiner && (
+        <ClipLoader
+          loading={loading}
+          size={20}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+          className="mr-5 flex relative top-1"
+        />
+      )}
       {showIcon && <img src={image} alt="" className="w-[25px] h-[25px]" />}
 
       <span className="text-sm inline-block  font-montserrat">{title}</span>
