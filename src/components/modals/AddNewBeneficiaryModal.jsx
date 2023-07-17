@@ -3,6 +3,7 @@ import CloseIcon from "../../assets/svgs/close-circle.svg";
 import AppInput from "../AppInput/AppInput";
 import AppDropDown from "../AppDropDown/AppDropDown";
 import AppBtn from "../AppBtn/AppBtn";
+import AppInputWithPhone from "../AppInputWithPhone/AppInputWithPhone";
 
 const AddNewBeneficiaryModal = ({
   newBeneficiary,
@@ -55,8 +56,8 @@ const AddNewBeneficiaryModal = ({
                     />
                   </div>
 
-                  <div className="w-full mb-5 md:mb-6">
-                    <label htmlFor="" className="base-text font-montserrat">
+                  <div className="w-full mb-5 md:mb-3">
+                    {/* <label htmlFor="" className="base-text font-montserrat">
                       Phone Number*
                     </label>
                     <div
@@ -77,7 +78,13 @@ const AddNewBeneficiaryModal = ({
                         style={{ border: 0 }}
                         placeholder="Phone number"
                       />
-                    </div>
+                    </div> */}
+                    <AppInputWithPhone
+                      placeholderTop="Phone Number*"
+                      placeholder="Phone Number"
+                      hasPLaceHolder={true}
+                      className="bg-[#F5F5F5] border-[#F5F5F5]"
+                    />
                   </div>
                 </div>
 

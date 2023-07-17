@@ -43,7 +43,7 @@ export default function LoginModal({ modal, setModal }) {
             </div>
 
             <div className="flex flex-col items-center justify-center">
-              <h2 className="font-montserrat font-bold text-[20px]">
+              <h2 className="font-montserrat font-bold text-4xl font-medium">
                 Sign in with HyveCloud
               </h2>
               <span className="text-[14px] font-light font-montserrat inline-block mb-[43px]">

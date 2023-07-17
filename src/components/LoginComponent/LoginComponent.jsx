@@ -6,7 +6,7 @@ const LoginComponent = ({ setModal }) => {
   return (
     <div className="w-full flex flex-col justify-center mt-10 px-28   items-center h-[100%]">
       <div className="text-center">
-        <h2 className="text-[40px] font-montserrat font-semibold text-center">
+        <h2 className="text-4xl font-montserrat font-semibold text-center">
           Hello there!
         </h2>
         <h5 className="text-[12px] gray-color">

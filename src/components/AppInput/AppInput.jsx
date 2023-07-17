@@ -1,4 +1,6 @@
 import React from "react";
+import { BsEyeSlash } from "react-icons/bs";
+import InputHeader from "../InputHeader/InputHeader";
 
 const AppInput = ({
   rightImg,
@@ -7,7 +9,7 @@ const AppInput = ({
   hasPLaceHolder,
   placeholder,
   className,
-  type,
+  type = "text",
 }) => {
   const [pwdfield, setPwdfield] = React.useState(false);
 
@@ -16,26 +18,27 @@ const AppInput = ({
 
     setPwdfield(val);
   };
+
   return (
     <>
-      {hasPLaceHolder && (
-        <span className="text[10px] inline-block font-montserrat">
-          {placeholderTop}
-        </span>
-      )}
+      {hasPLaceHolder && <InputHeader text={placeholderTop} />}
 
       <div className="prepend w-full mb-5">
         <img src={leftImg} alt="" />
         <input
-          type={type}
+          type={pwdfield ? "password" : type}
           className={
-            `w-full placeholder-[#A5A5A5] placeholderText
+            `w-full placeholder-[#A5A5A5] placeholderText font-montserrat
           } ` + className
           }
           placeholder={placeholder}
         />
         <button onClick={(e) => togglePassword(e, !pwdfield)}>
-          <img src={rightImg} alt="" />
+          {pwdfield ? (
+            <BsEyeSlash color="black" size={25} />
+          ) : (
+            <img src={rightImg} alt="" />
+          )}
         </button>
       </div>
     </>

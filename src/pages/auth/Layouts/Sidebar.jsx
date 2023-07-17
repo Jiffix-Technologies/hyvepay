@@ -1,84 +1,87 @@
 import React, { useState } from "react";
-import Tab from "../../../components/Dashboard/Tab";
-import Logo from "../../../assets/svgs/logo.svg";
+import { VscChromeClose } from "react-icons/vsc";
+import "../../../assets/css/layout.css";
 import hyvePay from "../../../assets/images/hyvePay.png";
+import HyveIcon from "../../../assets/images/hyvBlackLogo.png";
+import logoutLogo from "../../../assets/images/logoutLogo.png";
 import ArrowCircleLeft from "../../../assets/svgs/arrowcircleleft.svg";
-import { sidebarItems } from "../../../contsants/sidebar";
-import { Link } from "react-router-dom";
-("");
+import { Link, useNavigate } from "react-router-dom";
+import LogoutModal from "../../../components/modals/LogoutModal";
 
-const Sidebar = () => {
-  const [collapse, setCollapse] = useState(false);
-  const [selected, setSelected] = useState(0);
-
+const Sidebar = ({ show, setShow, openNav, setOpenNav }) => {
+  const navigation = useNavigate();
+  const [logoutModal, setLogoutModal] = useState(false);
   return (
     <>
       <div
-        className={
-          "md:w-2/5 h-screen sticky  top-0 hidden md:block overflow-y-scroll"
-        }
-        style={{
-          backgroundColor: "#494949",
-          minWidth: "max-content",
-          maxWidth: "max-content",
-          overflow: "visible",
-        }}
+        className={`side-navbar  ${openNav ? "show-mobile" : null} relative ${
+          show ? "small-sidebar" : null
+        } `}
       >
-        <div className="px-8 flex gap-4 mt-4 mb-8 items-center text-white">
-          <img src={hyvePay} alt="" style={{ height: 50 }} />
-          {!collapse && (
-            <h5 className="heading-five font-montserrat">HyvePay</h5>
-          )}
-        </div>
+        <div className="shortcut-links">
+          <Link to="/dashboard" className="flex items-center pl-[10px]">
+            <img
+              src={hyvePay}
+              alt=""
+              className={show ? "small-logo" : "logo-img "}
+            />
+            <span
+              className={`heading-five ml-4 font-montserrat text-white ${
+                show ? "item-text" : null
+              } `}
+            >
+              HyvePay
+            </span>
+          </Link>
 
-        <button
-          onClick={() => setCollapse(!collapse)}
-          className="collapse-toggle hidden md:block"
-        >
           <img
             src={ArrowCircleLeft}
             alt=""
-            className={collapse && "rotate-180"}
+            className="absolute top-20 -right-3 cursor-pointer w-[30px] md:block hidden"
+            onClick={() => setShow(!show)}
           />
-        </button>
 
-        <div className="mt-14">
-          {sidebarItems.map((item, index) => {
-            return (
-              <Link to={item.path} onClick={() => setSelected(index)}>
-                <div
-                  className={
-                    selected === index
-                      ? "py-4 px-8 tab active text-white flex gap-4 font-montserrat"
-                      : "py-4 px-8 tab text-white flex gap-4 font-montserrat"
-                  }
-                >
-                  <img src={item.icon} alt="" />
-                  <span>{item.name}</span>
+          <VscChromeClose
+            color="#fff"
+            className="md:hidden block absolute top-3  right-3 cursor-pointer"
+            size={20}
+            onClick={() => setOpenNav(!openNav)}
+          />
+          <div className="mt-14 flex flex-col gap-5">
+            <div
+              className="flex items-center font-montserrat text-white active cursor-pointer"
+              onClick={() => {
+                setOpenNav(!openNav);
+                navigation("/dashboard");
+              }}
+            >
+              <img src={HyveIcon} alt="" style={{ height: 27, width: 24 }} />
+              <span
+                className={` ml-4 font-montserrat text-white ${
+                  show ? "item-text" : null
+                } `}
+              >
+                Dashboard
+              </span>
+            </div>
+            <div
+              onClick={() => setLogoutModal(!logoutModal)}
+              className="flex items-center font-montserrat text-white pl-[10px] cursor-pointer"
+            >
+              <img src={logoutLogo} alt="" style={{ height: 27, width: 30 }} />
 
-                  {/* {!collapse && name} */}
-                </div>
-              </Link>
-            );
-          })}
-
-          <div className="absolute bottom-0 w-full ">
-            <Tab name={"Logout"} link={"/logout"} collapse={collapse} />
+              <span
+                className={` ml-4 font-montserrat text-white ${
+                  show ? "item-text" : null
+                } `}
+              >
+                Logout
+              </span>
+            </div>
           </div>
         </div>
-
-        {/* <Tab name={"Dashboard"} link={"/dashboard"} collapse={collapse} />
-            <Tab name={"Customers"} link={"/customers"} collapse={collapse} />
-            <Tab name={"HyvePay"} link={"/hyvepay"} collapse={collapse} />
-            <Tab name={"Items & Inventory"} link={"/items&inventory"} collapse={collapse} />
-            <Tab name={"Service Reminder"} link={"/service-reminder"} collapse={collapse} />
-            <Tab name={"Estimates"} link={"/estimates"} collapse={collapse} />
-            <Tab name={"Invoices"} link={"/invoices"} collapse={collapse} />
-            <Tab name={"Payments"} link={"/payments"} collapse={collapse} />
-            <Tab name={"Expenses"} link={"/expenses"} collapse={collapse} />
-            <hr />
-            <Tab name={"Logout"} link={"/logout"} collapse={collapse} /> */}
       </div>
+      <LogoutModal logoutModal={logoutModal} setLogoutModal={setLogoutModal} />
     </>
   );
 };

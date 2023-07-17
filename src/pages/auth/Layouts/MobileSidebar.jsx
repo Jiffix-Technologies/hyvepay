@@ -56,7 +56,7 @@ const MobileSidebar = ({ toggle = false, closeSidebar }) => {
             </svg>
           </button>
         </div>
-        <Tab name={"HyvePay"} link={"/hyvepay"} />
+        <Tab name={"HyvePay"} link={"/dashboard"} />
 
         <hr />
         <div className="absolute bottom-0 w-full ">

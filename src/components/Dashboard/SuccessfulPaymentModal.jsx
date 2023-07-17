@@ -2,6 +2,7 @@ import React from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
+import hyvePay from "../../assets/images/hyvePay.png";
 
 const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }) => {
   return (
@@ -29,7 +30,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }) => {
                 <h5 className="text-center mt-3 text-[#494949] text-[14px] font-semibold">
                   Payment Successful
                 </h5>
-                <h5 className="text-center md:text-sm text-[10px] text-[#494949] font-montserrat">
+                <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
                   Yay! Congratulations... ₦50,000 was successfully sent <br />
                   to (Beneficiary 1 GTBank 0357935792)
                 </h5>
@@ -40,12 +41,12 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }) => {
               {/* view */}
 
               <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
-                <div className="w-full receipt-preview mt-4 p-8 mb-1 md:mb-3">
+                <div className="w-full receipt-preview mt-4 p-3 md:p-8 mb-1 md:mb-3">
                   <div className="flex justify-between items-center">
                     <h5 className="text-[#494949] text-[14px] font-semibold">
                       Transaction Receipt
                     </h5>
-                    <img src={HyveIcon2} alt="" style={{ width: 30 }} />
+                    <img src={hyvePay} alt="" style={{ width: 30 }} />
                   </div>
 
                   <div className="my-8">
@@ -116,7 +117,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }) => {
 
                   <hr className="mb-4" />
 
-                  <p className="text-sm text-gray-500 text-[8px] font-montserrat">
+                  <p className="md:text-xs text-[5px]  text-gray-500  font-montserrat">
                     {" "}
                     <b>Disclaimer:</b> Enjoy customized banking experienced with
                     HyvePay. HyvePay financial serves are backed by Kuda

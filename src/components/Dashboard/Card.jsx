@@ -1,5 +1,7 @@
 import React from "react";
-import Eye from "../../assets/svgs/eye.svg";
+// import Eye from "../../assets/svgs/eye.svg";
+import Eye from "../../assets/images/eye.png";
+import { BsEyeSlash } from "react-icons/bs";
 
 const Card = ({ name, price, qty, color }) => {
   const [obscure, setObscure] = React.useState(false);
@@ -17,7 +19,11 @@ const Card = ({ name, price, qty, color }) => {
           </div>
 
           <button onClick={() => setObscure(!obscure)}>
-            <img src={Eye} alt="" />
+            {obscure ? (
+              <BsEyeSlash color="black" size={18} />
+            ) : (
+              <img src={Eye} alt="" className="w-[18px] h-[18px]" />
+            )}
           </button>
         </div>
         <div className="flex px-6 pb-4 justify-end font-montserrat">

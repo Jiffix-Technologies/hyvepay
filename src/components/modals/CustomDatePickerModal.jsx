@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
@@ -20,7 +20,8 @@ const CustomDatePickerModal = ({ openDate, setOpenDate }) => {
   };
 
   const days = ["S", "M", "T", "W", "T", "F", "S"];
-  const currentDate = dayjs();
+  // const currentDate = dayjs();
+  const currentDate = '';
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
 

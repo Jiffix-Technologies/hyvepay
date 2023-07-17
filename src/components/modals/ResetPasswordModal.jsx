@@ -24,7 +24,7 @@ export default function ResetPasswordModal({ setOpenModal, openModal }) {
           className="overlay h-screen w-screen flex fixed justify-center items-center"
           onClick={toggleModal}
         >
-          <div className="modal bg-white py-8 px-20 ">
+          <div className="modal bg-white py-8 px-20 reset-pword">
             <div className="modal-header bg-white p-8 py-2 relative">
               <button
                 onClick={toggleModal}

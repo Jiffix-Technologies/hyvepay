@@ -15,9 +15,7 @@ const SavedBeneficiaries = () => {
       <div className="w-full">
         <div className="w-full flex h-10  md:hidden items-center mt-20 mb-5 cursor-pointer">
           <FaChevronLeft onClick={() => window.history.back()} />
-          <span className="font-montserrat inline-block ml-5">
-            Initial Transaction
-          </span>
+          <span className="font-montserrat inline-block ml-5">Back</span>
         </div>
         <div>
           <div className="flex flex-col md:flex-row gap-5 justify-between items-center md:mt-28 w-full">
@@ -43,7 +41,10 @@ const SavedBeneficiaries = () => {
           </div>
         </div>
 
-        <div className="grid pb-20 grid-cols-2 md:grid-cols-3  w-[100%] md:w-[60%] gap-3 md:gap-16 mt-14 ">
+        {/* <div className="grid grid-cols-2 md:grid-cols-5  w-[100%] gap-1  mt-14 "> */}
+        <div className="flex justify-start gap-3 flex-wrap mt-14 ">
+          {/* <div className="grid pb-20 grid-cols-2 md:grid-cols-3  w-[100%] md:w-[60%] gap-3 md:gap-16 mt-14 "> */}
+
           <TransactCard
             name={"David James"}
             accountnum={"0578358735"}
