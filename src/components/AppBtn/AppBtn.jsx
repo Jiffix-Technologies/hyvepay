@@ -6,6 +6,7 @@ const AppBtn = ({
   showIcon,
   image,
   className,
+  type = "submit",
   sppiner = false,
 }) => {
   const [loading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ const AppBtn = ({
       ` + className
       }
       onClick={onClick}
+      type={type}
     >
       {sppiner && (
         <ClipLoader

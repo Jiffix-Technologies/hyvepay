@@ -582,3 +582,9 @@ select.none {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.error-input-field {
+  font-size: 13px;
+  color: red;
+  padding-left: 8px;
+}

@@ -56,16 +56,16 @@ const WelcomeAuthenticationPage = () => {
                     <path
                       d="M15.1528 9.39062L5.54199 19.0015L15.1528 28.6123"
                       stroke="#D9D9D9"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M32.458 19H5.81055"
                       stroke="#D9D9D9"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </button>
@@ -82,16 +82,16 @@ const WelcomeAuthenticationPage = () => {
                     <path
                       d="M22.8472 9.39062L32.458 19.0015L22.8472 28.6123"
                       stroke="#D9D9D9"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                     <path
                       d="M5.54195 19H32.1895"
                       stroke="#D9D9D9"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
                   </svg>
                 </button>
