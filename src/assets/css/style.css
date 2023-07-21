@@ -317,7 +317,7 @@ select.none {
   position: relative;
 }
 .prepend input {
-  padding-left: 40px;
+  padding-left: 18px;
 }
 .prepend.phone input {
   padding-left: 30%;
@@ -587,4 +587,8 @@ select.none {
   font-size: 13px;
   color: red;
   padding-left: 8px;
+}
+
+.react-tel-input .form-control {
+  width: 100% !important;
 }

@@ -22,10 +22,7 @@ const router = createBrowserRouter([
         element: <WelcomeAuthenticationPage />,
         // errorElement: <ErrorPage />,
       },
-      {
-        path: "/register",
-        element: <Register />,
-      },
+
       {
         path: "/verification",
         element: <Verification />,
@@ -33,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },

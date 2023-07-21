@@ -1,12 +1,9 @@
 import axios from "axios";
 import { APP_BASE_URL } from "../contsants";
-import { store } from "../store/store";
-import { IAuthState } from "../reducers/authReducer";
+import { IAuthState, store } from "../reducers/authReducer";
 
 // axios.defaults.withCredentials = true;
 axios.defaults.baseURL = APP_BASE_URL;
-
-console.log("baseUrl > ", APP_BASE_URL);
 
 axios.interceptors.request.use((config: any) => {
   // grab current state
@@ -17,10 +14,7 @@ axios.interceptors.request.use((config: any) => {
 
     // alert((token))
 
-    token =
-      state?.userInfo?.access_token ||
-      state.userInfo?.accessToken?.access_token ||
-      (`${state.userInfo?.accessToken}` as string);
+    token = state?.accessToken || "";
   }
 
   // get the JWT token out of it

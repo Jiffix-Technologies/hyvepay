@@ -1,0 +1,386 @@
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Card from "../../components/Dashboard/Card";
+import SearchIcon from "../../assets/svgs/vuesax/linear/search-normal.svg";
+import DownloadIcon from "../../assets/svgs/download-icon.svg";
+import DocumentIcon from "../../assets/svgs/document.svg";
+import AppBtn from "../../components/AppBtn/AppBtn";
+import ActivateAccountModal from "../../components/modals/ActivateAccountModal";
+import CustomModal from "../../components/modals/CustomModal";
+import CustomDatePickerModal from "../../components/modals/CustomDatePickerModal";
+import AppTabBtn from "../../components/AppTabBtn/AppTabBtn";
+import AppCalender from "../../components/AppCalender/AppCalender";
+import AppCalenderEnd from "../../components/AppCalender/AppCalenderEnd";
+import { format, addDays } from "date-fns";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import {
+  getAccountBalanceAction,
+  getAccountTransactionsAction,
+} from "../../reducers/bankReducer";
+import useAppSelector from "../../hooks/useAppSelector";
+import { Util } from "../../helpers/Util";
+import { postingType } from "../../contsants";
+import { useUser } from "../../hooks/useUser";
+
+const Hyvepay = () => {
+  const [accountDetails, showAccountDetails] = useState(false);
+  const [activate, setActivate] = useState(false);
+  const [headerText, setHeaderText] = useState(0);
+  const [openDate, setOpenDate] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [calender, setCalender] = useState("");
+  const [calenderEnd, setCalenderEnd] = useState("");
+  const [openStart, setOpenStart] = useState(false);
+
+  const state = useAppSelector((state) => state.authReducer);
+
+  const [showAccountModal, setShowAccountModal] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const bankState = useAppSelector((state) => state.bankReducer);
+
+  const getUserAccountBalance = useCallback(() => {
+    dispatch(getAccountBalanceAction());
+  }, []);
+
+  const getUserAccountTransaction = useCallback(() => {
+    dispatch(getAccountTransactionsAction());
+  }, []);
+
+  useEffect(() => {
+    getUserAccountBalance();
+    getUserAccountTransaction();
+  }, [getUserAccountBalance, getUserAccountTransaction]);
+
+  const [range, setRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
+
+  const [openEnd, setOpenEnd] = useState(false);
+  const refOne = useRef<any>(null);
+  const navigation = useNavigate();
+
+  const [modal, setModal] = useState(false);
+  const closeModal = () => setModal(!modal);
+
+  const hideOnClickOutside = (e: any) => {
+    if (refOne.current && !refOne.current.contains(e.target)) {
+      setOpenStart(false);
+      showAccountDetails(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
+  useEffect(() => {
+    if (modal) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [modal]);
+
+  useEffect(() => {
+    if (openDate) {
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [openDate]);
+
+  return (
+    <>
+      <div className="mb-20 mt-20 md:mt-32 w-full">
+        <div className="flex justify-between items-center  flex-col md:flex-row">
+          <h5 className="font-semibold font-montserrat md:mb-0 mb-10 flex-1">
+            Account Information
+          </h5>
+
+          <div className="flex gap-4  item-wrapper flex-col md:flex-row bg">
+            {["DECLINED", "NOT_REQUESTED"].includes(
+              state.userInfo?.partner?.accountProvisionStatus as string
+            ) && (
+              <AppTabBtn
+                title="Activate Account"
+                className="bg-[#FAA21B] text-[#000] "
+                onClick={() => setShowAccountModal(true)}
+              />
+            )}
+
+            {state.userInfo?.partner?.accountProvisionStatus === "APPROVED" && (
+              <>
+                <AppTabBtn
+                  title=" Initiate Transaction"
+                  className="  text-[#000] btn-secondary"
+                  onClick={() => navigation("/hyvepay/initiate-transaction")}
+                />
+                <div className="">
+                  <AppTabBtn
+                    title="View Account Details"
+                    className="  text-[#000] btn-secondary"
+                    onClick={() => showAccountDetails(!accountDetails)}
+                  />
+
+                  {accountDetails && (
+                    <div
+                      className="account-dropdown z-50 w-full flex w flex-col justify-center items-center px-8 mt-4 p-6"
+                      ref={refOne}
+                    >
+                      <div className="w-full">
+                        <h5 className="font-bold text-left ">
+                          Account Details
+                        </h5>
+                      </div>
+
+                      <div className="flex justify-between w-full mt-6">
+                        <div>
+                          <p>
+                            <span className="text-sm mr-2 mb-0 font-montserrat">
+                              Account Number
+                            </span>
+                          </p>
+                          <p>
+                            <span className="font-bold text-sm mr-2 font-montserrat">
+                              {bankState.accountBalance?.accountNumber}
+                            </span>
+                          </p>
+                        </div>
+                        <img
+                          src={DocumentIcon}
+                          alt=""
+                          className="cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="flex justify-between w-full mt-6">
+                        <div>
+                          <p>
+                            <span className="text-sm mr-2 mb-0 font-montserrat">
+                              Account Name
+                            </span>
+                          </p>
+                          <p>
+                            <span className="font-bold text-sm mr-2 font-montserrat">
+                              {bankState.accountBalance?.businessName}
+                            </span>
+                          </p>
+                        </div>
+                        <img
+                          src={DocumentIcon}
+                          alt=""
+                          className="cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="flex justify-between w-full mt-6">
+                        <div>
+                          <p>
+                            <span className="text-sm mr-2 mb-0 font-montserrat">
+                              Bank Name
+                            </span>
+                          </p>
+                          <p>
+                            <span className="font-bold text-sm mr-2 font-montserrat">
+                              {bankState.accountBalance?.accountProvider}
+                            </span>
+                          </p>
+                        </div>
+                        <img
+                          src={DocumentIcon}
+                          alt=""
+                          className="cursor-pointer"
+                        />
+                      </div>
+
+                      <AppBtn
+                        onClick={() =>
+                          navigation("/hyvepay/saved-beneficiaries")
+                        }
+                        title=" View saved beneficiaries"
+                        className="btn-secondary mt-4 "
+                      />
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 overflow-x-scroll mt-10">
+          <Card
+            name={"Available Balance"}
+            price={Util.formAmount(
+              bankState.accountBalance?.availableBalance,
+              true
+            )}
+            qty={""}
+            color={"#FFF2DD"}
+          />
+          <Card
+            name={"Total Credit"}
+            price={Util.formAmount(bankState.transaction?.totalCredit, false)}
+            qty={
+              bankState.transaction?.postingsHistory
+                ? bankState.transaction.postingsHistory.filter(
+                    (item) => item.postingRecordType === postingType.credit
+                  ).length
+                : 0
+            }
+            color={"#F1F3FF"}
+          />
+          <Card
+            name={"Total Debit"}
+            price={Util.formAmount(bankState.transaction?.totalDebit, false)}
+            qty={
+              bankState.transaction?.postingsHistory
+                ? bankState.transaction.postingsHistory.filter(
+                    (item) => item.postingRecordType === postingType.debit
+                  ).length
+                : 0
+            }
+            color={"#FFEDED"}
+          />
+        </div>
+
+        <h5 className="heading-five font-montserrat">Transaction History</h5>
+
+        <div className="flex justify-between  mt-8 flex-wrap items-center">
+          <div className="search w-full md:w-2/4 mb-3">
+            <form action="">
+              <div className="prepend">
+                <img src={SearchIcon} alt="" />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="bg-gray-100 w-full md:w-2/3 searchInput"
+                  style={{ border: 0 }}
+                />
+              </div>
+            </form>
+          </div>
+
+          <div
+            className="flex items-center mt-5 md:mt-0 mb-5 gap-4"
+            ref={refOne}
+          >
+            <div className="relative flex flex-col">
+              <span>Start Date</span>
+              <button
+                className="btn btn-secondary font-montserrat"
+                onClick={() => setOpenStart(!openStart)}
+              >
+                {format(range[0].startDate, "MM/dd/yyyy")}
+              </button>
+              {openStart && (
+                <AppCalender
+                  setOpenStart={setOpenStart}
+                  openStart={openStart}
+                  range={range}
+                  setRange={setRange}
+                />
+              )}
+            </div>
+            <span className="mt-5">-</span>
+
+            <div className="relative flex flex-col">
+              <span>End Date</span>
+              <button
+                className="btn btn-secondary font-montserrat"
+                onClick={() => setOpenStart(!openStart)}
+              >
+                {format(range[0].endDate, "MM/dd/yyyy")}
+              </button>
+              {openEnd && (
+                <AppCalenderEnd
+                  calender={calenderEnd}
+                  setCalender={setCalenderEnd}
+                  setOpenStart={setOpenEnd}
+                  openStart={openEnd}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4" style={{ overflowX: "scroll" }}>
+          <table border={1} style={{ borderRadius: 20, overflow: "clip" }}>
+            <thead>
+              <th className="font-montserrat    text-xs">Date</th>
+              <th className="font-montserrat    text-xs ">Account Name</th>
+              <th className="font-montserrat      text-xs ">Account Number</th>
+              <th className="font-montserrat     text-xs ">Amount</th>
+              <th className="font-montserrat    text-xs ">Balance</th>
+              <th className="font-montserrat   text-xs ">Narration</th>
+              <th className="font-montserrat  text-xs ">Type</th>
+              <th className="font-montserrat text-xs ">Status</th>
+            </thead>
+            <tbody>
+              {bankState.transaction?.postingsHistory.map((item, i) => (
+                <tr key={i}>
+                  <td className="font-montserrat text-xs">07-06-2023</td>
+                  <td className="font-montserrat text-xs">
+                    {item.beneficiaryName}
+                  </td>
+                  <td className="font-montserrat text-xs">
+                    {item.accountNumber}
+                  </td>
+                  <td className="font-montserrat text-xs">
+                    {Util.formAmount(item.amount, true)}
+                  </td>
+                  <td className="font-montserrat text-xs">
+                    {Util.formAmount(item.balanceAfter, true)}
+                  </td>
+                  <td className="font-montserrat text-xs">
+                    {item.narration || "N/A"}
+                  </td>
+                  <td className="font-montserrat text-xs">Transfer</td>
+                  <td>
+                    {/* <span
+                      className="py-2 px-4"
+                      style={{
+                        backgroundColor: "#FF8282",
+                        borderRadius: 10,
+                        color: "#fff",
+                      }}
+                    >
+                   
+                    </span> */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="flex justify-between mt-4">
+            <button className="flex gap-1 btn btn-secondary">
+              <img src={DownloadIcon} className="mr-3 font-montserrat" alt="" />
+              Download Statement
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ActivateAccountModal
+        isVisible={showAccountModal}
+        onCancel={() => setShowAccountModal(false)}
+        onOk={() => setShowAccountModal(false)}
+      />
+
+      <CustomDatePickerModal openDate={openDate} setOpenDate={setOpenDate} />
+    </>
+  );
+};
+
+export default Hyvepay;

@@ -1,19 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "../reducers/authReducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { combineReducers } from "redux";
-import autoMergeLevel1 from "redux-persist/lib/stateReconciler/hardSet";
+import bankReducer from "../reducers/bankReducer";
+// import authReducer from "../reducers/authReducer";
 
 const persistConfig = {
   key: "root",
   storage,
-  whiteList: ["authReducer"],
-  //   stateReconciler: autoMergeLevel1,
+  whitelist: ["authReducer"], // <-- Corrected property name here
 };
 
 const reducers = combineReducers({
-  authReducer,
+  // authReducer,
+  bankReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -25,6 +25,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     }),
+  // ...
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,6 +1,8 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { store } from "../reducers/authReducer";
 
-const useAppDispatch: () => AppDispatch = useDispatch;
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export default useAppDispatch;

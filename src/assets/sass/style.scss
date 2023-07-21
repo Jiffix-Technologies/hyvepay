@@ -181,7 +181,7 @@ input {
     margin-bottom: 4px;
   }
   .prepend.phone input {
-    padding-left: 40%;
+    padding-left: 12px;
   }
   max-width: 45%;
   overflow-y: scroll;
@@ -281,7 +281,7 @@ ul.author-dropdown {
 textarea,
 select.none,
 input {
-  padding: 18px;
+  padding: 8px;
   border-radius: 20px;
   border: 1px solid #cacaca;
   color: #000000;
@@ -321,7 +321,7 @@ select.none {
 .prepend {
   position: relative;
   input {
-    padding-left: 40px;
+    padding-left: 18px;
   }
 
   &.phone input {
