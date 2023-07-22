@@ -100,7 +100,7 @@ export const MyTextInput = ({
     <div className="mb-5">
       {hasPLaceHolder && <InputHeader text={placeholderTop} />}
       <div className="prepend w-full mb-0">
-        <img src={leftImg} alt="" />
+        {/* <img src={leftImg} alt="" /> */}
         <input
           className={
             `w-full placeholder-[#A5A5A5] placeholderText font-montserrat
