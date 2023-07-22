@@ -21,6 +21,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { Util } from "../../helpers/Util";
 import { postingType } from "../../contsants";
 import { useUser } from "../../hooks/useUser";
+import moment from "moment";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -98,6 +99,49 @@ const Hyvepay = () => {
       document.body.style.overflow = "auto";
     };
   }, [openDate]);
+
+  const handleExport = () => {
+    const headers = [
+      "Date",
+      "beneficiaryName",
+      "accountNumber",
+      "amount",
+      "balanceAfter",
+      "narration",
+    ];
+    // const titleKeys = Object.keys(
+    //   bankState.transaction?.postingsHistory[0] || []
+    // );
+    const refinedData = [];
+    refinedData.push(headers);
+
+    (bankState.transaction?.postingsHistory || []).forEach((item) => {
+      refinedData.push([
+        item.realDate,
+        item.beneficiaryName,
+        item.accountNumber,
+        item.amount / 100,
+        item.balanceAfter / 100,
+        item.narration,
+      ]);
+    });
+
+    let csvContent = "";
+
+    refinedData.forEach((row) => {
+      csvContent += row.join(",") + "\n";
+    });
+
+    const element = document.createElement("a");
+    const file = new Blob([csvContent], {
+      type: "text/csv",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = "statement.csv";
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  };
 
   return (
     <>
@@ -260,7 +304,7 @@ const Hyvepay = () => {
           <div className="search w-full md:w-2/4 mb-3">
             <form action="">
               <div className="prepend">
-                <img src={SearchIcon} alt="" />
+                {/* <img src={SearchIcon} alt="" /> */}
                 <input
                   type="text"
                   placeholder="Search"
@@ -329,7 +373,9 @@ const Hyvepay = () => {
             <tbody>
               {bankState.transaction?.postingsHistory.map((item, i) => (
                 <tr key={i}>
-                  <td className="font-montserrat text-xs">07-06-2023</td>
+                  <td className="font-montserrat text-xs">
+                    {moment(item.realDate).format("YYYY-MM-DD")}
+                  </td>
                   <td className="font-montserrat text-xs">
                     {item.beneficiaryName}
                   </td>
@@ -364,7 +410,10 @@ const Hyvepay = () => {
           </table>
 
           <div className="flex justify-between mt-4">
-            <button className="flex gap-1 btn btn-secondary">
+            <button
+              onClick={handleExport}
+              className="flex gap-1 btn btn-secondary"
+            >
               <img src={DownloadIcon} className="mr-3 font-montserrat" alt="" />
               Download Statement
             </button>

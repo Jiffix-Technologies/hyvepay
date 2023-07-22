@@ -61,7 +61,7 @@ const FundModal = ({
               {selected === 0 ? (
                 <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
                   <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-3">
                       <label htmlFor="" className="font-small">
                         Recipient's Account Number
                       </label>{" "}
@@ -74,7 +74,7 @@ const FundModal = ({
                       />
                     </div>
 
-                    <div className="w-full mb-3 md:mb-6">
+                    <div className="w-full mb-3 ">
                       <label htmlFor=""> Account Name</label> <br />
                       <input
                         type="text"
@@ -209,6 +209,7 @@ const FundModal = ({
                         id=""
                         cols={30}
                         rows={3}
+                        maxLength={20}
                         placeholder="Enter your message"
                         className="bg-gray-100 w-full p-4"
                         style={{ borderRadius: 18, border: 0 }}

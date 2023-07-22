@@ -82,6 +82,7 @@ export const MyTextInput = ({
   placeholderTop,
   rightImg,
   type = "text",
+  disabled = false,
   ...props
 }: any) => {
   // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
@@ -108,6 +109,7 @@ export const MyTextInput = ({
           {...field}
           {...props}
           type={pwdfield ? "text" : type}
+          disabled={disabled}
         />
         {type === "password" && (
           <button onClick={(e) => togglePassword(e, !pwdfield)}>
@@ -127,14 +129,22 @@ export const MyTextInput = ({
   );
 };
 
-export const MySelect = ({ options, styles, placeholder, ...props }: any) => {
+export const MySelect = ({
+  options,
+  styles,
+  placeholder,
+  label,
+  ...props
+}: any) => {
   const [field, meta] = useField(props);
 
   const { setFieldValue } = useFormikContext();
   return (
     <div>
+      {label && <InputHeader text={label} />}
       <Select
         options={options}
+        className={props.className}
         styles={styles}
         placeholder={placeholder}
         {...props}

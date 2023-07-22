@@ -1,12 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import add from "../../assets/images/add.png";
 import AppBtn from "../AppBtn/AppBtn";
 import ConfirmPaymentModal from "../Dashboard/ConfirmPaymentModal";
-import AppInput from "../AppInput/AppInput";
-import AppDropDown from "../AppDropDown/AppDropDown";
-import ChooseBeneficiaryDropDown from "../ChooseBeneficiaryDropDown/ChooseBeneficiaryDropDown";
-import InputHeader from "../InputHeader/InputHeader";
+import { Form, Formik, useFormikContext } from "formik";
+import SingleTransferForm from "../SingleTransferForm/SingleTransferForm";
+import SavedBeneficiaryTransferForm from "../SingleTransferForm/SavedBeneficiaryTransfer";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { saveAccountTransferInfo } from "../../reducers/bankReducer";
+import * as Yup from "yup";
+
+const AccountTransferSchema = Yup.object({
+  accountNumber: Yup.string().required("Account number is required"),
+  accountName: Yup.string()
+  .required("Account name is required"),
+  bank: Yup.object({
+    value: Yup.string().required("Bank is required"),
+  }),
+  amount: Yup.string()
+    .matches(/^[0-9]+$/, "Amount should be only digits")
+    .required("Amount is required"),
+  narration: Yup.string().max(20, "Narration exceeds 20 characters").optional(),
+});
 
 const FundAccountModal = ({
   openSingleModal,
@@ -15,11 +30,22 @@ const FundAccountModal = ({
 }: any) => {
   const [confirmationmodal, setConfirmationmodal] = React.useState(false);
   const [selected, setSelected] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const [openBeneficiary, setIsOpenBeneficiary] = useState(false);
 
-  const dropdownRef = useRef<any>(null);
+  const [formState] = useState({
+    accountNumber: "",
+    bank: {
+      label: "",
+      value: "",
+    },
+    accountName: "",
+    amount: "",
+    narration: "",
+    saveAsBeneficiary: false,
+  });
+
   const tab = [" New Beneficiary", " Saved Beneficiary"];
+
+  const dispatch = useAppDispatch();
 
   if (openSingleModal) {
     document.body.classList.add("active-modal");
@@ -32,23 +58,13 @@ const FundAccountModal = ({
       // setOpenSingleModal(!modal);
     }
   };
-  const banks = [
-    "Guaranty Trust Bank (GTBank)",
-    "Access Bank",
-    "First Bank of Nigeria",
-    "United Bank for Africa (UBA)",
-  ];
 
-  const hideOnClickOutside = (e: any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-      setIsOpen(false);
-      setIsOpenBeneficiary(false);
-    }
+  const handleSingleTransfer = (values: any) => {
+    console.log(values);
+    dispatch(saveAccountTransferInfo(values));
+    setOpenSingleModal(false);
+    setConfirmationmodal(true);
   };
-
-  useEffect(() => {
-    document.addEventListener("click", hideOnClickOutside, true);
-  }, []);
 
   return (
     <>
@@ -59,7 +75,7 @@ const FundAccountModal = ({
           onClick={toggleModal}
         >
           <div
-            className="bg-white p-2 relative h-[95%] w-[90%] md:w-[50%] overflow-y-auto pb-10  rounded-md"
+            className="bg-white p-2 relative w-[90%] md:w-[50%] overflow-y-auto pb-10  rounded-md"
             style={{ maxWidth: 700 }}
           >
             <div className="body">
@@ -111,163 +127,23 @@ const FundAccountModal = ({
 
               {/* view */}
               {selected === 0 ? (
-                <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
-                  <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-0 md:mb-6">
-                      <AppInput
-                        type="number"
-                        placeholderTop="Recipient's Account Number"
-                        placeholder="Enter account number"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <AppDropDown
-                        className="border-[#F5F5F5]"
-                        data={banks}
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        dropdownRef={dropdownRef}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full mb-0 mt-5 md:mb-6">
-                      <AppInput
-                        type="text"
-                        placeholderTop=" Account Name"
-                        placeholder="Enter your account Name"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-                    <div className="w-full mb-0 mt-0 md:mt-5 md:mb-6">
-                      <AppInput
-                        type="text"
-                        placeholderTop="Enter Amount"
-                        placeholder="Enter an amount"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
-                      <InputHeader text="Narration" />
-
-                      <textarea
-                        name=""
-                        id=""
-                        cols={30}
-                        rows={3}
-                        placeholder="Enter your message"
-                        className="bg-gray-100 w-full p-4"
-                        style={{ borderRadius: 18, border: 0 }}
-                      ></textarea>
-                    </div>
-                  </div>
-
-                  <div className="w-full mb-3 md:mb-6">
-                    <input type="checkbox" name="" id="" className="mr-2" />
-                    Save Beneficiary
-                  </div>
-
-                  <AppBtn
-                    title="Send Money"
-                    className="text-[#000] w-full bg-[#FAA21B] mt-2"
-                    onClick={() => {
-                      setOpenSingleModal(false);
-                      setConfirmationmodal(!confirmationmodal);
-                    }}
-                  />
-                </div>
+                <Formik
+                  enableReinitialize
+                  initialValues={formState}
+                  onSubmit={handleSingleTransfer}
+                  validationSchema={AccountTransferSchema}
+                >
+                  <SingleTransferForm />
+                </Formik>
               ) : (
-                <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
-                  <div className="w-full mb-3 md:mb-6">
-                    <ChooseBeneficiaryDropDown
-                      dropdownRef={dropdownRef}
-                      openBeneficiary={openBeneficiary}
-                      setIsOpenBeneficiary={setIsOpenBeneficiary}
-                    />
-                  </div>
-                  <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
-                      <AppDropDown
-                        data={banks}
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        dropdownRef={dropdownRef}
-                      />
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <AppInput
-                        type="text"
-                        placeholderTop="Account Name"
-                        placeholder="Enter your account name"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full md:mt-0 mt-5 mb-0 md:mb-6">
-                      <AppInput
-                        type="text"
-                        placeholderTop="Recipient's Account Number"
-                        placeholder="Enter account number"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <AppInput
-                        type="text"
-                        placeholderTop="Enter Amount"
-                        placeholder="Enter an amount"
-                        hasPLaceHolder={true}
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
-                      <InputHeader text="Narration" />
-
-                      <textarea
-                        name=""
-                        id=""
-                        cols={30}
-                        rows={3}
-                        placeholder="Enter your message"
-                        className="bg-gray-100 w-full p-4"
-                        style={{ borderRadius: 18, border: 0 }}
-                      ></textarea>
-                    </div>
-                  </div>
-
-                  {/* <div className="w-full mb-3 md:mb-6">
-                    <input type="checkbox" name="" id="" className="mr-2" />
-                    Save Beneficiary
-                  </div> */}
-
-                  <AppBtn
-                    title="Send Money"
-                    className="text-[#000] w-full bg-[#FAA21B] mt-2"
-                    onClick={() => {
-                      setConfirmationmodal(!confirmationmodal);
-                      setOpenSingleModal(false);
-                      // setModal(false);
-                    }}
-                  />
-                </div>
+                <Formik
+                  enableReinitialize
+                  initialValues={formState}
+                  onSubmit={() => {}}
+                  validationSchema={AccountTransferSchema}
+                >
+                  <SavedBeneficiaryTransferForm />
+                </Formik>
               )}
             </div>
           </div>

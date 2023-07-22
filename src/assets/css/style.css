@@ -310,7 +310,8 @@ select.none {
 
 .form-group {
   display: flex;
-  gap: 24px;
+  /* gap: 24px; */
+  column-gap: 24px;
 }
 
 .prepend {

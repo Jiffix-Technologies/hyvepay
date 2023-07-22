@@ -1,6 +1,9 @@
 import {
   AccountBalanceDTO,
+  AccountHolder,
   AccountTransactionsResponseDTO,
+  AccountTransferDTO,
+  AccountTransferResponseDTO,
   ApiResponseSuccess,
   IBank,
   IBeneficiary,
@@ -16,6 +19,8 @@ import {
   GET_BANKS,
   GET_BENEFICIARIES,
   GET_USER_ACCOUNT_BALANCE,
+  PERFORM_ACCOUNT_TRANSFER,
+  PERFORM_NAME_ENQUIRY,
 } from "./types";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -81,6 +86,33 @@ export const requestActivationAction = asyncThunkWrapper<
   return response.data;
 });
 
+export const performNameEnquiryAction = asyncThunkWrapper<
+  ApiResponseSuccess<AccountHolder>,
+  {
+    beneficiaryBankCode: string;
+    beneficiaryAccountNumber: string;
+  }
+>(
+  PERFORM_NAME_ENQUIRY,
+  async (args: {
+    beneficiaryBankCode: string;
+    beneficiaryAccountNumber: string;
+  }) => {
+    const response = await axiosClient.post(`/api/v1/account/enquiry`, args);
+
+    return response.data;
+  }
+);
+
+export const initiateAccountTranfer = asyncThunkWrapper<
+  ApiResponseSuccess<AccountTransferResponseDTO>,
+  AccountTransferDTO
+>(PERFORM_ACCOUNT_TRANSFER, async (args: AccountTransferDTO) => {
+  const response = await axiosClient.post(`/api/v1/account/transfer`, args);
+
+  return response.data;
+});
+
 export interface IBankState {
   accountBalance: AccountBalanceDTO | null;
 
@@ -108,11 +140,36 @@ export interface IBankState {
   getBankSuccess: string;
   getBankError: string;
 
+  performAccountEnquiryStatus: IThunkAPIStatus;
+  performAccountEnquirySuccess: string;
+  performAccountEnquiryError: string;
+
+  performAccountTransferRequestStatus: IThunkAPIStatus;
+  performAccountTransferRequestSuccess: string;
+  performAccountTransferRequestError: string;
+
   requestActivationStatus: IThunkAPIStatus;
   requestActivationSuccess: string;
   requestActivationError: string;
 
   banks: IBank[];
+
+  accountHolder: AccountHolder | null;
+
+  accountTransferInfo: {
+    accountNumber: string;
+    bank: {
+      label: string;
+      value: string;
+    };
+    accountName: string;
+    amount: string;
+    narration: string;
+    saveAsBeneficiary?: boolean;
+    pin?: string;
+  } | null;
+
+  accountTransferResponse: AccountTransferResponseDTO | null;
 }
 
 const initialState: IBankState = {
@@ -121,6 +178,14 @@ const initialState: IBankState = {
   getUserAccountBalanceStatus: "idle",
   getUserAccountBalanceSuccess: "",
   getUserAccountBalanceError: "",
+
+  performAccountEnquiryStatus: "idle",
+  performAccountEnquirySuccess: "",
+  performAccountEnquiryError: "",
+
+  performAccountTransferRequestStatus: "idle",
+  performAccountTransferRequestSuccess: "",
+  performAccountTransferRequestError: "",
 
   getAccountTransactionStatus: "idle",
   getAccountTransactionSuccess: "",
@@ -146,6 +211,12 @@ const initialState: IBankState = {
   requestActivationError: "",
 
   banks: [],
+
+  accountHolder: null,
+
+  accountTransferInfo: null,
+
+  accountTransferResponse: null,
 };
 
 const bankSlice = createSlice({
@@ -162,6 +233,13 @@ const bankSlice = createSlice({
       state.requestActivationStatus = "idle";
       state.requestActivationSuccess = "";
       state.requestActivationError = "";
+    },
+    clearAccountHolder(state: IBankState) {
+      state.accountHolder = null;
+    },
+
+    saveAccountTransferInfo(state: IBankState, action) {
+      state.accountTransferInfo = action.payload;
     },
   },
 
@@ -224,6 +302,7 @@ const bankSlice = createSlice({
     });
     builder.addCase(createBeneficiaryAction.rejected, (state, action) => {
       state.createBeneficiaryStatus = "failed";
+      state.createBeneficiaryError = action.payload?.message as string;
     });
 
     builder.addCase(requestActivationAction.pending, (state, action) => {
@@ -237,10 +316,42 @@ const bankSlice = createSlice({
       state.requestActivationError = "failed";
       state.requestActivationError = action.payload?.error as string;
     });
+
+    builder.addCase(performNameEnquiryAction.pending, (state, action) => {
+      state.performAccountEnquiryStatus = "loading";
+    });
+    builder.addCase(performNameEnquiryAction.fulfilled, (state, action) => {
+      state.performAccountEnquiryStatus = "completed";
+      state.performAccountEnquirySuccess = action.payload.message;
+      state.accountHolder = action.payload.result as AccountHolder;
+    });
+    builder.addCase(performNameEnquiryAction.rejected, (state, action) => {
+      state.performAccountEnquiryStatus = "failed";
+      state.performAccountEnquiryError = action.payload?.error as string;
+    });
+
+    builder.addCase(initiateAccountTranfer.pending, (state, action) => {
+      state.performAccountTransferRequestStatus = "loading";
+    });
+    builder.addCase(initiateAccountTranfer.fulfilled, (state, action) => {
+      state.performAccountTransferRequestStatus = "completed";
+      state.performAccountTransferRequestSuccess = action.payload.message;
+      state.accountTransferResponse = action.payload
+        .result as AccountTransferResponseDTO;
+    });
+    builder.addCase(initiateAccountTranfer.rejected, (state, action) => {
+      state.performAccountTransferRequestStatus = "failed";
+      state.performAccountTransferRequestError = action.payload
+        ?.message as string;
+    });
   },
 });
 
-export const { clearCreateBeneficiaryStatus, clearAccountActivationStatus } =
-  bankSlice.actions;
+export const {
+  clearCreateBeneficiaryStatus,
+  clearAccountActivationStatus,
+  clearAccountHolder,
+  saveAccountTransferInfo,
+} = bankSlice.actions;
 
 export default bankSlice.reducer;

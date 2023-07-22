@@ -35,7 +35,7 @@ const SavedBeneficiaries = () => {
             <div className="search w-[100%] md:w-2/4 ">
               <form action="">
                 <div className="prepend">
-                  <img src={SearchIcon} alt="" />
+                  {/* <img src={SearchIcon} alt="" /> */}
                   <input
                     type="text"
                     placeholder="Search"

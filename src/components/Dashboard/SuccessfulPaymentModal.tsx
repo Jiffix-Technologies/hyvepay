@@ -3,8 +3,26 @@ import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
 import hyvePay from "../../assets/images/hyvePay.png";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import useAppSelector from "../../hooks/useAppSelector";
+import moment from "moment";
+import { useUser } from "../../hooks/useUser";
 
 const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
+  const state = useAppSelector((state) => state.bankReducer);
+
+  const { user } = useUser();
+
+  const handlePDFDownload = () => {
+    const pdfview = document.querySelector("#pdfView") as HTMLElement;
+    const pdf = new jsPDF();
+    html2canvas(pdfview).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "JPEG", 30, 50);
+      pdf.save("receipt.pdf");
+    });
+  };
   return (
     <>
       {successModal && (
@@ -31,8 +49,11 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                   Payment Successful
                 </h5>
                 <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
-                  Yay! Congratulations... ₦50,000 was successfully sent <br />
-                  to (Beneficiary 1 GTBank 0357935792)
+                  Yay! Congratulations... ₦{" "}
+                  {Number(state.accountTransferInfo?.amount).toFixed(2)} was
+                  successfully sent <br />
+                  to (Beneficiary | {state.accountTransferInfo?.bank.label} |
+                  {state.accountHolder?.beneficiaryAccountNumber})
                 </h5>
                 {/* </div> */}
               </div>
@@ -41,7 +62,10 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
               {/* view */}
 
               <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
-                <div className="w-full receipt-preview mt-4 p-3 md:p-8 mb-1 md:mb-3">
+                <div
+                  id="pdfView"
+                  className="w-full receipt-preview mt-4 p-3 md:p-8 mb-1 md:mb-3"
+                >
                   <div className="flex justify-between items-center">
                     <h5 className="text-[#494949] text-[14px] font-semibold">
                       Transaction Receipt
@@ -55,38 +79,45 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                         {" "}
                         Transaction Date:
                       </p>
-                      <p className="text-[10px] font-montserrat">12-06-2023</p>
+                      <p className="text-[10px] font-montserrat">
+                        {moment().format("DD-MM-YYYY")}
+                      </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
-                        {" "}
                         Reference Number:
                       </p>
                       <p className="text-[10px] font-montserrat">
-                        REF897/386753434354
+                        {state.accountTransferResponse?.transactionReference}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Amount:</p>
-                      <p className="text-[10px] font-montserrat">₦50,000.00</p>
+                      <p className="text-[10px] font-montserrat">
+                        ₦ {Number(state.accountTransferInfo?.amount).toFixed(2)}
+                      </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Sender:</p>
                       <p className="text-[10px] font-montserrat">
-                        DEMO WORKSHOP
+                        {user?.firstName} {user?.lastName}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Recipient:</p>
-                      <p className="text-[10px] font-montserrat">DAVID JAMES</p>
+                      <p className="text-[10px] font-montserrat">
+                        {state.accountHolder?.beneficiaryName}
+                      </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
-                        {" "}
                         Recipient Bank Name:
                       </p>
-                      <p className="text-[10px] font-montserrat w-[105px]">
-                        Guaranty Trust Bank (GTBank)
+                      <p
+                        style={{ textAlign: "right" }}
+                        className="text-[10px] font-montserrat w-[105px]"
+                      >
+                        {state.accountTransferInfo?.bank.label}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -94,12 +125,14 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                         {" "}
                         Account Number:
                       </p>
-                      <p className="text-[11px] font-montserrat">0564784545</p>
+                      <p className="text-[11px] font-montserrat">
+                        {state.accountHolder?.beneficiaryAccountNumber}
+                      </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Narration:</p>
                       <p className="text-[10px] font-montserrat w-[150px] text-right">
-                        Refund from your excess payment for engine
+                        {state.accountTransferInfo?.narration}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -107,11 +140,15 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                         {" "}
                         Transfer Fees:
                       </p>
-                      <p className="text-[10px] font-montserrat">₦0.00</p>
+                      <p className="text-[10px] font-montserrat">
+                        ₦{import.meta.env.TRANSFER_FEE}
+                      </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Status:</p>
-                      <p className="text-[10px] font-montserrat">Successful</p>
+                      <p className="text-[10px] font-montserrat">
+                        {state.accountTransferResponse?.status}
+                      </p>
                     </div>
                   </div>
 
@@ -127,7 +164,12 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                 </div>
 
                 <div className="flex gap-4 justify-around mt-5">
-                  <button className="btn btn-secondary">Download PDF</button>
+                  <button
+                    onClick={handlePDFDownload}
+                    className="btn btn-secondary"
+                  >
+                    Download PDF
+                  </button>
 
                   <div>
                     <button className="btn btn-secondary">Share PDF</button>

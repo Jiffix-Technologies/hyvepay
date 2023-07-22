@@ -198,4 +198,41 @@ declare module "@app-model" {
     bankName: string;
     bankCode: string;
   }
+
+  interface AccountHolder {
+    beneficiaryAccountNumber: string;
+    beneficiaryName: string;
+    senderAccountNumber: string;
+    senderName: string;
+    beneficiaryCustomerID: number;
+    beneficiaryBankCode: string;
+    nameEnquiryID: string;
+    responseCode: string;
+    transferCharge: number;
+    sessionID: string;
+  }
+
+  export interface AccountTransferResponseDTO {
+    requestReference: string;
+    transactionReference: string;
+    responseCode: string;
+    status: boolean;
+    message: string;
+    data: any;
+  }
+
+  export interface AccountTransferDTO {
+    trackingReference?: string;
+    beneficiaryAccount: string;
+    amount: number;
+    narration: string;
+    beneficiaryBankCode: string;
+    beneficiaryName: string;
+    senderName?: string;
+    nameEnquiryId: string;
+    clientFeeCharge?: number;
+    saveAsBeneficiary?: boolean;
+    bankName?: string;
+    pin: string;
+  }
 }
