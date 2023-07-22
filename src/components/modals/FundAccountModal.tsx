@@ -12,8 +12,7 @@ import * as Yup from "yup";
 
 const AccountTransferSchema = Yup.object({
   accountNumber: Yup.string().required("Account number is required"),
-  accountName: Yup.string()
-  .required("Account name is required"),
+  accountName: Yup.string().required("Account name is required"),
   bank: Yup.object({
     value: Yup.string().required("Bank is required"),
   }),
@@ -138,8 +137,11 @@ const FundAccountModal = ({
               ) : (
                 <Formik
                   enableReinitialize
-                  initialValues={formState}
-                  onSubmit={() => {}}
+                  initialValues={{
+                    ...formState,
+                    beneficiary: { label: "", value: "" },
+                  }}
+                  onSubmit={handleSingleTransfer}
                   validationSchema={AccountTransferSchema}
                 >
                   <SavedBeneficiaryTransferForm />

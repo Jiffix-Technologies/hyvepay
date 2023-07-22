@@ -1,4 +1,4 @@
-import { Form } from "formik";
+import { Field, Form, FormikContextType, useFormikContext } from "formik";
 import ChooseBeneficiaryDropDown from "../ChooseBeneficiaryDropDown/ChooseBeneficiaryDropDown";
 import { MySelect, MyTextInput } from "../AppInput/AppInput";
 import InputHeader from "../InputHeader/InputHeader";
@@ -6,14 +6,45 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import {
+  clearAccountHolder,
   getAllBankAction,
   getBeneficiariesAction,
+  performNameEnquiryAction,
 } from "../../reducers/bankReducer";
+import AppBtn from "../AppBtn/AppBtn";
 
 const SavedBeneficiaryTransferForm = () => {
   const dispatch = useAppDispatch();
 
+  const { values, setFieldValue } =
+    useFormikContext() as FormikContextType<any>;
+
   const state = useAppSelector((state) => state.bankReducer);
+
+  useEffect(() => {
+    dispatch(clearAccountHolder());
+    if (values.beneficiary) {
+      const data = state.beneficiaries.find(
+        (item) => item.accountNumber === values.beneficiary.value
+      );
+
+      if (data) {
+        dispatch(
+          performNameEnquiryAction({
+            beneficiaryAccountNumber: data.accountNumber,
+            beneficiaryBankCode: data.bankCode as string,
+          })
+        );
+        setFieldValue("bank", { label: data.bankName, value: data.bankCode });
+        setFieldValue("accountName", data.accountName);
+        setFieldValue("accountNumber", data.accountNumber);
+      } else {
+        setFieldValue("bank", { label: "", value: "" });
+        setFieldValue("accountName", "");
+        setFieldValue("accountNumber", "");
+      }
+    }
+  }, [values.beneficiary]);
 
   const getBanks = useCallback(() => {
     dispatch(getAllBankAction());
@@ -61,6 +92,7 @@ const SavedBeneficiaryTransferForm = () => {
               }))}
               label="Recipient’s Bank Name"
               name="bank"
+              disabled
             />
           </div>
 
@@ -72,6 +104,7 @@ const SavedBeneficiaryTransferForm = () => {
               hasPLaceHolder={true}
               className="bg-[#F5F5F5] border-[#F5F5F5]"
               name="accountName"
+              disabled
             />
           </div>
         </div>
@@ -85,6 +118,7 @@ const SavedBeneficiaryTransferForm = () => {
               hasPLaceHolder={true}
               className="bg-[#F5F5F5] border-[#F5F5F5]"
               name="accountNumber"
+              disabled
             />
           </div>
 
@@ -104,15 +138,17 @@ const SavedBeneficiaryTransferForm = () => {
           <div className="w-full mb-3 mt-5 md:mt-0 md:mb-6">
             <InputHeader text="Narration" />
 
-            <textarea
-              name=""
+            <Field
+              name="narration"
               id=""
+              as="textarea"
               cols={30}
               rows={3}
+              maxLength={20}
               placeholder="Enter your message"
               className="bg-gray-100 w-full p-4"
               style={{ borderRadius: 18, border: 0 }}
-            ></textarea>
+            />
           </div>
         </div>
 
@@ -121,15 +157,15 @@ const SavedBeneficiaryTransferForm = () => {
                     Save Beneficiary
                   </div> */}
 
-        {/* <AppBtn
-            title="Send Money"
-            className="text-[#000] w-full bg-[#FAA21B] mt-2"
-            onClick={() => {
-              setConfirmationmodal(!confirmationmodal);
-              setOpenSingleModal(false);
-              // setModal(false);
-            }}
-          /> */}
+        <AppBtn
+          title="Send Money"
+          className="text-[#000] w-full bg-[#FAA21B] mt-2"
+          // onClick={() => {
+          //   setConfirmationmodal(!confirmationmodal);
+          //   setOpenSingleModal(false);
+          //   // setModal(false);
+          // }}
+        />
       </div>
     </Form>
   );
