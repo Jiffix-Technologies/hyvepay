@@ -49,10 +49,10 @@ const NewTransaction = () => {
         </div>
 
         <div
-          onClick={() => {
-            setOpenSingleModal(true);
-            setCurretntModal(true);
-          }}
+          // onClick={() => {
+          //   setOpenSingleModal(true);
+          //   setCurretntModal(true);
+          // }}
           className="p-8 transact-card bg-gray-100"
         >
           <img src={ShareIcon} alt="" />
