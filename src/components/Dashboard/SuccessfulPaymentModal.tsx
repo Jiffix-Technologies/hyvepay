@@ -16,7 +16,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
 
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
-    const pdf = new jsPDF();
+    const pdf = new jsPDF() as any;
     html2canvas(pdfview).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       pdf.addImage(imgData, "JPEG", 30, 50);
