@@ -7,8 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "prompt",
-
       manifest: {
         name: "HyvePay",
         short_name: "HyvePay",
