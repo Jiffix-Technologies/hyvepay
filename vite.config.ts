@@ -7,10 +7,16 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      registerType: "prompt",
+
       manifest: {
+        name: "HyvePay",
+        short_name: "HyvePay",
+        description:
+          "Payments platform for automotive industry, sponsored by HyveTech",
         icons: [
           {
-            src: "/vite.svg",
+            src: "/hyvePay.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
