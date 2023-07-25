@@ -266,15 +266,15 @@ const Hyvepay = () => {
           <Card
             name={"Available Balance"}
             price={Util.formAmount(
-              bankState.accountBalance?.availableBalance,
-              true
+              bankState.accountBalance?.availableBalance
             )}
             qty={""}
             color={"#FFF2DD"}
+            cardName={"Balance"}
           />
           <Card
             name={"Total Credit"}
-            price={Util.formAmount(bankState.transaction?.totalCredit, false)}
+            price={Util.formAmount(bankState.transaction?.totalCredit)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -283,10 +283,11 @@ const Hyvepay = () => {
                 : 0
             }
             color={"#F1F3FF"}
+            cardName={"Credit"}
           />
           <Card
             name={"Total Debit"}
-            price={Util.formAmount(bankState.transaction?.totalDebit, false)}
+            price={Util.formAmount(bankState.transaction?.totalDebit)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -295,7 +296,7 @@ const Hyvepay = () => {
                 : 0
             }
             color={"#FFEDED"}
-          />
+            cardName={"Debit"}          />
         </div>
 
         <h5 className="heading-five font-montserrat">Transaction History</h5>
@@ -383,10 +384,10 @@ const Hyvepay = () => {
                     {item.accountNumber}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.amount, true)}
+                    {Util.formAmount(item.amount)}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.balanceAfter, true)}
+                    {Util.formAmount(item.balanceAfter)}
                   </td>
                   <td className="font-montserrat text-xs">
                     {item.narration || "N/A"}

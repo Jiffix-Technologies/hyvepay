@@ -52,7 +52,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                   Yay! Congratulations... ₦{" "}
                   {Number(state.accountTransferInfo?.amount).toFixed(2)} was
                   successfully sent <br />
-                  to (Beneficiary | {state.accountTransferInfo?.bank.label} |
+                  to ({state.accountTransferInfo?.accountName} | {state.accountTransferInfo?.bank.label} |
                   {state.accountHolder?.beneficiaryAccountNumber})
                 </h5>
                 {/* </div> */}
