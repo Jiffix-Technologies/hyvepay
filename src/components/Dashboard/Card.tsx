@@ -3,7 +3,7 @@ import React from "react";
 import Eye from "../../assets/images/eye.png";
 import { BsEyeSlash } from "react-icons/bs";
 
-const Card = ({ name, price, qty, color }: any) => {
+const Card = ({ name, price, qty, color, cardName }: any) => {
   const [obscure, setObscure] = React.useState(false);
   return (
     <>
@@ -27,7 +27,8 @@ const Card = ({ name, price, qty, color }: any) => {
           </button>
         </div>
         <div className="flex px-6 pb-4 justify-end font-montserrat">
-          {qty && (qty > 1 ? qty + " Credit(s)" : qty + " Credit")}
+          {qty && (qty > 1 ? qty + " Credit(s)" : qty + cardName)}
+          {/* " Credit")} */}
         </div>
       </div>
     </>

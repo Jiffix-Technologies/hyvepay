@@ -34,6 +34,7 @@ const AppInput: FC<any> = ({
   const [pwdfield, setPwdfield] = useState(false);
 
   const [field, meta] = useField({ ...props });
+  console.log(field);
 
   const togglePassword = (e: any, val: any) => {
     e.preventDefault();
