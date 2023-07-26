@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { BsEyeSlash } from "react-icons/bs";
 import InputHeader from "../InputHeader/InputHeader";
-import { useField, useFormikContext } from "formik";
+import { Formik, useField, useFormikContext } from "formik";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Select from "react-select";
@@ -14,7 +14,7 @@ interface Props {
   hasPLaceHolder?: any;
   placeholder?: any;
   className?: any;
-  name?: any;
+  name?: string;
   type?: any;
   formik?: any;
 }
@@ -29,17 +29,17 @@ const AppInput: FC<any> = ({
   name = "",
   type = "text",
   formik = null,
-  ...props
+  ...props 
 }) => {
-  const [pwdfield, setPwdfield] = useState(false);
+  const [pwdField, setPwdField] = useState(false);
 
   const [field, meta] = useField({ ...props });
-  console.log(field);
+
 
   const togglePassword = (e: any, val: any) => {
     e.preventDefault();
 
-    setPwdfield((state) => !state);
+    setPwdField((state) => !state);
   };
 
   return (
@@ -49,7 +49,7 @@ const AppInput: FC<any> = ({
       <div className="prepend w-full mb-0">
         <img src={leftImg} alt="" />
         <input
-          type={pwdfield ? "text" : type}
+          type={pwdField ? "text" : type}
           className={
             `w-full placeholder-[#A5A5A5] placeholderText font-montserrat
           } ` + className
@@ -61,8 +61,8 @@ const AppInput: FC<any> = ({
         />
 
         {type === "password" && (
-          <button onClick={(e) => togglePassword(e, !pwdfield)}>
-            {pwdfield ? (
+          <button onClick={(e) => togglePassword(e, !pwdField)}>
+            {pwdField ? (
               <BsEyeSlash color="black" size={25} />
             ) : (
               <img src={rightImg} alt="password" />
@@ -90,7 +90,7 @@ export const MyTextInput = ({
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
   const [pwdfield, setPwdfield] = useState(false);
-  const [field, meta] = useField(props);
+  const [field, meta] = useField({...props});
   const togglePassword = (e: any, val: any) => {
     e.preventDefault();
 
