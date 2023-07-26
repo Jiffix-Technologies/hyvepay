@@ -5,9 +5,10 @@ export class Util {
     return moment(date).format(format || "DD-MM-YYYY");
   }
 
-  static formAmount(amount: number | undefined) {
+  static formAmount(amount: number | undefined, isKobo?: boolean) {
     if (!amount) return this.CurrencyDisplay(0);
-
+    const convertedToKobo = (amount / 100).toFixed(2);
+    if (isKobo) return this.CurrencyDisplay(Number(convertedToKobo));
     return this.CurrencyDisplay(amount);
   }
 

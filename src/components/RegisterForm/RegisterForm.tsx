@@ -22,7 +22,7 @@ import { showMessage } from "../../helpers/notification";
 
 const RegisterForm = () => {
   const [state, setState] = useState<any[]>([]);
-  const [district, setDistrict] = useState<any[]>([]);
+  // const [district, setDistrict] = useState<any[]>([]);
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
 
@@ -35,7 +35,7 @@ const RegisterForm = () => {
     email: "",
     address: "",
     state: { label: "", value: "" },
-    district: { label: "", value: "" },
+    // district: { label: "", value: "" },
     password: "",
     confirmPassword: "",
     businessName: "",
@@ -46,33 +46,33 @@ const RegisterForm = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    let stateyArray: any[] = [];
+    let stateArray: any[] = [];
     const newData = Object.entries(stateLga);
     newData.map((item, index) => {
-      stateyArray.push({
+      stateArray.push({
         value: item[0],
         label: item[0],
       });
     });
-    setState(stateyArray);
+    setState(stateArray);
   }, []);
 
-  useEffect(() => {
-    if (value != null) {
-      let distrciyArray: any[] = [];
-      const newData: any = Object.entries(stateLga).find(
-        (_items) => _items[0] === value
-      );
+  // useEffect(() => {
+  //   if (value != null) {
+  //     let districtArray: any[] = [];
+  //     const newData: any = Object.entries(stateLga).find(
+  //       (_items) => _items[0] === value
+  //     );
 
-      newData[1].map((item: any, index: any) => {
-        distrciyArray.push({
-          value: item,
-          label: item,
-        });
-      });
-      setDistrict(distrciyArray);
-    }
-  }, [value]);
+  //     newData[1].map((item: any, index: any) => {
+  //       districtArray.push({
+  //         value: item,
+  //         label: item,
+  //       });
+  //     });
+  //     setDistrict(districtArray);
+  //   }
+  // }, [value]);
 
   useEffect(() => {
     if (authState.signupStatus === "completed") {
@@ -127,7 +127,7 @@ const RegisterForm = () => {
                 return confirmPassword === password;
               }
             ),
-          businessName: Yup.string(),
+          businessName: Yup.string().required("Business Name is required") .typeError("Business Name is required"),
         })}
         onSubmit={(values, helpers: FormikHelpers<any>) => {
           console.log("values> ", values);
@@ -137,8 +137,8 @@ const RegisterForm = () => {
               lastName: values.lastName,
               name: values.businessName,
               phone: values.phoneNumber,
-              email: values.email,
-              password: values.pasword,
+              email: values.email.toLowerCase(),
+              password: values.password,
               state: values.state.value,
               address: values.address,
               dialCode: values.phoneNumber,
@@ -178,9 +178,10 @@ const RegisterForm = () => {
           <div className="mt-0 md:mt-5 mb-0 md:mb-10">
             <MyTextInput
               hasPLaceHolder={true}
-              placeholderTop="Workshop/Business Name"
+              placeholderTop="Workshop/Business Name*"
               placeholder="Your Workshop/Business Name"
               name="businessName"
+              
             />
           </div>
 
@@ -203,7 +204,7 @@ const RegisterForm = () => {
           </div>
 
           <div className="mt-5 md:mt-10">
-            <InputHeader text="State" />
+            <InputHeader text="State*" />
 
             <MySelect
               name="state"
