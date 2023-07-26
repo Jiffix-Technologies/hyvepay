@@ -266,7 +266,7 @@ const Hyvepay = () => {
           <Card
             name={"Available Balance"}
             price={Util.formAmount(
-              bankState.accountBalance?.availableBalance
+              bankState.accountBalance?.availableBalance,true
             )}
             qty={""}
             color={"#FFF2DD"}
@@ -274,7 +274,7 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Credit"}
-            price={Util.formAmount(bankState.transaction?.totalCredit)}
+            price={Util.formAmount(bankState.transaction?.totalCredit,false)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -287,7 +287,7 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Debit"}
-            price={Util.formAmount(bankState.transaction?.totalDebit)}
+            price={Util.formAmount(bankState.transaction?.totalDebit,false)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(

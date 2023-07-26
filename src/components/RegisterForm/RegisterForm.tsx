@@ -93,9 +93,11 @@ const RegisterForm = () => {
         validationSchema={Yup.object().shape({
           firstName: Yup.string()
             .required("First name is required")
+            .matches(/^\S*$/, "First name must not contain whitespace")
             .typeError("First name is required"),
           lastName: Yup.string()
             .required("Last name is required")
+            .matches(/^\S*$/, "Last name must not contain whitespace")
             .typeError("Last name is required"),
           email: Yup.string()
             .email()
@@ -103,8 +105,10 @@ const RegisterForm = () => {
             .typeError("Email address is required"),
           phoneNumber: Yup.string()
             .required("Phone number is required")
+            .matches(/^\S*$/, "Phone Number must not contain whitespace")
             .typeError("Phone number is required"),
-          address: Yup.string().required("Address is required"),
+          address: Yup.string().required("Address is required")
+          .matches(/^\S*$/, "Address must not contain whitespace"),
           state: Yup.object({
             label: Yup.string().required("State is required"),
             value: Yup.string().required("State is required"),
@@ -114,6 +118,7 @@ const RegisterForm = () => {
           password: Yup.string()
             .min(8)
             .required("Password is required")
+            .matches(/^\S*$/, "Password must not contain whitespace")
             .typeError(
               "Password is required and must be a minimum of 8 characters"
             ),
