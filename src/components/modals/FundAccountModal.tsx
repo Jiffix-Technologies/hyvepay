@@ -74,8 +74,8 @@ const FundAccountModal = ({
           onClick={toggleModal}
         >
           <div
-            className="bg-white p-2 relative w-[90%] md:w-[50%] overflow-y-auto pb-10  rounded-md"
-            style={{ maxWidth: 700 }}
+            className="bg-white p-2 relative w-[90%] md:w-[50%] xs:w-[30%] overflow-y-auto pb-5 xs:pb-2 xs:h-[80%] rounded-md"
+            style={{ maxWidth: 600 }}
           >
             <div className="body">
               <div className="flex justify-end w-full">

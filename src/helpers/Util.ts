@@ -7,8 +7,11 @@ export class Util {
 
   static formAmount(amount: number | undefined, isKobo?: boolean) {
     if (!amount) return this.CurrencyDisplay(0);
-    const convertedToKobo = (amount / 100).toFixed(2);
-    if (isKobo) return this.CurrencyDisplay(Number(convertedToKobo));
+
+    if (isKobo) {
+      const convertedToKobo = (amount / 100).toFixed(2);
+      return this.CurrencyDisplay(Number(convertedToKobo));
+    }
     return this.CurrencyDisplay(amount);
   }
 
@@ -21,6 +24,12 @@ export class Util {
     return formattedAmount;
   };
 
+  static isValueInKoboOrNaira(amount: number) {
+    if (amount < 100 || amount % 100 === 0) {
+      return "Kobo";
+    }
+  }
+  // const isKobo = this.isValueInKoboOrNaira(amount);
   //FIXME: this code was redundant. i replaced it with the CurrencyDisplay function
   // static formAmount(amount: number | undefined, isKobo?: boolean) {
   //   if (!amount) return `N 0.00`;
