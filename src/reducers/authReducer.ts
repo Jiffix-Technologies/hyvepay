@@ -44,7 +44,6 @@ export const garageSignUpAction = asyncThunkWrapper<
   IGarageSignupModel
 >(GARAGE_SIGN_UP, async (args) => {
   const response = await axiosClient.post("/api/v1/garage-sign-up", args);
-
   return response.data;
 });
 
@@ -115,6 +114,7 @@ const authSlice = createSlice({
     builder.addCase(loginUserAction.fulfilled, (state, action) => {
       state.loginStatus = "completed";
       state.accessToken = action.payload.result;
+      console.log(action.payload);
     });
 
     builder.addCase(loginUserAction.rejected, (state, action) => {
@@ -133,7 +133,7 @@ const authSlice = createSlice({
 
     builder.addCase(getUserAction.rejected, (state, action) => {
       state.getUserStatus = "failed";
-      state.getUserError = action.payload?.error as string;
+      state.getUserError = action.payload?.message as string;
     });
 
     builder.addCase(garageSignUpAction.pending, (state, action) => {

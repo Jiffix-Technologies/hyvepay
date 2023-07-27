@@ -30,31 +30,31 @@ const AccountSettings = () => {
   const dropdownRef = useRef(null) as any;
 
   useEffect(() => {
-    let stateyArray: any[] = [];
+    let stateArray: any[] = [];
     const newData = Object.entries(stateLga);
     newData.map((item, index) => {
-      stateyArray.push({
+      stateArray.push({
         value: item[0],
         label: item[0],
       });
     });
-    setState(stateyArray);
+    setState(stateArray);
   }, []);
 
   useEffect(() => {
     if (value != null) {
-      let distrciyArray: any = [];
+      let districtArray: any = [];
       const newData: any = Object.entries(stateLga).find(
         (_items) => _items[0] === value
       );
 
       newData[1].map((item: any, index: any) => {
-        distrciyArray.push({
+        districtArray.push({
           value: item,
           label: item,
         });
       });
-      setDistrict(distrciyArray);
+      setDistrict(districtArray);
     }
   }, [value]);
 

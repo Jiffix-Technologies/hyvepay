@@ -3,7 +3,7 @@ import OptionIcon from "../../assets/svgs/option.svg";
 import DeleteModal from "../modals/DeleteModal.jsx";
 import AddNewBeneficiaryModal from "../modals/AddNewBeneficiaryModal";
 
-const TransactCard = ({ name, accountnum, bankName, phone }: any) => {
+const TransactCard = ({ name, accountNumber, bankName, phone }: any) => {
   const [option, setOption] = useState(false);
   const [dModal, setdModal] = useState(false);
   const [beneficiary, setBeneficiary] = useState(false);
@@ -64,7 +64,7 @@ const TransactCard = ({ name, accountnum, bankName, phone }: any) => {
           {name}
         </h5>
 
-        <p className="text-sm font-montserrat text-[11px]">{accountnum}</p>
+        <p className="text-sm font-montserrat text-[11px]">{accountNumber}</p>
         <p className="text-sm font-montserrat text-[11px]">{bankName}</p>
         <p className="text-sm font-montserrat text-[11px]">{phone}</p>
       </div>

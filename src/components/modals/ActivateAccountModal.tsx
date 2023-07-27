@@ -106,6 +106,7 @@ const ActivateAccountModal: FC<IProps> = ({
         })
       );
     } catch (error) {
+      console.log(error);
       showError(error);
       setLoading(false);
     }
@@ -137,9 +138,13 @@ const ActivateAccountModal: FC<IProps> = ({
                 ),
                 nin: Yup.string()
                   .matches(/^[0-9]+$/, "NIN should be numbers")
+                  .min(11, "NIN should be 11 digits")
+                  .max(11, "NIN should be 11 digits")
                   .required("NIN is required"),
                 bvn: Yup.string()
                   .matches(/^[0-9]+$/, "BVN should be numbers")
+                  .min(11, "BVN should be 11 digits")
+                  .max(11, "BVN should be 11 digits")
                   .required("BVN is required"),
                 pin: Yup.string()
                   .min(4, "PIN should be 4 digits")

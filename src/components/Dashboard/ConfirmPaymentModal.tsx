@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { initiateAccountTranfer } from "../../reducers/bankReducer";
 import { showMessage } from "../../helpers/notification";
+import {Util} from "../../helpers/Util";
 
 const ConfirmPaymentModal = ({
   confirmationmodal,
@@ -83,11 +84,9 @@ const ConfirmPaymentModal = ({
                       Confirm Payment
                     </h5>
                     <h5 className="text-center text-sm gray-color">
-                      You’re about to send ₦{" "}
-                      {Number(state.accountTransferInfo?.amount).toFixed(2)} to{" "}
-                      {state.accountTransferInfo?.accountName}. Enter your PIN
-                      below to confirm and complete this transaction
-                    </h5>
+  You're about to send {Util.formAmount(Number(state.accountTransferInfo?.amount))} to {state.accountTransferInfo?.accountName}.<br />
+  Enter your PIN below to confirm and complete this transaction
+</h5>
                     {/* </div> */}
                   </div>
                 </div>

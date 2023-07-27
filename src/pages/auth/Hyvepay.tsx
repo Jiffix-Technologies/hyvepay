@@ -104,7 +104,7 @@ const Hyvepay = () => {
     const headers = [
       "Date",
       "beneficiaryName",
-      "accountNumber",
+      // "accountNumber",
       "amount",
       "balanceAfter",
       "narration",
@@ -119,10 +119,11 @@ const Hyvepay = () => {
       refinedData.push([
         item.realDate,
         item.beneficiaryName,
-        item.accountNumber,
+        // item.accountNumber,
         item.amount / 100,
         item.balanceAfter / 100,
         item.narration,
+        item.detailOfClosure
       ]);
     });
 
@@ -266,15 +267,15 @@ const Hyvepay = () => {
           <Card
             name={"Available Balance"}
             price={Util.formAmount(
-              bankState.accountBalance?.availableBalance,
-              true
+              bankState.accountBalance?.availableBalance,true
             )}
             qty={""}
             color={"#FFF2DD"}
+            cardName={"Balance"}
           />
           <Card
             name={"Total Credit"}
-            price={Util.formAmount(bankState.transaction?.totalCredit, false)}
+            price={Util.formAmount(bankState.transaction?.totalCredit,true)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -283,10 +284,11 @@ const Hyvepay = () => {
                 : 0
             }
             color={"#F1F3FF"}
+            cardName={"Credit"}
           />
           <Card
             name={"Total Debit"}
-            price={Util.formAmount(bankState.transaction?.totalDebit, false)}
+            price={Util.formAmount(bankState.transaction?.totalDebit,true)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -295,7 +297,7 @@ const Hyvepay = () => {
                 : 0
             }
             color={"#FFEDED"}
-          />
+            cardName={"Debit"}          />
         </div>
 
         <h5 className="heading-five font-montserrat">Transaction History</h5>
@@ -363,7 +365,7 @@ const Hyvepay = () => {
             <thead>
               <th className="font-montserrat    text-xs">Date</th>
               <th className="font-montserrat    text-xs ">Account Name</th>
-              <th className="font-montserrat      text-xs ">Account Number</th>
+              {/* <th className="font-montserrat      text-xs ">Account Number</th> */}
               <th className="font-montserrat     text-xs ">Amount</th>
               <th className="font-montserrat    text-xs ">Balance</th>
               <th className="font-montserrat   text-xs ">Narration</th>
@@ -379,30 +381,23 @@ const Hyvepay = () => {
                   <td className="font-montserrat text-xs">
                     {item.beneficiaryName}
                   </td>
-                  <td className="font-montserrat text-xs">
+                  {/* <td className="font-montserrat text-xs">
                     {item.accountNumber}
+                  </td> */}
+                  <td className="font-montserrat text-xs">
+                    {Util.formAmount(item.amount)}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.amount, true)}
-                  </td>
-                  <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.balanceAfter, true)}
+                    {Util.formAmount(item.balanceAfter)}
                   </td>
                   <td className="font-montserrat text-xs">
                     {item.narration || "N/A"}
                   </td>
-                  <td className="font-montserrat text-xs">Transfer</td>
-                  <td>
-                    {/* <span
-                      className="py-2 px-4"
-                      style={{
-                        backgroundColor: "#FF8282",
-                        borderRadius: 10,
-                        color: "#fff",
-                      }}
-                    >
-                   
-                    </span> */}
+                  <td className="font-montserrat text-xs">
+                    {item.transactionMethod}
+                  </td>
+                  <td className="font-montserrat text-xs">
+                    {item.detailOfClosure}
                   </td>
                 </tr>
               ))}

@@ -14,6 +14,7 @@ import { loginUserAction } from "../../actions/auth";
 import useAppSelector from "../../hooks/useAppSelector";
 import { IAuthState } from "../../reducers/authReducer";
 import { clearLoginStatus } from "../../reducers/authReducer";
+import { showMessage } from "../../helpers/notification";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -33,8 +34,7 @@ const LoginForm = () => {
       clearLoginStatus();
       navigate("/dashboard");
     } else if (loginState.loginStatus === "failed") {
-      clearLoginStatus();
-      // alert(loginState.loginError);
+      showMessage(loginState.loginStatus, "Email or Password is incorrect", "error");
     }
   }, [loginState.loginStatus]);
 
@@ -44,13 +44,13 @@ const LoginForm = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email().required(),
+      email: Yup.string().email("Invalid email address").email().required("Email is required"),
       password: Yup.string().required(),
     }),
     onSubmit: (values) => {
       dispatch(
         loginUserAction({
-          username: values.email,
+          username: values.email.toLowerCase(),
           password: values.password,
         })
       );
@@ -72,7 +72,7 @@ const LoginForm = () => {
           onSubmit={(values) => {
             dispatch(
               loginUserAction({
-                username: values.email,
+                username: values.email.toLowerCase(),
                 password: values.password,
               })
             );
