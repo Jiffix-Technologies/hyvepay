@@ -123,7 +123,7 @@ const Hyvepay = () => {
         item.amount / 100,
         item.balanceAfter / 100,
         item.narration,
-        item.detailOfClosure
+        item.detailOfClosure,
       ]);
     });
 
@@ -267,7 +267,8 @@ const Hyvepay = () => {
           <Card
             name={"Available Balance"}
             price={Util.formAmount(
-              bankState.accountBalance?.availableBalance,true
+              bankState.accountBalance?.availableBalance,
+              true
             )}
             qty={""}
             color={"#FFF2DD"}
@@ -275,7 +276,7 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Credit"}
-            price={Util.formAmount(bankState.transaction?.totalCredit,true)}
+            price={Util.formAmount(bankState.transaction?.totalCredit)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -288,7 +289,7 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Debit"}
-            price={Util.formAmount(bankState.transaction?.totalDebit,true)}
+            price={Util.formAmount(bankState.transaction?.totalDebit)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
@@ -297,7 +298,8 @@ const Hyvepay = () => {
                 : 0
             }
             color={"#FFEDED"}
-            cardName={"Debit"}          />
+            cardName={"Debit"}
+          />
         </div>
 
         <h5 className="heading-five font-montserrat">Transaction History</h5>
@@ -385,7 +387,7 @@ const Hyvepay = () => {
                     {item.accountNumber}
                   </td> */}
                   <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.amount)}
+                    {Util.formAmount(item.amount, true)}
                   </td>
                   <td className="font-montserrat text-xs">
                     {Util.formAmount(item.balanceAfter)}
@@ -394,7 +396,11 @@ const Hyvepay = () => {
                     {item.narration || "N/A"}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {item.transactionMethod}
+                    {item.postingRecordType === postingType.credit ? (
+                      <span>Credit</span>
+                    ) : (
+                      <span>Debit</span>
+                    )}
                   </td>
                   <td className="font-montserrat text-xs">
                     {item.detailOfClosure}
