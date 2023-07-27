@@ -390,7 +390,7 @@ const Hyvepay = () => {
                     {Util.formAmount(item.amount, true)}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {Util.formAmount(item.balanceAfter)}
+                    {Util.formAmount(item.balanceAfter, true)}
                   </td>
                   <td className="font-montserrat text-xs">
                     {item.narration || "N/A"}
