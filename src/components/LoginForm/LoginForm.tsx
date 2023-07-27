@@ -34,7 +34,7 @@ const LoginForm = () => {
       clearLoginStatus();
       navigate("/dashboard");
     } else if (loginState.loginStatus === "failed") {
-      showMessage(loginState.loginStatus, "", "error");
+      showMessage(loginState.loginStatus, "Email or Password is incorrect", "error");
     }
   }, [loginState.loginStatus]);
 

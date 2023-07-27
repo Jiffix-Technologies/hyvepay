@@ -11,8 +11,8 @@ const EditUserModal = ({
   editUser,
   setEditUser,
   title = "Add User",
-}: // description = 'Are you sure you want to carry out this action? If you proceed, you will not be able to undo this action',
-any) => {
+  // description = 'Are you sure you want to carry out this action? If you proceed, you will not be able to undo this action',
+}: any) => {
   const [successModal, setSuccessModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>(null);

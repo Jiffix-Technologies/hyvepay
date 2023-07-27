@@ -17,7 +17,14 @@ import EditRoleModal from "../../components/modals/EditRoleModal";
 import AppSwitch from "../../components/AppSwitch/AppSwitch";
 import { GrEdit } from "react-icons/gr";
 import EditUserModal from "../../components/modals/EditUserModal";
+import {Formik} from "formik";
 
+
+const initialValues={
+pin:'',
+confirmPin:'',
+password:'',
+}
 const Settings = () => {
   const [view, setView] = useState(0);
   const [deletemodal, setDeletemodal] = useState(false);
@@ -78,7 +85,8 @@ const Settings = () => {
                   Please set your password for HyvePay
                 </p>
 
-                <div className="mt-10 ">
+              <Formik initialValues={initialValues} onSubmit={()=>{}} >
+              <div className="mt-10 ">
                   <div className="flex flex-col md:flex-row rounded-none gap-4 w-full">
                     <div className="w-full relative">
                       <AppInput
@@ -86,6 +94,7 @@ const Settings = () => {
                         placeholderTop="HyvePay Pin"
                         placeholder="Enter a pin for your HyvePay account"
                         className="bg-[#F5F5F5] border-[#F5F5F5]"
+                        name="pin"
                       />
                       <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
                         Your pin must be minimum of 4 digits
@@ -98,6 +107,7 @@ const Settings = () => {
                         placeholderTop="Confirm HyvePay Pin"
                         placeholder="Enter a pin for your HyvePay account"
                         className="bg-[#F5F5F5] border-[#F5F5F5]"
+                        name="confirmPin"
                       />
                       <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
                         Your pin must be minimum of 4 digits
@@ -111,6 +121,7 @@ const Settings = () => {
                       placeholderTop="AutoHyve Account Password"
                       placeholder="Enter your AutoHyve account password"
                       className="bg-[#F5F5F5] border-[#F5F5F5]"
+                      name="password"
                     />
                     <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
                       Your pin must be minimum of 4 digits
@@ -124,6 +135,7 @@ const Settings = () => {
                     />
                   </div>
                 </div>
+              </Formik>
               </div>
             </>
           )}
