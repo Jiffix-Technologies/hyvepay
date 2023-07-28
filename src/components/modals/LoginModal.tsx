@@ -37,9 +37,7 @@ export default function LoginModal({ modal, setModal }: any) {
                   <img src={CloseIcon} alt="" />
                 </button>
               </div>
-              {/* <div>
-                <h5 className="text-center heading-five">Transfer Fund</h5>
-              </div> */}
+             
             </div>
 
             <div className="flex flex-col items-center justify-center">

@@ -9,7 +9,9 @@ import AppBtn from "../../components/AppBtn/AppBtn";
 import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
 import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import { useUser } from "../../hooks/useUser";
-import { Form, Formik, useFormik, useFormikContext } from "formik";
+import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
+import axios from "axios";
+import { showMessage } from "../../helpers/notification";
 
 const Profile = () => {
   const [state, setState] = useState<any[]>([]);
@@ -17,13 +19,11 @@ const Profile = () => {
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
   const [openModal, setOpenModal] = useState(false);
-  const [opneProfile, setOpenProfile] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
 
   const { user } = useUser();
-
-  console.log(user);
 
   useEffect(() => {
     let stateArray: any = [];
@@ -54,6 +54,22 @@ const Profile = () => {
     }
   }, [value]);
 
+  const formData = {
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
+    phone: user?.phone,
+  };
+
+  async function updateProfile(formData: any) {
+    try {
+      const data = await axios.patch("/url", formData);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
   const customStyles = {
     placeholder: (defaultStyles: any) => {
       return {
@@ -113,39 +129,38 @@ const Profile = () => {
     document.addEventListener("click", hideOnClickOutside, true);
   }, []);
 
-  const formik = useFormik({
-    initialValues: {
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      email: user?.email,
-      phoneNumber: user?.phone,
-    },
-    onSubmit: (values) => {},
-  });
-
   return (
-    <Formik
-      enableReinitialize
-      initialValues={{
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        email: user?.email,
-        phoneNumber: user?.phone, // added for our select
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
-      }}
-    >
-      <>
-        <Form>
-          <div className="mb-20 mt-32 h-screen px-0 md:px-20">
+    <>
+      <div className="mb-20 mt-32 h-screen px-0 md:px-20">
+        <Formik
+          enableReinitialize
+          initialValues={formData}
+          onSubmit={(values) => {
+            console.log(values);
+            // update profile ()
+            updateProfile(formData)
+              .then(function () {
+                //show success notification
+                showMessage(
+                  "Profile Update",
+                  "Profile Updated Successfully",
+                  "success"
+                );
+              })
+              .catch(function (err) {
+                showMessage(
+                  "Profile Update",
+                  "Profile was not Updated Successfully",
+                  "error"
+                );
+              })
+          }}>
+          <Form>
             <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
+
               <div
                 className="absolute -top-10 w-[100%] md:w-[80%] items-center justify-center text-center flex cursor-pointer"
-                onClick={() => setOpenProfile(!opneProfile)}
+                onClick={() => setOpenProfile(!openProfile)}
               >
                 <img
                   src={profilePicx}
@@ -162,7 +177,6 @@ const Profile = () => {
                       placeholderTop="First Name"
                       placeholder="Enter your first name"
                       name="firstName"
-                      formik={formik}
                     />
                   </div>
                   <div className=" md:mt-5  w-full">
@@ -171,7 +185,6 @@ const Profile = () => {
                       placeholderTop="Last Name"
                       placeholder="David"
                       name="lastName"
-                      formik={formik}
                     />
                   </div>
                 </div>
@@ -181,7 +194,7 @@ const Profile = () => {
                     hasPLaceHolder={true}
                     placeholderTop="Email"
                     placeholder="Enter your valid email address"
-                    name={"email"}
+                    name="email"
                   />
                 </div>
 
@@ -189,9 +202,9 @@ const Profile = () => {
                   <div className="mt-5 md:mt-5  w-full relative">
                     <MyTextInput
                       hasPLaceHolder={true}
-                      placeholderTop="Password"
+                      placeholderTop="HyvePay Account Password"
                       placeholder="****************"
-                      name={"password"}
+                      name="password"
                     />
                     <span
                       onClick={() => setOpenModal(!openModal)}
@@ -218,6 +231,7 @@ const Profile = () => {
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
+                      name="phone"
                     />
                   </div>
 
@@ -256,27 +270,26 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
+
             </div>
 
             <div className="w-full flex md:items-end md:justify-end">
               <AppBtn
                 className=" bg-[#FAA21B] w-full md:w-[100px]  text-[#000] -mt-10 md:mt-3 mb-40"
                 title="SAVE"
+                type="submit"
               />
             </div>
-          </div>
-        </Form>
+          </Form>
+        </Formik>
+      </div >
 
-        <ChangePasswordModal
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-        />
-        <UploadPictureModal
-          opneProfile={opneProfile}
-          setOpenProfile={setOpenProfile}
-        />
-      </>
-    </Formik>
+      <ChangePasswordModal openModal={openModal} setOpenModal={setOpenModal} />
+      <UploadPictureModal
+        openProfile={openProfile}
+        setOpenProfile={setOpenProfile}
+      />
+    </>
   );
 };
 
