@@ -107,8 +107,8 @@ const RegisterForm = () => {
             .required("Phone number is required")
             .matches(/^\S*$/, "Phone Number must not contain whitespace")
             .typeError("Phone number is required"),
-          address: Yup.string().required("Address is required")
-          .matches(/^\S*$/, "Address must not contain whitespace"),
+          address: Yup.string().required("Address is required"),
+
           state: Yup.object({
             label: Yup.string().required("State is required"),
             value: Yup.string().required("State is required"),
@@ -132,7 +132,9 @@ const RegisterForm = () => {
                 return confirmPassword === password;
               }
             ),
-          businessName: Yup.string().required("Business Name is required") .typeError("Business Name is required"),
+          businessName: Yup.string()
+            .required("Business Name is required")
+            .typeError("Business Name is required"),
         })}
         onSubmit={(values, helpers: FormikHelpers<any>) => {
           console.log("values> ", values);
@@ -149,7 +151,7 @@ const RegisterForm = () => {
               dialCode: values.phoneNumber,
             })
           );
-            helpers.resetForm();
+          helpers.resetForm();
         }}
       >
         <Form>
@@ -186,7 +188,6 @@ const RegisterForm = () => {
               placeholderTop="Workshop/Business Name*"
               placeholder="Your Workshop/Business Name"
               name="businessName"
-              
             />
           </div>
 

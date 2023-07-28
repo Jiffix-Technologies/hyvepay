@@ -70,16 +70,14 @@ const SavedBeneficiaryTransferForm = () => {
     <Form>
       <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
         <div className="w-full mb-3 md:mb-6">
-          {/* <ChooseBeneficiaryDropDown
-            dropdownRef={dropdownRef}
-            openBeneficiary={openBeneficiary}
-            setIsOpenBeneficiary={setIsOpenBeneficiary}
-          /> */}
+          <label>Choose Beneficiary</label>
           <MySelect
             options={state.beneficiaries.map((item) => ({
               label: item.accountName,
               value: item.accountNumber,
             }))}
+            placeholderTop="Beneficiary"
+            placeholder="Select Beneficiary"
             name="beneficiary"
           />
         </div>

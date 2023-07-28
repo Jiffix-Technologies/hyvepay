@@ -27,8 +27,10 @@ const Card = ({ name, price, qty, color, cardName }: any) => {
           </button>
         </div>
         <div className="flex px-6 pb-4 justify-end font-montserrat">
+
           {qty && (qty > 1 ? qty + cardName : qty + ' ' + cardName + 's')}
-          {/* " Credit")} */}
+        
+
         </div>
       </div>
     </>

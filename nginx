@@ -1,0 +1,1114 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+
+    # set client body size to 1000M #
+    client_max_body_size 1000M;
+
+################################# STAGING SERVER BLOCKS ##################################
+
+    server {
+        #listen      80;
+        listen       8080;
+        listen       [::]:8080;
+        server_name  18.219.78.4;
+        root /var/www/staging/jiffix-booking-app/client/build;
+        index index.html index.htm;
+
+        location / {
+            #proxy_pass http://127.0.0.1:6003; # Redirect to port 6003 on the same server
+            #proxy_set_header Host $host;
+           # proxy_set_header X-Real-IP $remote_addr;
+         try_files $uri $uri/ /index.html =404;
+  	    }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6000;
+        }
+
+        location /graphql {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6000/graphql;
+        }
+
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6000;
+        }
+    }
+
+
+    server {
+        listen       8081;
+        listen       [::]:8081;
+        server_name  18.219.78.4;
+        root /var/www/staging/jiffix-official-customer-app/client/build;
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404;
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6001;
+        }
+
+        location /graphql {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6001/graphql;
+        }
+
+        location ^~/storage {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6001;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6001;
+        }
+    }
+
+
+    server {
+        listen       8082;
+        listen       [::]:8082;
+        server_name  18.219.78.4;
+        root /var/www/staging/jiffix-official-website/new_client/build;
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.hml =404;
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6002;
+        }
+
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6002;
+        }
+    }
+
+    server {
+
+        listen       8083;
+        listen       [::]:8083;
+        server_name  3.136.11.154;
+        root /var/www/staging/jiffix-pdms/client/build;
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404;
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6003;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6003;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:6003;
+        }
+      }
+
+
+
+
+    server {
+        listen       8084;
+        listen       [::]:8084;
+        server_name  18.219.78.4;
+        root /var/www/staging;
+       
+        index index.php;
+        charset UTF-8;
+
+        # set client body size to 8M #
+        client_max_body_size 256M;
+
+        location = /favicon.ico {
+          log_not_found off;
+          access_log off;
+        }
+
+        location = /robots.txt {
+          allow all;
+          log_not_found off;
+          access_log off;
+        }
+
+
+        location / {
+          try_files $uri $uri/ /index.php?$args;
+       }
+
+       location ~ \.php$ {
+        try_files $uri =404;
+
+
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_index index.php;
+        fastcgi_intercept_errors on;
+        fastcgi_keep_conn on;
+        fastcgi_read_timeout 300;
+
+        #fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass  unix:/var/run/php-fpm/www.sock;
+        #for ubuntu unix:/var/run/php/php8.0-fpm.sock;
+
+        fastcgi_cache_valid any 30m;
+    }
+
+  }
+    server {
+        listen       8085;
+        listen       [::]:8085;
+        server_name  3.136.11.154;
+        root /opt;
+
+        index index.php;
+        charset UTF-8;
+
+        # set client body size to 8M #
+        client_max_body_size 256M;
+
+        location = /favicon.ico {
+          log_not_found off;
+          access_log off;
+        }
+
+        location = /robots.txt {
+          allow all;
+          log_not_found off;
+          access_log off;
+        }
+
+
+        location / {
+          try_files $uri $uri/ /index.php?$args;
+       }
+
+       location ~ \.php$ {
+        try_files $uri =404;
+
+
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_index index.php;
+        fastcgi_intercept_errors on;
+        fastcgi_keep_conn on;
+        fastcgi_read_timeout 300;
+
+        #fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass  unix:/var/run/php-fpm/www.sock;
+        #for ubuntu unix:/var/run/php/php8.0-fpm.sock;
+
+        fastcgi_cache_valid any 30m;
+    }   
+
+   }
+
+
+
+
+######################## CAUTION!!!! ########################################################################
+######################## PRODUCTION SERVER BLOCKS ############################################################
+
+server {
+        server_name app.myautohyve.com  www.app.myautohyve.com;
+        root /usr/local/jiffix/AutoHyve-web-app/client/dist; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options *;
+            proxy_pass http://localhost:5151;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options *;
+            proxy_pass http://localhost:5050;
+        }
+    
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app.myautohyve.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app.myautohyve.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+}
+
+server {
+        server_name workshop.myautohyve.com;
+        root /usr/local/jiffix/redirect/one; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options *;
+            proxy_pass http://localhost:5151;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options *;
+            proxy_pass http://localhost:5050;
+        }
+    
+
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/workshop.myautohyve.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/workshop.myautohyve.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+    server {
+        server_name jiffixtech.com  www.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-new-official-website/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5002;
+        }
+
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5002;
+        }
+    
+    listen [::]:443 ssl ipv6only=on; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/pdms.jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/pdms.jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+
+
+
+
+}
+
+
+    server {
+        server_name  app.jiffixtech.com www.app.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-official-customer-app/client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5001;
+        }
+
+
+        location ^~/storage {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5001;
+        }
+
+        location /graphql {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5001/graphql;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5001;
+        }
+    
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/pdms.jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/pdms.jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}    
+
+
+    server {
+        server_name  book.jiffixtech.com www.book.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-booking-app/client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5000;
+        }
+
+        location /graphql {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5000/graphql;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5000;
+        }
+    
+    #listen [::]:443 ssl; # managed by Certbot
+    #listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+}
+
+
+    server {
+        server_name  partner.jiffixtech.com www.partner.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-pdms/client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+ 
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+    
+   #listen [::]:443 ssl; # managed by Certbot
+   #listen 443 ssl; # managed by Certbot
+   #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+   #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+   #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+   #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+
+
+
+
+    server {
+        server_name  pdms.jiffixtech.com www.pdms.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-pdms/client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+ 
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5400;
+        }
+
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/pdms.jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/pdms.jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+}
+
+
+server {
+        server_name  rideshare.jiffixtech.com www.rideshare.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-official-website/new_client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5003;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5003;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5003;
+        }
+
+   #listen [::]:443 ssl; # managed by Certbot
+   #listen 443 ssl; # managed by Certbot
+   #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+   #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+   #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+   #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+}
+
+
+
+
+server {
+        server_name  garage.jiffixtech.com www.garage.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-official-website/new_client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5004;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5004;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5004;
+        }
+
+   #listen [::]:443 ssl; # managed by Certbot
+   #listen 443 ssl; # managed by Certbot
+   #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+   #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+   #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+   #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+
+
+server {
+        server_name  autohyve.jiffixtech.com www.autohyve.jiffixtech.com;
+        root /usr/local/jiffix/jiffix-official-website/new_client/build; ## directory where static files are served
+        index index.html index.htm;
+
+        location / {
+         try_files $uri $uri/ /index.html =404; ## route all to index.html file
+        }
+
+        location ^~/api {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5005;
+        }
+
+        location ^~/uploads {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5005;
+        }
+
+        location /socket.io/ {
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Frame-Options SAMEORIGIN;
+            proxy_pass http://localhost:5005;
+        }
+
+
+    #listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+
+
+}
+
+
+server {
+    server_name blog.jiffixtech.com www.blog.jiffixtech.com;
+    
+    root /usr/local/jiffix/jiffix-blog;
+    index index.php;
+    charset UTF-8;
+    
+    location = /favicon.ico {
+        log_not_found off;
+        access_log off;
+    }
+
+    location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+    }
+
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+
+
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_index index.php;
+        fastcgi_intercept_errors on;
+        fastcgi_keep_conn on;
+        fastcgi_read_timeout 300;
+
+        # fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass  unix:/var/run/php-fpm/www.sock;
+        #for ubuntu unix:/var/run/php/php8.0-fpm.sock;        
+        
+        fastcgi_cache_valid any 30m;
+    }
+
+
+    #listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/jiffixtech.com-0001/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/jiffixtech.com-0001/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+
+
+
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+
+    include /etc/nginx/conf.d/*.conf;
+
+
+
+    server {
+    if ($host = www.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  jiffixtech.com www.jiffixtech.com;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+
+    server {
+    if ($host = www.app.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = app.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  app.jiffixtech.com www.app.jiffixtech.com;
+    return 404; # managed by Certbot
+
+
+
+
+}    
+
+
+    server {
+    if ($host = www.book.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = book.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  book.jiffixtech.com www.book.jiffixtech.com;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+
+    server {
+    if ($host = www.pdms.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = pdms.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        listen       80;
+        listen       [::]:80;
+        server_name  pdms.jiffixtech.com www.pdms.jiffixtech.com;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+
+
+
+
+
+server {
+    if ($host = www.blog.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = blog.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name blog.jiffixtech.com www.blog.jiffixtech.com;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+
+
+
+
+    server {
+    if ($host = pdms.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        server_name  pdms.jiffixtech.com www.pdms.jiffixtech.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+}
+
+
+
+server {
+    if ($host = www.autohyve.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = autohyve.jiffixtech.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        server_name  autohyve.jiffixtech.com www.autohyve.jiffixtech.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+server {
+    if ($host = www.app.myautohyve.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = app.myautohyve.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        server_name app.myautohyve.com  www.app.myautohyve.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+
+
+}
+
+server {
+    if ($host = workshop.myautohyve.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+        server_name workshop.myautohyve.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+}}
