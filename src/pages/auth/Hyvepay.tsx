@@ -156,12 +156,12 @@ const Hyvepay = () => {
             {["DECLINED", "NOT_REQUESTED"].includes(
               state.userInfo?.partner?.accountProvisionStatus as string
             ) && (
-              <AppTabBtn
-                title="Activate Account"
-                className="bg-[#FAA21B] text-[#000] "
-                onClick={() => setShowAccountModal(true)}
-              />
-            )}
+                <AppTabBtn
+                  title="Activate Account"
+                  className="bg-[#FAA21B] text-[#000] "
+                  onClick={() => setShowAccountModal(true)}
+                />
+              )}
 
             {state.userInfo?.partner?.accountProvisionStatus === "APPROVED" && (
               <>
@@ -267,8 +267,9 @@ const Hyvepay = () => {
           <Card
             name={"Available Balance"}
             price={Util.formAmount(
-              bankState.accountBalance?.availableBalance,
-              true
+
+              bankState.accountBalance?.availableBalance, true
+
             )}
             qty={""}
             color={"#FFF2DD"}
@@ -280,8 +281,8 @@ const Hyvepay = () => {
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
-                    (item) => item.postingRecordType === postingType.credit
-                  ).length
+                  (item) => item.postingRecordType === postingType.credit
+                ).length
                 : 0
             }
             color={"#F1F3FF"}
@@ -289,17 +290,19 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Debit"}
-            price={Util.formAmount(bankState.transaction?.totalDebit)}
+            price={Util.formAmount(bankState.transaction?.totalDebit, true)}
+
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
-                    (item) => item.postingRecordType === postingType.debit
-                  ).length
+                  (item) => item.postingRecordType === postingType.debit
+                ).length
                 : 0
             }
             color={"#FFEDED"}
-            cardName={"Debit"}
-          />
+
+            cardName={"Debit"} />
+
         </div>
 
         <h5 className="heading-five font-montserrat">Transaction History</h5>
