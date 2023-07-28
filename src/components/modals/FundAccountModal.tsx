@@ -30,7 +30,7 @@ const FundAccountModal = ({
   currentModal,
 }: any) => {
   const [confirmationmodal, setConfirmationmodal] = React.useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("New Beneficiary");
 
   const [formState] = useState({
     accountNumber: "",
