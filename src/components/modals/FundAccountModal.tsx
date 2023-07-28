@@ -9,6 +9,8 @@ import SavedBeneficiaryTransferForm from "../SingleTransferForm/SavedBeneficiary
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { saveAccountTransferInfo } from "../../reducers/bankReducer";
 import * as Yup from "yup";
+import Media from "react-media";
+import { Tabs } from "antd";
 
 const AccountTransferSchema = Yup.object({
   accountNumber: Yup.string().required("Account number is required"),
@@ -28,7 +30,7 @@ const FundAccountModal = ({
   currentModal,
 }: any) => {
   const [confirmationmodal, setConfirmationmodal] = React.useState(false);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState("");
 
   const [formState] = useState({
     accountNumber: "",
@@ -42,7 +44,7 @@ const FundAccountModal = ({
     saveAsBeneficiary: false,
   });
 
-  const tab = [" New Beneficiary", " Saved Beneficiary"];
+  const tab = ["New Beneficiary", "Saved Beneficiary"];
 
   const dispatch = useAppDispatch();
 
@@ -106,47 +108,75 @@ const FundAccountModal = ({
                 </>
               )}
 
-              <div className=" border-[#CACACA] border-[1px] p-2 w-[100%] mx-auto  md:w-[90%] gap-3 rounded-[15px] tabWrapper items-center justify-between flex self-center">
-                {tab.map((item, index) => {
-                  return (
-                    <AppBtn
-                      className={`text-[#000] w-[48%] customBtnText] ${
-                        selected === index
-                          ? "bg-[#FAA21B] "
-                          : "bg-[#fff] border-[#CACACA] border-[1px]"
-                      } `}
-                      title={item}
-                      onClick={() => setSelected(index)}
-                    />
-                  );
-                })}
-              </div>
+              <Media query="(max-width: 600px)">
+                {(matches) =>
+                  matches ? (
+                    <div>
+                      <Tabs
+                        defaultActiveKey="1"
+                        items={[
+                          {
+                            label: "New Beneficiary",
+                            key: "New Beneficiary",
+                            children: null,
+                          },
+                          {
+                            label: "Saved Beneficiary",
+                            key: "Saved Beneficiary",
+                            children: null,
+                          },
+                        ]}
+                        activeKey={selected}
+                        onChange={(key) => setSelected(key)}
+                      />
+                    </div>
+                  ) : (
+                    <div className=" border-[#CACACA] border-[1px] p-2 w-[100%] mx-auto  md:w-[90%] gap-3 rounded-[15px] tabWrapper items-center justify-between flex self-center">
+                      {tab.map((item, index) => {
+                        return (
+                          <AppBtn
+                            className={`text-[#000] w-[48%] customBtnText] ${
+                              selected === item
+                                ? "bg-[#FAA21B] "
+                                : "bg-[#fff] border-[#CACACA] border-[1px]"
+                            } `}
+                            title={item}
+                            onClick={() => setSelected(item)}
+                          />
+                        );
+                      })}
+                    </div>
+                  )
+                }
+              </Media>
 
               <div className="flex justify-center "></div>
 
               {/* view */}
-              {selected === 0 ? (
-                <Formik
-                  enableReinitialize
-                  initialValues={formState}
-                  onSubmit={handleSingleTransfer}
-                  validationSchema={AccountTransferSchema}
-                >
-                  <SingleTransferForm />
-                </Formik>
-              ) : (
-                <Formik
-                  enableReinitialize
-                  initialValues={{
-                    ...formState,
-                    beneficiary: { label: "", value: "" },
-                  }}
-                  onSubmit={handleSingleTransfer}
-                  validationSchema={AccountTransferSchema}
-                >
-                  <SavedBeneficiaryTransferForm />
-                </Formik>
-              )}
+              <div className="form-modal">
+                {selected === "New Beneficiary" ? (
+                  <Formik
+                    enableReinitialize
+                    initialValues={formState}
+                    onSubmit={handleSingleTransfer}
+                    validationSchema={AccountTransferSchema}
+                  >
+                    <SingleTransferForm />
+                  </Formik>
+                ) : (
+                  <Formik
+                    enableReinitialize
+                    initialValues={{
+                      ...formState,
+                      beneficiary: { label: "", value: "" },
+                    }}
+                    onSubmit={handleSingleTransfer}
+                    validationSchema={AccountTransferSchema}
+                  >
+                    <SavedBeneficiaryTransferForm />
+                  </Formik>
+                )}
+              </div>
             </div>
           </div>
         </div>
