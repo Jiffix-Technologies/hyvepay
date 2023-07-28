@@ -149,7 +149,7 @@ const RegisterForm = () => {
               dialCode: values.phoneNumber,
             })
           );
-          //   helpers.resetForm();
+            helpers.resetForm();
         }}
       >
         <Form>

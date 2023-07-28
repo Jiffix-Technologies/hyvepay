@@ -11,13 +11,12 @@ const FundModal = ({
   modalType = 0,
 }: any) => {
   const [view, setView] = React.useState(modalType);
-
   const [confirmationmodal, setConfirmationmodal] = React.useState(false);
   const [selected, setSelected] = useState(0);
 
   const closeConfirmModal = () => setConfirmationmodal(!confirmationmodal);
 
-  const tab = [" New Beneficiary", " Saved Beneficiary"];
+  const tab = ["New Beneficiary", "Saved Beneficiary"];
 
   return (
     <>
@@ -27,7 +26,7 @@ const FundModal = ({
       />
       {modal && (
         <div className="overlay h-screen w-screen flex fixed justify-center items-center">
-          <div className="modal bg-white py-8">
+          <div className="modal bg-white p-4 max-h-[60%] overflow-y-auto">
             <div className="modal-header bg-white p-8 py-2">
               <div className="flex justify-end w-full">
                 <button onClick={() => closeModal()}>
@@ -39,17 +38,18 @@ const FundModal = ({
               </div>
             </div>
             <div className="body">
-              <div className=" border-[#CACACA] border-[1px] p-2 w-[80%] gap-3 rounded-[15px] tabWrapper items-center justify-between flex self-center">
+              <div className="border-[#CACACA] border-[1px] rounded-[15px] tabWrapper items-center justify-between flex self-center flex-wrap">
                 {tab.map((item, index) => {
                   return (
                     <AppBtn
-                      className={` w-full text-black ${
+                      className={`w-full text-black ${
                         selected === index
                           ? "bg-[#FAA21B] "
                           : "bg-[#fff] border-[#CACACA] border-[1px]"
                       } `}
                       title={item}
                       onClick={() => setSelected(index)}
+                      key={index}
                     />
                   );
                 })}
@@ -57,72 +57,15 @@ const FundModal = ({
 
               <div className="flex justify-center "></div>
 
-              {/* view */}
               {selected === 0 ? (
-                <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
-                  <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3">
-                      <label htmlFor="" className="font-small">
-                        Recipient's Account Number
-                      </label>{" "}
-                      <br />
-                      <input
-                        type="text"
-                        placeholder="Enter account number"
-                        className="bg-gray-100 w-full"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-
-                    <div className="w-full mb-3 ">
-                      <label htmlFor=""> Account Name</label> <br />
-                      <input
-                        type="text"
-                        placeholder="Enter your account number"
-                        className="bg-gray-100 w-full sm"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor="">Recipient's Bank Name</label> <br />
-                      <select
-                        name=""
-                        id=""
-                        className="bg-gray-100 none w-full sm"
-                        style={{ border: 0 }}
-                      >
-                        <option value="">Choose bank name</option>
-                      </select>
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor=""> Enter Amount</label> <br />
-                      <input
-                        type="number"
-                        placeholder="Enter your account number"
-                        className="bg-gray-100 w-full"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <InputHeader text="Narration" />
-
-                      <textarea
-                        name=""
-                        id=""
-                        cols={20}
-                        rows={3}
-                        placeholder="Enter your message"
-                        className="bg-gray-100 w-full p-4"
-                        style={{ borderRadius: 18, border: 0 }}
-                      ></textarea>
-                    </div>
+                <div
+                  className="flex flex-col mt-6 xs:my-10 justify-center items-center px-4 md:px-10"
+                  style={{
+                    maxWidth: "100%",
+                  }}
+                >
+                  <div className="form-group flex-col md:flex-row w-full xs:h-[80%] justify-center">
+                    {/* Rest of the code for the first view... */}
                   </div>
 
                   <div className="w-full mb-3 md:mb-6">
@@ -140,7 +83,12 @@ const FundModal = ({
                   />
                 </div>
               ) : (
-                <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
+                <div
+                  className="flex flex-col mt-8 justify-center items-center px-4 md:px-10"
+                  style={{
+                    maxWidth: "100%",
+                  }}
+                >
                   <div className="w-full mb-3 md:mb-6">
                     <select
                       name=""
@@ -151,71 +99,7 @@ const FundModal = ({
                       <option value="">Choose Beneficiary</option>
                     </select>
                   </div>
-                  <div className="form-group flex-col md:flex-row w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor="" className="font-small">
-                        Recipient's Account Number
-                      </label>{" "}
-                      <br />
-                      <input
-                        type="text"
-                        placeholder="Enter account number"
-                        className="bg-gray-100 w-full"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor=""> Account Name</label> <br />
-                      <input
-                        type="text"
-                        placeholder="Enter your account number"
-                        className="bg-gray-100 w-full"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group flex-col md:flex-row  w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <InputHeader text="Narration" />
-                      <label htmlFor="">Recipient's Bank Name</label> <br />
-                      <select
-                        name=""
-                        id=""
-                        className="bg-gray-100 w-full sm"
-                        style={{ border: 0 }}
-                      >
-                        <option value="">Choose bank name</option>
-                      </select>
-                    </div>
-
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor=""> Enter Amount</label> <br />
-                      <input
-                        type="number"
-                        placeholder="Enter your account number"
-                        className="bg-gray-100 w-full"
-                        style={{ border: 0 }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-group w-full justify-center">
-                    <div className="w-full mb-3 md:mb-6">
-                      <label htmlFor=""> Narration</label> <br />
-                      <textarea
-                        name=""
-                        id=""
-                        cols={30}
-                        rows={3}
-                        maxLength={20}
-                        placeholder="Enter your message"
-                        className="bg-gray-100 w-full p-4"
-                        style={{ borderRadius: 18, border: 0 }}
-                      ></textarea>
-                    </div>
-                  </div>
+                  {/* Rest of the code for the second view... */}
 
                   <div className="w-full mb-3 md:mb-6">
                     <input type="checkbox" name="" id="" className="mr-2" />

@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-
+import * as Yup from "yup";
 import DownloadIcon from "../../assets/svgs/download-icon.svg";
 import SearchIcon from "../../assets/svgs/vuesax/linear/search-normal.svg";
 import TrashIcon from "../../assets/svgs/vuesax/linear/trash.svg";
 import AppBtn from "../../components/AppBtn/AppBtn";
 import TabBtn from "../../components/TabBtn/TabBtn";
-import AppInput from "../../components/AppInput/AppInput";
+import AppInput, { MyTextInput } from "../../components/AppInput/AppInput";
 import AccountSettings from "../../components/AccountSettings/AccountSettings";
 import { HiChevronDown } from "react-icons/hi";
 import SingleSort from "../../components/SingleSort/SingleSort";
@@ -17,14 +17,11 @@ import EditRoleModal from "../../components/modals/EditRoleModal";
 import AppSwitch from "../../components/AppSwitch/AppSwitch";
 import { GrEdit } from "react-icons/gr";
 import EditUserModal from "../../components/modals/EditUserModal";
-import {Formik} from "formik";
+import { Form, Formik, FormikHelpers, useFormik } from "formik";
+import { showMessage } from "../../helpers/notification";
+import { createPrinter } from "typescript";
+import axios from "axios";
 
-
-const initialValues={
-pin:'',
-confirmPin:'',
-password:'',
-}
 const Settings = () => {
   const [view, setView] = useState(0);
   const [deletemodal, setDeletemodal] = useState(false);
@@ -40,6 +37,29 @@ const Settings = () => {
   const [openSort, setOpenSort] = useState(false);
   const dropdownRef = useRef<any>(null);
   const [select, setSelect] = useState("Sort by");
+
+  //FIXME:
+  // handle form submission
+  // create a createPin()
+  async function createPin(formData: any) {
+    try {
+      const data = await axios.post("/url", formData);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  //show notification
+
+  //clear input
+  // create initialValue
+  const formData = {
+    pin: "",
+    confirmPin: "",
+    password: "",
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -85,57 +105,112 @@ const Settings = () => {
                   Please set your password for HyvePay
                 </p>
 
-              <Formik initialValues={initialValues} onSubmit={()=>{}} >
-              <div className="mt-10 ">
-                  <div className="flex flex-col md:flex-row rounded-none gap-4 w-full">
-                    <div className="w-full relative">
-                      <AppInput
-                        hasPLaceHolder={true}
-                        placeholderTop="HyvePay Pin"
-                        placeholder="Enter a pin for your HyvePay account"
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                        name="pin"
-                      />
-                      <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
-                        Your pin must be minimum of 4 digits
-                      </small>
-                    </div>
+                <Formik
+                  enableReinitialize
+                  initialValues={formData}
+                  validationSchema={Yup.object().shape({
+                    pin: Yup.string()
+                      .required("Pin is required")
+                      .min(4)
+                      .typeError("Pin is required"),
 
-                    <div className="w-full relative">
-                      <AppInput
-                        hasPLaceHolder={true}
-                        placeholderTop="Confirm HyvePay Pin"
-                        placeholder="Enter a pin for your HyvePay account"
-                        className="bg-[#F5F5F5] border-[#F5F5F5]"
-                        name="confirmPin"
-                      />
-                      <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
-                        Your pin must be minimum of 4 digits
-                      </small>
-                    </div>
-                  </div>
+                    confirmPin: Yup.string()
+                      .required("Confirm Pin is required")
+                      .min(4)
+                      .test(
+                        "confirmPin",
+                        "Confirm pin does not match pin",
+                        function (confirmPin) {
+                          const { pin } = this.parent;
+                          return confirmPin === pin;
+                        }
+                      ),
+                    password: Yup.string()
+                      .min(8)
+                      .required("Password is required")
+                      .matches(/^\S*$/, "Password must not contain whitespace")
+                      .typeError(
+                        "Password is required and must be a minimum of 8 characters"
+                      ),
+                  })}
+                  onSubmit={(values, helpers: FormikHelpers<any>) => {
+                    console.log(values);
+                    // create a createPin()
+                    createPin(formData)
+                      .then(function () {
+                        //show success notification
+                        showMessage(
+                          "Pin Change",
+                          "Password Submitted Successfully",
+                          "success"
+                        );
+                      })
+                      .catch(function (err) {
+                        showMessage(
+                          "Pin Change",
+                          "Password not Submitted",
+                          "error"
+                        );
+                      });
 
-                  <div className="md:w-[50%] w-full mt-8 relative">
-                    <AppInput
-                      hasPLaceHolder={true}
-                      placeholderTop="AutoHyve Account Password"
-                      placeholder="Enter your AutoHyve account password"
-                      className="bg-[#F5F5F5] border-[#F5F5F5]"
-                      name="password"
-                    />
-                    <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                    //clear input
+                    helpers.resetForm();
+                    //
+                  }}
+                >
+                  <Form>
+                    <div className="mt-10 ">
+                      <div className="flex flex-col md:flex-row rounded-none gap-4 w-full">
+                        <div className="w-full relative">
+                          <MyTextInput
+                            hasPLaceHolder={true}
+                            placeholderTop="HyvePay Pin"
+                            placeholder="Enter a pin for your HyvePay account"
+                            className="bg-[#F5F5F5] border-[#F5F5F5]"
+                            name="pin"
+                          />
+                          {/* <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                        Your pin must be minimum of 4 digits
+                      </small> */}
+                        </div>
+
+                        <div className="w-full relative">
+                          <MyTextInput
+                            hasPLaceHolder={true}
+                            placeholderTop="Confirm HyvePay Pin"
+                            placeholder="Enter a pin for your HyvePay account"
+                            className="bg-[#F5F5F5] border-[#F5F5F5]"
+                            name="confirmPin"
+                          />
+                          {/* <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
+                        Your pin must be minimum of 4 digits
+                      </small> */}
+                        </div>
+                      </div>
+
+                      <div className="md:w-[50%] w-full mt-8 relative">
+                        <MyTextInput
+                          hasPLaceHolder={true}
+                          placeholderTop="AutoHyve Account Password"
+                          placeholder="Enter your AutoHyve account password"
+                          className="bg-[#F5F5F5] border-[#F5F5F5]"
+                          name="password"
+                        />
+                        {/* <small className="absolute font-montserrat top-[85px] text-[#A5A5A5]">
                       Your pin must be minimum of 4 digits
-                    </small>
-                  </div>
+                    </small> */}
+                      </div>
 
-                  <div className="flex justify-end ">
-                    <AppBtn
-                      title="submit"
-                      className="font-medium uppercase mt-5"
-                    />
-                  </div>
-                </div>
-              </Formik>
+                      <div className="flex justify-end ">
+                        <AppBtn
+                          title="submit"
+                          className="font-medium uppercase mt-5"
+                          type="submit"
+                        />
+                      </div>
+                    </div>
+                  </Form>
+                </Formik>
               </div>
             </>
           )}
