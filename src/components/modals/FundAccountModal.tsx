@@ -113,7 +113,7 @@ const FundAccountModal = ({
                   matches ? (
                     <div>
                       <Tabs
-                        defaultActiveKey="1"
+                        defaultActiveKey={selected}
                         items={[
                           {
                             label: "New Beneficiary",
