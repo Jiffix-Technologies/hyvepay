@@ -277,7 +277,7 @@ const Hyvepay = () => {
           />
           <Card
             name={"Total Credit"}
-            price={Util.formAmount(bankState.transaction?.totalCredit)}
+            price={Util.formAmount(bankState.transaction?.totalCredit, true)}
             qty={
               bankState.transaction?.postingsHistory
                 ? bankState.transaction.postingsHistory.filter(
