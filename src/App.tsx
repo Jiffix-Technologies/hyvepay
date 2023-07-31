@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { store } from "./reducers/authReducer";
+// import dotenv from 'dotenv';
+// dotenv.config();
 let persistor = persistStore(store);
 
 function App() {

@@ -21,7 +21,10 @@ const AccountTransferSchema = Yup.object({
   amount: Yup.string()
     .matches(/^[0-9]+$/, "Amount should be only digits")
     .required("Amount is required"),
-  narration: Yup.string().max(20, "Narration exceeds 20 characters").optional(),
+  narration: Yup.string().max(20, "Narration exceeds 20 characters")
+    .required("Narration is required")
+    .typeError("Narration is required"),
+  email: Yup.string(),
 });
 
 const FundAccountModal = ({
@@ -135,11 +138,10 @@ const FundAccountModal = ({
                       {tab.map((item, index) => {
                         return (
                           <AppBtn
-                            className={`text-[#000] w-[48%] customBtnText] ${
-                              selected === item
-                                ? "bg-[#FAA21B] "
-                                : "bg-[#fff] border-[#CACACA] border-[1px]"
-                            } `}
+                            className={`text-[#000] w-[48%] customBtnText] ${selected === item
+                              ? "bg-[#FAA21B] "
+                              : "bg-[#fff] border-[#CACACA] border-[1px]"
+                              } `}
                             title={item}
                             onClick={() => setSelected(item)}
                           />

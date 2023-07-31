@@ -104,7 +104,6 @@ const Hyvepay = () => {
     const headers = [
       "Date",
       "beneficiaryName",
-      // "accountNumber",
       "amount",
       "balanceAfter",
       "narration",
@@ -119,7 +118,6 @@ const Hyvepay = () => {
       refinedData.push([
         item.realDate,
         item.beneficiaryName,
-        // item.accountNumber,
         item.amount / 100,
         item.balanceAfter / 100,
         item.narration,
@@ -143,6 +141,28 @@ const Hyvepay = () => {
     element.click();
     document.body.removeChild(element);
   };
+
+
+
+
+  const [isCopied, setIsCopied] = useState(false);
+  function displayReceipt() {
+    return console.log("i was clicked and can do any thing now from here...")
+    //   //transaction modal
+    //   <SuccessfulPaymentModal
+    //     successModal={successModal}
+    //     closeSuccessModal={closeSuccessModal}
+    //   />
+  }
+
+  const copyToClipboard = (text: any) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 3000); // Reset the copied status after 3 seconds
+    });
+  };
+
+
 
   return (
     <>
@@ -188,6 +208,7 @@ const Hyvepay = () => {
                         </h5>
                       </div>
 
+
                       <div className="flex justify-between w-full mt-6">
                         <div>
                           <p>
@@ -201,11 +222,12 @@ const Hyvepay = () => {
                             </span>
                           </p>
                         </div>
-                        <img
+                        <button onClick={() => copyToClipboard(bankState.accountBalance?.accountNumber)}> <img
                           src={DocumentIcon}
                           alt=""
                           className="cursor-pointer"
                         />
+                        </button>
                       </div>
 
                       <div className="flex justify-between w-full mt-6">
@@ -221,11 +243,11 @@ const Hyvepay = () => {
                             </span>
                           </p>
                         </div>
-                        <img
+                        <button onClick={() => copyToClipboard(bankState.accountBalance?.businessName)}> <img
                           src={DocumentIcon}
                           alt=""
                           className="cursor-pointer"
-                        />
+                        /></button>
                       </div>
 
                       <div className="flex justify-between w-full mt-6">
@@ -241,11 +263,12 @@ const Hyvepay = () => {
                             </span>
                           </p>
                         </div>
-                        <img
+                        <button onClick={() => copyToClipboard(bankState.accountBalance?.accountProvider)}><img
                           src={DocumentIcon}
                           alt=""
                           className="cursor-pointer"
                         />
+                        </button>
                       </div>
 
                       <AppBtn
@@ -378,8 +401,9 @@ const Hyvepay = () => {
               <th className="font-montserrat text-xs ">Status</th>
             </thead>
             <tbody>
+
               {bankState.transaction?.postingsHistory.map((item, i) => (
-                <tr key={i}>
+                <tr key={i} onClick={() => displayReceipt()}>
                   <td className="font-montserrat text-xs">
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>
@@ -390,6 +414,7 @@ const Hyvepay = () => {
                     {item.accountNumber}
                   </td> */}
                   <td className="font-montserrat text-xs">
+
                     {Util.formAmount(item.amount, true)}
                   </td>
                   <td className="font-montserrat text-xs">
@@ -400,13 +425,13 @@ const Hyvepay = () => {
                   </td>
                   <td className="font-montserrat text-xs">
                     {item.postingRecordType === postingType.credit ? (
-                      <span>Credit</span>
+                      <span className="text-green-600">Credit</span>
                     ) : (
-                      <span>Debit</span>
+                      <span className="text-red-600">Debit</span>
                     )}
                   </td>
                   <td className="font-montserrat text-xs">
-                    {item.detailOfClosure}
+                    {bankState.getAccountTransactionStatus}
                   </td>
                 </tr>
               ))}
@@ -435,5 +460,6 @@ const Hyvepay = () => {
     </>
   );
 };
+
 
 export default Hyvepay;

@@ -192,6 +192,7 @@ const Profile = () => {
                 <div className="mt-5 md:mt-5 w-full">
                   <MyTextInput
                     hasPLaceHolder={true}
+                    disabled
                     placeholderTop="Email"
                     placeholder="Enter your valid email address"
                     name="email"
@@ -213,14 +214,14 @@ const Profile = () => {
                       Change Password
                     </span>
                   </div>
-
+                  {/* FIXME: the dropdown always make a call once clicked..... */}
                   <div className="mt-5 md:mt-5  w-full">
                     <AppDropDown
                       title="Account Type"
                       data={banks}
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
-                      dropdownRef={dropdownRef}
+                    // dropdownRef={dropdownRef}
                     />
                   </div>
                 </div>

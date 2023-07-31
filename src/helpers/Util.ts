@@ -23,7 +23,10 @@ export class Util {
 
     return formattedAmount;
   };
-
+  static CurrencyDisplayInKobo = (amount: number) => {
+    const convertedToKobo = (amount / 100).toFixed(2);
+    return this.CurrencyDisplay(Number(convertedToKobo));
+  };
   static isValueInKoboOrNaira(amount: number) {
     if (amount < 100 || amount % 100 === 0) {
       return "Kobo";

@@ -76,7 +76,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (authState.signupStatus === "completed") {
-      showMessage("Signup successful", "Please proceed to login", "success");
+      showMessage("SignUp successful", "Please proceed to login", "success");
       navigate("/login");
     } else if (authState.signupStatus === "failed") {
       showMessage(authState.signupError, "", "error");
@@ -106,6 +106,7 @@ const RegisterForm = () => {
           phoneNumber: Yup.string()
             .required("Phone number is required")
             .matches(/^\S*$/, "Phone Number must not contain whitespace")
+            .max(13, "Must be exactly 13 digits")
             .typeError("Phone number is required"),
           address: Yup.string().required("Address is required"),
 
@@ -185,7 +186,7 @@ const RegisterForm = () => {
           <div className="mt-0 md:mt-5 mb-0 md:mb-10">
             <MyTextInput
               hasPLaceHolder={true}
-              placeholderTop="Workshop/Business Name*"
+              placeholderTop="Name Of Business*"
               placeholder="Your Workshop/Business Name"
               name="businessName"
             />
@@ -241,7 +242,8 @@ const RegisterForm = () => {
             />
           </div>
 
-          <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">
+          <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">g
+            {/* FIXME: make terms and policy a link... */}
             By clicking ‘Proceed’ you agree with the AutoHyve Terms and Policies
           </span>
 
