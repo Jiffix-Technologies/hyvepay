@@ -1,4 +1,5 @@
 import { Form, Formik, FormikHelpers } from "formik";
+import { Link } from "react-router-dom";
 import AppInput, {
   AppPhoneInput,
   MySelect,
@@ -84,7 +85,8 @@ const RegisterForm = () => {
 
     dispatch(clearSignupStatus());
   }, [authState.signupStatus]);
-
+  const termsPage = 'https://hyvetech.notion.site/HyveTech-Limited-Terms-of-Use-138c1d3439b6420c9649f0d0003f65ad'
+  const policyPage = 'https://hyvetech.notion.site/HyveTech-Limited-Privacy-Policy-79ccd19af6c94d0d8df441abcb2d991e'
   return (
     <div className="form w-full mt-10">
       <Formik
@@ -244,7 +246,8 @@ const RegisterForm = () => {
 
           <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">g
             {/* FIXME: make terms and policy a link... */}
-            By clicking ‘Proceed’ you agree with the AutoHyve Terms and Policies
+            By clicking ‘Proceed’ you agree with the AutoHyve <Link className="text-orange-400" to={termsPage}><strong>Terms</strong></Link> and <Link className="text-orange-400" to={policyPage}><strong>Policies</strong></Link>
+
           </span>
 
           <AppBtn

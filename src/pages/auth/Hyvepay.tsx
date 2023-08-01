@@ -6,6 +6,7 @@ import DownloadIcon from "../../assets/svgs/download-icon.svg";
 import DocumentIcon from "../../assets/svgs/document.svg";
 import AppBtn from "../../components/AppBtn/AppBtn";
 import ActivateAccountModal from "../../components/modals/ActivateAccountModal";
+import TransactionReceiptModal from "../../components/modals/TransactionReceiptModal";
 import CustomModal from "../../components/modals/CustomModal";
 import CustomDatePickerModal from "../../components/modals/CustomDatePickerModal";
 import AppTabBtn from "../../components/AppTabBtn/AppTabBtn";
@@ -146,14 +147,24 @@ const Hyvepay = () => {
 
 
   const [isCopied, setIsCopied] = useState(false);
-  function displayReceipt() {
-    return console.log("i was clicked and can do any thing now from here...")
-    //   //transaction modal
-    //   <SuccessfulPaymentModal
-    //     successModal={successModal}
-    //     closeSuccessModal={closeSuccessModal}
-    //   />
-  }
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [successModal, setSuccessModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const closeSuccessModal = () => setSuccessModal(!successModal);
+
+
+  const handleRowClick = (rowData: any) => {
+    setSelectedRow(rowData);
+    setShowModal(true);
+    console.log(showModal)
+  };
+  const closeReceiptModal = () => {
+    setShowModal(false);
+  };
+
+
+
 
   const copyToClipboard = (text: any) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -403,8 +414,8 @@ const Hyvepay = () => {
             <tbody>
 
               {bankState.transaction?.postingsHistory.map((item, i) => (
-                <tr key={i} onClick={() => displayReceipt()}>
-                  <td className="font-montserrat text-xs">
+                <tr key={i} onClick={() => handleRowClick(item)}>
+                  <td className="font-montserrat text-xs" style={{ whiteSpace: "nowrap" }}>
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>
                   <td className="font-montserrat text-xs">
@@ -449,7 +460,13 @@ const Hyvepay = () => {
           </div>
         </div>
       </div>
-
+      {showModal && (
+        <TransactionReceiptModal
+          successModal={successModal}
+          closeSuccessModal={closeSuccessModal}
+          rowData={selectedRow}
+          closeModal={closeModal}
+        />)}
       <ActivateAccountModal
         isVisible={showAccountModal}
         onCancel={() => setShowAccountModal(false)}
