@@ -10,7 +10,6 @@ import moment from "moment";
 import { useUser } from "../../hooks/useUser";
 import { Util } from "../../helpers/Util"
 
-//FIXME: fix this by making .env to work on this codebase.. 
 const { VITE_TRANSFER_FEE } = import.meta.env
 
 const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
