@@ -77,7 +77,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (authState.signupStatus === "completed") {
-      showMessage("SignUp successful", "Please proceed to login", "success");
+      showMessage("Signup successful", "Please proceed to login", "success");
       navigate("/login");
     } else if (authState.signupStatus === "failed") {
       showMessage(authState.signupError, "", "error");

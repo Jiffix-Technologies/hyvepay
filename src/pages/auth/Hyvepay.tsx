@@ -23,6 +23,7 @@ import { Util } from "../../helpers/Util";
 import { postingType } from "../../contsants";
 import { useUser } from "../../hooks/useUser";
 import moment from "moment";
+import { showMessage } from "../../helpers/notification";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -169,6 +170,7 @@ const Hyvepay = () => {
   const copyToClipboard = (text: any) => {
     navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
+      showMessage("Successful", "Copied to clipboard", "success");
       setTimeout(() => setIsCopied(false), 3000); // Reset the copied status after 3 seconds
     });
   };
