@@ -108,7 +108,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
-                      <p className="text-[10px] font-montserrat"> Sender:</p>
+                      <p className="text-[10px] font-montserrat"> Sender</p>
                       <p className="text-[10px] font-montserrat">
                         {state.accountBalance?.accountName}
                       </p>
