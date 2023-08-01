@@ -10,8 +10,8 @@ import moment from "moment";
 import { useUser } from "../../hooks/useUser";
 import { Util } from "../../helpers/Util"
 
-//FIXME: fix this by making .env to work on this codebase.. 
-const TRANSFER_FEE = 10
+
+const { VITE_TRANSFER_FEE } = import.meta.env
 
 const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, closeModal }: any) => {
   const state = useAppSelector((state) => state.bankReducer);
@@ -142,7 +142,7 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                         Transfer Fees:
                       </p>
                       <p className="text-[10px] font-montserrat">
-                        {Util.CurrencyDisplay(Number(TRANSFER_FEE))}
+                        {Util.CurrencyDisplay(VITE_TRANSFER_FEE)}
 
                       </p>
                     </div>
