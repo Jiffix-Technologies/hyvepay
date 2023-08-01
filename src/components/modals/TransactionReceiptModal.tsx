@@ -8,14 +8,18 @@ import html2canvas from "html2canvas";
 import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
-import { Util } from "../../helpers/Util"
+import { Util } from "../../helpers/Util";
 
-//FIXME: fix this by making .env to work on this codebase.. 
-const TRANSFER_FEE = 10
+//FIXME: fix this by making .env to work on this codebase..
+const TRANSFER_FEE = 10;
 
-const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, closeModal }: any) => {
+const TransactionReceiptModal = ({
+  successModal,
+  closeSuccessModal,
+  rowData,
+  closeModal,
+}: any) => {
   const state = useAppSelector((state) => state.bankReducer);
-
   const { user } = useUser();
 
   const handlePDFDownload = () => {
@@ -52,8 +56,6 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                 <h5 className="text-center mt-3 text-[#494949] text-[14px] font-semibold">
                   Transaction Receipt
                 </h5>
-
-
               </div>
             </div>
             <div className="body">
@@ -74,7 +76,6 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                   <div className="my-8">
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
-
                         Transaction Date:
                       </p>
                       <p className="text-[10px] font-montserrat">
@@ -94,14 +95,12 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                       <p className="text-[10px] font-montserrat"> Amount:</p>
                       <p className="text-[10px] font-montserrat">
                         {Util.CurrencyDisplay(Number(rowData.amount))}
-
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Sender:</p>
                       <p className="text-[10px] font-montserrat">
-
-                        {user?.companyName}
+                        {state.accountBalance?.accountName}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -138,12 +137,10 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
-
                         Transfer Fees:
                       </p>
                       <p className="text-[10px] font-montserrat">
                         {Util.CurrencyDisplay(Number(TRANSFER_FEE))}
-
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -155,8 +152,6 @@ const TransactionReceiptModal = ({ successModal, closeSuccessModal, rowData, clo
                   </div>
 
                   <hr className="mb-4" />
-
-
                 </div>
 
                 <div className="flex gap-4 justify-around mt-5">
