@@ -19,6 +19,7 @@ import {
 // import axios from "axios";
 import axiosClient from "../../config/axiosClient";
 import { showMessage } from "../../helpers/notification";
+import useAppDispatch from "../../hooks/useAppDispatch";
 
 const Profile = () => {
   const [state, setState] = useState<any[]>([]);
@@ -29,6 +30,8 @@ const Profile = () => {
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>(null);
+
+  const dispatch = useAppDispatch();
 
   const { user } = useUser();
 
@@ -280,11 +283,13 @@ const Profile = () => {
             </div>
 
             <div className="w-full flex md:items-end md:justify-end">
-              <AppBtn
-                className=" bg-[#FAA21B] w-full md:w-[100px]  text-[#000] -mt-10 md:mt-3 mb-40"
-                title="SAVE"
+              <button
                 type="submit"
-              />
+                className="button-style w-full  text-[#000] md:mt-3 mb-40"
+                onClick={() => console.log("caled here")}
+              >
+                save
+              </button>
             </div>
           </Form>
         </Formik>

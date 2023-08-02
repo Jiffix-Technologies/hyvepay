@@ -609,3 +609,18 @@ select.none {
 .hide-modal {
   display: none !important;
 }
+
+.button-style {
+  background-color: var(--primary-color);
+  padding: 10px 8px;
+  border-radius: 4px;
+  width: 40%;
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .button-style {
+    margin-top: -20px;
+    width: 100%;
+  }
+}
