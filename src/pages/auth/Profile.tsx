@@ -9,9 +9,15 @@ import AppBtn from "../../components/AppBtn/AppBtn";
 import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
 import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import { useUser } from "../../hooks/useUser";
-import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
+import {
+  Form,
+  Formik,
+  FormikHelpers,
+  useFormik,
+  useFormikContext,
+} from "formik";
 // import axios from "axios";
-import axiosClient from '../../config/axiosClient'
+import axiosClient from "../../config/axiosClient";
 import { showMessage } from "../../helpers/notification";
 
 const Profile = () => {
@@ -62,7 +68,6 @@ const Profile = () => {
     state: user?.partner?.contact?.state || "",
     district: user?.partner?.contact?.district || "",
     address: user?.partner?.contact?.address || "",
-
   };
 
   async function updateProfile(values: any) {
@@ -70,13 +75,18 @@ const Profile = () => {
       let payload = values;
       // Remove empty properties from the object
       const filteredObject = Object.fromEntries(
-        Object.entries(values).filter(([key, value]) => value !== null && value !== '')
+        Object.entries(values).filter(
+          ([key, value]) => value !== null && value !== ""
+        )
       );
       if (filteredObject) {
-        payload = filteredObject
+        payload = filteredObject;
       }
-      const response = await axiosClient.patch("/api/v1/partner/profile/update", payload);
-      console.log('this is data:', payload)
+      const response = await axiosClient.patch(
+        "/api/v1/partner/profile/update",
+        payload
+      );
+      console.log("this is data:", payload);
       return response;
     } catch (err) {
       console.log(err);
@@ -124,18 +134,12 @@ const Profile = () => {
     }),
   };
 
-
-
   const hideOnClickOutside = (e: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setIsOpen(false);
       // setIsOpenBeneficiary(false);
     }
   };
-
-  useEffect(() => {
-    document.addEventListener("click", hideOnClickOutside, true);
-  }, []);
 
   return (
     <>
@@ -158,11 +162,11 @@ const Profile = () => {
                   "Profile was not Updated Successfully",
                   "error"
                 );
-              })
-          }}>
+              });
+          }}
+        >
           <Form>
             <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
-
               <div
                 className="absolute -top-10 w-[100%] md:w-[80%] items-center justify-center text-center flex cursor-pointer"
                 onClick={() => setOpenProfile(!openProfile)}
@@ -220,7 +224,6 @@ const Profile = () => {
                       Change Password
                     </span>
                   </div>
-
                 </div>
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
@@ -274,7 +277,6 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-
             </div>
 
             <div className="w-full flex md:items-end md:justify-end">
@@ -286,7 +288,7 @@ const Profile = () => {
             </div>
           </Form>
         </Formik>
-      </div >
+      </div>
 
       <ChangePasswordModal openModal={openModal} setOpenModal={setOpenModal} />
       <UploadPictureModal

@@ -162,6 +162,7 @@ input {
 .modal {
   max-width: 45%;
   overflow-y: scroll;
+  margin: 20px auto 0px auto;
 }
 .modal label,
 .modal select,
@@ -599,4 +600,12 @@ select.none {
     max-height: 500px !important;
     overflow-y: scroll !important;
   }
+}
+
+.show-modal {
+  display: block !important;
+}
+
+.hide-modal {
+  display: none !important;
 }
