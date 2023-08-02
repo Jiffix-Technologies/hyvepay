@@ -24,6 +24,7 @@ import { postingType } from "../../contsants";
 import { useUser } from "../../hooks/useUser";
 import moment from "moment";
 import { showMessage } from "../../helpers/notification";
+import Search from "../../components/FilterSearch/Search";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -146,7 +147,7 @@ const Hyvepay = () => {
 
 
 
-
+  const [query, setQuery] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [successModal, setSuccessModal] = useState(false);
@@ -160,17 +161,15 @@ const Hyvepay = () => {
     setShowModal(true);
     console.log(showModal)
   };
+
   const closeReceiptModal = () => {
     setShowModal(false);
   };
 
-
-
-
   const copyToClipboard = (text: any) => {
     navigator.clipboard.writeText(text).then(() => {
       setIsCopied(true);
-      showMessage("Successful", "Copied to clipboard", "success");
+      showMessage("Successful", "Copied to ClipBoard", "success");
       setTimeout(() => setIsCopied(false), 3000); // Reset the copied status after 3 seconds
     });
   };
@@ -347,13 +346,15 @@ const Hyvepay = () => {
           <div className="search w-full md:w-2/4 mb-3">
             <form action="">
               <div className="prepend">
-                {/* <img src={SearchIcon} alt="" /> */}
+
                 <input
                   type="text"
                   placeholder="Search"
                   className="bg-gray-100 w-full md:w-2/3 searchInput"
                   style={{ border: 0 }}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
+                {/* <button><img src={SearchIcon} alt="" /></button> */}
               </div>
             </form>
           </div>
@@ -370,6 +371,7 @@ const Hyvepay = () => {
               >
                 {format(range[0].startDate, "MM/dd/yyyy")}
               </button>
+
               {openStart && (
                 <AppCalender
                   setOpenStart={setOpenStart}
@@ -402,11 +404,10 @@ const Hyvepay = () => {
         </div>
 
         <div className="mt-4" style={{ overflowX: "scroll" }}>
-          <table border={1} style={{ borderRadius: 20, overflow: "clip" }}>
+          <table border={1} style={{ borderRadius: 20, overflow: "clip" }} >
             <thead>
               <th className="font-montserrat    text-xs">Date</th>
               <th className="font-montserrat    text-xs ">Account Name</th>
-              {/* <th className="font-montserrat      text-xs ">Account Number</th> */}
               <th className="font-montserrat     text-xs ">Amount</th>
               <th className="font-montserrat    text-xs ">Balance</th>
               <th className="font-montserrat   text-xs ">Narration</th>
@@ -414,21 +415,24 @@ const Hyvepay = () => {
               <th className="font-montserrat text-xs ">Status</th>
             </thead>
             <tbody>
-
+              {/* {<Search data={bankState?.transaction?.postingsHistory} />} */}
               {bankState.transaction?.postingsHistory.map((item, i) => (
                 <tr key={i} onClick={() => handleRowClick(item)}>
                   <td className="font-montserrat text-xs" style={{ whiteSpace: "nowrap" }}>
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>
+
                   <td className="font-montserrat text-xs">
                     {item.beneficiaryName}
                   </td>
-                  {/* <td className="font-montserrat text-xs">
-                    {item.accountNumber}
-                  </td> */}
-                  <td className="font-montserrat text-xs">
 
-                    {Util.formAmount(item.amount, true)}
+                  <td className="font-montserrat text-xs">
+                    {item.postingRecordType === postingType.credit ? (
+                      <span className="text-green-600"> {Util.formAmount(item.amount, true)}</span>
+                    ) : (
+                      <span className="text-red-600"> {Util.formAmount(item.amount, true)}</span>
+                    )}
+
                   </td>
                   <td className="font-montserrat text-xs">
                     {Util.formAmount(item.balanceAfter, true)}
