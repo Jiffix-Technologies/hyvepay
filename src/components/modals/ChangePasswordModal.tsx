@@ -8,6 +8,7 @@ import * as Yup from "yup";
 import { Form, Formik, FormikHelpers, useFormik, ErrorMessage } from "formik";
 import { showError, showMessage } from "../../helpers/notification";
 import axiosClient from "../../config/axiosClient";
+import NewPassword from "./NewPassword";
 
 const formData = {
   password: "",
@@ -139,9 +140,10 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
           </div>
         </Form>
       </Formik>
-      <OtpModal
-        openOtp={openOtp}
+      <NewPassword
         setOpenOtp={setOpenOtp}
+        setNewPasswordModal={setOpenOtp}
+        newPasswordModal={openOtp}
         headerTitle="Reset AutoHyve Password"
         subHeader="We sent an OTP to your WhatsApp and as a text message"
       />

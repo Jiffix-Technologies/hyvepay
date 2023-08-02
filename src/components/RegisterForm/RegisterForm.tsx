@@ -85,8 +85,10 @@ const RegisterForm = () => {
 
     dispatch(clearSignupStatus());
   }, [authState.signupStatus]);
-  const termsPage = 'https://hyvetech.notion.site/HyveTech-Limited-Terms-of-Use-138c1d3439b6420c9649f0d0003f65ad'
-  const policyPage = 'https://hyvetech.notion.site/HyveTech-Limited-Privacy-Policy-79ccd19af6c94d0d8df441abcb2d991e'
+  const termsPage =
+    "https://hyvetech.notion.site/HyveTech-Limited-Terms-of-Use-138c1d3439b6420c9649f0d0003f65ad";
+  const policyPage =
+    "https://hyvetech.notion.site/HyveTech-Limited-Privacy-Policy-79ccd19af6c94d0d8df441abcb2d991e";
   return (
     <div className="form w-full mt-10">
       <Formik
@@ -95,7 +97,10 @@ const RegisterForm = () => {
         validationSchema={Yup.object().shape({
           firstName: Yup.string()
             .required("First name is required")
-            .matches(/^\S*$/, "First name must not contain whitespace")
+            .matches(
+              /\b\w+\b(?:\s+\b\w+\b)*/g,
+              "First name must not contain whitespace"
+            )
             .typeError("First name is required"),
           lastName: Yup.string()
             .required("Last name is required")
@@ -244,10 +249,16 @@ const RegisterForm = () => {
             />
           </div>
 
-          <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">g
-            {/* FIXME: make terms and policy a link... */}
-            By clicking ‘Proceed’ you agree with the AutoHyve <Link className="text-orange-400" to={termsPage}><strong>Terms</strong></Link> and <Link className="text-orange-400" to={policyPage}><strong>Policies</strong></Link>
-
+          <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">
+            g{/* FIXME: make terms and policy a link... */}
+            By clicking ‘Proceed’ you agree with the AutoHyve{" "}
+            <Link className="text-orange-400" to={termsPage}>
+              <strong>Terms</strong>
+            </Link>{" "}
+            and{" "}
+            <Link className="text-orange-400" to={policyPage}>
+              <strong>Policies</strong>
+            </Link>
           </span>
 
           <AppBtn
