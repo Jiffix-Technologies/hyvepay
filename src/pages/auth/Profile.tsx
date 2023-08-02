@@ -22,6 +22,7 @@ const Profile = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
   const dropdownRef = useRef<any>(null);
 
   const { user } = useUser();
@@ -64,7 +65,9 @@ const Profile = () => {
     address: user?.partner?.contact?.address || "",
 
   };
-
+  const handleSubmit = (values: any) => {
+    console.log(values)
+  }
   async function updateProfile(values: any) {
     try {
       let payload = values;
@@ -73,7 +76,7 @@ const Profile = () => {
         Object.entries(values).filter(([key, value]) => value !== null && value !== '')
       );
       if (filteredObject) {
-        payload = filteredObject
+        return payload = filteredObject
       }
       const response = await axiosClient.patch("/api/v1/partner/profile/update", payload);
       console.log('this is data:', payload)
@@ -141,9 +144,10 @@ const Profile = () => {
     <>
       <div className="mb-20 mt-32 h-screen px-0 md:px-20">
         <Formik
-          enableReinitialize
+          enableReinitialize={true}
           initialValues={formData}
           onSubmit={(payload) => {
+            console.log('this is the payload', payload)
             updateProfile(payload)
               .then(function () {
                 showMessage(
@@ -229,6 +233,9 @@ const Profile = () => {
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
+                      value={values.firstName}
+                      onChange={(e) => setValue('firstName', e.target.value)}
+
                       name="phone"
                     />
                   </div>
