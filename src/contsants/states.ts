@@ -41,7 +41,7 @@ export const stateLga = {
     "Yola North",
     "Yola South",
   ],
-  AkwaIbom: [
+  "Akwa Ibom": [
     "Abak",
     "Eastern Obolo",
     "Eket",
