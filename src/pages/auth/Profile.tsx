@@ -10,7 +10,8 @@ import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
 import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import { useUser } from "../../hooks/useUser";
 import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
-import axios from "axios";
+// import axios from "axios";
+import axiosClient from '../../config/axiosClient'
 import { showMessage } from "../../helpers/notification";
 
 const Profile = () => {
@@ -57,14 +58,26 @@ const Profile = () => {
   const formData = {
     firstName: user?.firstName,
     lastName: user?.lastName,
-    email: user?.email,
     phone: user?.phone,
+    state: user?.partner?.contact?.state || "",
+    district: user?.partner?.contact?.district || "",
+    address: user?.partner?.contact?.address || "",
+
   };
 
-  async function updateProfile(formData: any) {
+  async function updateProfile(values: any) {
     try {
-      const data = await axios.patch("/url", formData);
-      return data;
+      let payload = values;
+      // Remove empty properties from the object
+      const filteredObject = Object.fromEntries(
+        Object.entries(values).filter(([key, value]) => value !== null && value !== '')
+      );
+      if (filteredObject) {
+        payload = filteredObject
+      }
+      const response = await axiosClient.patch("/api/v1/partner/profile/update", payload);
+      console.log('this is data:', payload)
+      return response;
     } catch (err) {
       console.log(err);
       throw err;
@@ -111,12 +124,7 @@ const Profile = () => {
     }),
   };
 
-  const banks = [
-    "Guaranty Trust Bank (GTBank)",
-    "Access Bank",
-    "First Bank of Nigeria",
-    "United Bank for Africa (UBA)",
-  ];
+
 
   const hideOnClickOutside = (e: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -135,12 +143,9 @@ const Profile = () => {
         <Formik
           enableReinitialize
           initialValues={formData}
-          onSubmit={(values) => {
-            console.log(values);
-            // update profile ()
-            updateProfile(formData)
+          onSubmit={(payload) => {
+            updateProfile(payload)
               .then(function () {
-                //show success notification
                 showMessage(
                   "Profile Update",
                   "Profile Updated Successfully",
@@ -196,6 +201,7 @@ const Profile = () => {
                     placeholderTop="Email"
                     placeholder="Enter your valid email address"
                     name="email"
+                    value={user?.email}
                   />
                 </div>
 
@@ -214,16 +220,7 @@ const Profile = () => {
                       Change Password
                     </span>
                   </div>
-                  {/* FIXME: the dropdown always make a call once clicked..... */}
-                  <div className="mt-5 md:mt-5  w-full">
-                    <AppDropDown
-                      title="Account Type"
-                      data={banks}
-                      isOpen={isOpen}
-                      setIsOpen={setIsOpen}
-                    // dropdownRef={dropdownRef}
-                    />
-                  </div>
+
                 </div>
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
@@ -241,6 +238,7 @@ const Profile = () => {
                       hasPLaceHolder={true}
                       placeholderTop="Address"
                       placeholder="Enter your current address"
+                      name="address"
                     />
                   </div>
                 </div>
@@ -257,6 +255,7 @@ const Profile = () => {
                       }}
                       styles={customStyles}
                       placeholder="Choose state"
+                      name="state"
                     />
                   </div>
                   <div className="mt-5 md:mt-5 w-full">
@@ -265,8 +264,12 @@ const Profile = () => {
                     </p>
                     <Select
                       options={district}
+                      onChange={(item) => {
+                        setValue2(item.value);
+                      }}
                       styles={customStyles}
                       placeholder="Choose district"
+                      name="district"
                     />
                   </div>
                 </div>
