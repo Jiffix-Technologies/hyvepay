@@ -148,9 +148,9 @@ const RegisterForm = () => {
           console.log("values> ", values);
           dispatch(
             garageSignUpAction({
-              firstName: values.firstName,
-              lastName: values.lastName,
-              name: values.businessName,
+              firstName: values.firstName.trim(),
+              lastName: values.lastName.trim(),
+              name: values.businessName.trim(),
               phone: values.phoneNumber,
               email: values.email.toLowerCase(),
               password: values.password,
