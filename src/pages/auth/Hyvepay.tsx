@@ -153,7 +153,7 @@ const Hyvepay = () => {
   const [successModal, setSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  console.log(successModal)
+  console.log(selectedRow)
   const closeSuccessModal = () => {
     console.log(successModal)
     setSuccessModal(!successModal);
@@ -425,7 +425,10 @@ const Hyvepay = () => {
             <tbody>
               {/* {<Search data={bankState?.transaction?.postingsHistory} />} */}
               {bankState.transaction?.postingsHistory.map((item, i) => (
-                <tr key={i} onClick={() => setSuccessModal(!successModal)}>
+                <tr key={i} onClick={() => {
+                  handleRowClick(item); setSuccessModal(!successModal)
+                }}
+                >
                   <td className="font-montserrat text-xs" style={{ whiteSpace: "nowrap" }}>
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>
@@ -473,7 +476,7 @@ const Hyvepay = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div >
 
       {successModal && (
         <TransactionReceiptModal
@@ -481,7 +484,8 @@ const Hyvepay = () => {
           closeSuccessModal={closeSuccessModal}
           rowData={selectedRow}
 
-        />)}
+        />)
+      }
       <ActivateAccountModal
         isVisible={showAccountModal}
         onCancel={() => setShowAccountModal(false)}

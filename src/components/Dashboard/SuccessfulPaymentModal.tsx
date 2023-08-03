@@ -17,7 +17,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
   const state = useAppSelector((state) => state.bankReducer);
 
   const { user } = useUser();
-  console.log(user)
+
 
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
