@@ -162,6 +162,7 @@ input {
 .modal {
   max-width: 45%;
   overflow-y: scroll;
+  margin: 20px auto 0px auto;
 }
 .modal label,
 .modal select,
@@ -598,5 +599,28 @@ select.none {
   .form-modal {
     max-height: 500px !important;
     overflow-y: scroll !important;
+  }
+}
+
+.show-modal {
+  display: block !important;
+}
+
+.hide-modal {
+  display: none !important;
+}
+
+.button-style {
+  background-color: var(--primary-color);
+  padding: 10px 8px;
+  border-radius: 4px;
+  width: 40%;
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .button-style {
+    margin-top: -20px;
+    width: 100%;
   }
 }
