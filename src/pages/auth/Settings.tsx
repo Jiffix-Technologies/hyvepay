@@ -38,8 +38,7 @@ const Settings = () => {
   const dropdownRef = useRef<any>(null);
   const [select, setSelect] = useState("Sort by");
 
-  //FIXME:
-  // handle form submission
+
   // create a createPin()
   async function createPin(formData: any) {
     try {
@@ -75,7 +74,7 @@ const Settings = () => {
     };
   }, []);
 
-  const data = ["Security", "User & Role Managment"];
+  const data = ["User & Role Managment"];
 
   return (
     <>

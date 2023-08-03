@@ -17,7 +17,8 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
   const state = useAppSelector((state) => state.bankReducer);
 
   const { user } = useUser();
-  console.log("this is the user properties", user);
+  console.log(user)
+
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
@@ -53,7 +54,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                   Payment Successful
                 </h5>
                 <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
-                  Yay! Congratulations...{" "}
+                  Yay! Congratulations...
                   {Util.CurrencyDisplay(
                     Number(state.accountTransferInfo?.amount)
                   )}
@@ -68,7 +69,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
               </div>
             </div>
             <div className="body">
-              {/* view */}
+
 
               <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
                 <div
@@ -108,9 +109,11 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
-                      <p className="text-[10px] font-montserrat"> Sender</p>
+                      <p className="text-[10px] font-montserrat"> Sender:</p>
                       <p className="text-[10px] font-montserrat">
-                        {state.accountBalance?.accountName}
+                        {user?.companyName}
+
+
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -143,6 +146,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       <p className="text-[10px] font-montserrat"> Narration:</p>
                       <p className="text-[10px] font-montserrat w-[150px] text-right">
                         {state.accountTransferInfo?.narration}
+
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">

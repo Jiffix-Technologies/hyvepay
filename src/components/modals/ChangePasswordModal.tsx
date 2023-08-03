@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./modal.css";
-import AppInput from "../AppInput/AppInput";
+import AppInput, { MyTextInput } from "../AppInput/AppInput";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import AppBtn from "../AppBtn/AppBtn";
 import OtpModal from "./OtpModal";
@@ -37,12 +37,29 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
     setOpenModal(!openModal);
   };
 
+
+  const handleSubmit = (payload: any) => {
+    updatePassword(payload)
+      .then(function () {
+        setOpenModal(!openModal);
+        showMessage(
+          "Password Updated",
+          "Password Updated Successfully",
+          "success"
+        );
+      })
+      .catch(function (err) {
+        setOpenModal(!openModal);
+        showMessage(
+          "Change Password Failed",
+          "Password was not Updated Successfully",
+          "error"
+        );
+      })
+  }
+
   async function updatePassword(payload: any) {
     try {
-      if (payload.password !== payload.confirmPassword) {
-        console.log(payload)
-        return " password and confirm password must be the same"
-      }
       const response = await axiosClient.patch("/api/v1/partner/profile/update", payload.password);
       return response;
     } catch (err) {
@@ -57,25 +74,7 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
         enableReinitialize
         initialValues={formData}
         validationSchema={ChangePasswordSchema}
-        onSubmit={(payload) => {
-          updatePassword(payload)
-            .then(function () {
-              setOpenModal(!openModal);
-              showMessage(
-                "Password Updated",
-                "Password Updated Successfully",
-                "success"
-              );
-            })
-            .catch(function (err) {
-              setOpenModal(!openModal);
-              showMessage(
-                "Change Password Failed",
-                "Password was not Updated Successfully",
-                "error"
-              );
-            })
-        }}>
+        onSubmit={handleSubmit}  >
         <Form>
           {openModal && (
 
@@ -105,11 +104,12 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
 
 
                   <div className="w-full relative">
-                    <AppInput
+                    <MyTextInput
                       placeholderTop="New Password"
                       placeholder="Enter new password"
                       hasPLaceHolder={true}
                       name="password"
+                      type="password"
 
                     />
 
@@ -119,11 +119,12 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
                     </span>
                   </div>
                   <div className="w-full mt-5 relative">
-                    <AppInput
+
+                    <MyTextInput
                       placeholderTop="Confirm New Password"
                       placeholder="Re-enter new password"
                       hasPLaceHolder={true}
-                      // type="password"
+                      type="password"
                       name="confirmPassword"
                     />
 
@@ -158,8 +159,8 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
           <OtpModal
             openOtp={openOtp}
             setOpenOtp={setOpenOtp}
-            headerTitle="Reset AutoHyve Password"
-            subHeader="We sent an OTP to your WhatsApp and as a text message"
+            headerTitle="New PIN"
+            subHeader="Kindly enter a new PIN for your HyvePay bank accounts"
           />
         </Form>
       </Formik>

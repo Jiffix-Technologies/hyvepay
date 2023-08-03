@@ -10,13 +10,15 @@ import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
 import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import { useUser } from "../../hooks/useUser";
 import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
-// import axios from "axios";
 import axiosClient from '../../config/axiosClient'
 import { showMessage } from "../../helpers/notification";
 
 const Profile = () => {
-  const [state, setState] = useState<any[]>([]);
-  const [district, setDistrict] = useState<any[]>([]);
+
+  const { user } = useUser();
+  const [state, setState] = useState(user?.partner?.contact?.state);
+  const [district, setDistrict] = useState(user?.partner?.contact?.district);
+  const [phone, setPhone] = useState(user?.phone)
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -25,7 +27,6 @@ const Profile = () => {
 
   const dropdownRef = useRef<any>(null);
 
-  const { user } = useUser();
 
   useEffect(() => {
     let stateArray: any = [];
@@ -65,21 +66,39 @@ const Profile = () => {
     address: user?.partner?.contact?.address || "",
 
   };
-  const handleSubmit = (values: any) => {
-    console.log(values)
+  const handleSubmit = (payload: any) => {
+    const value = { ...payload, state, district, phone }
+    console.log(value);
+    updateProfile(value)
+      .then(function () {
+        showMessage(
+          "Profile Update",
+          "Profile Updated Successfully",
+          "success"
+        );
+      })
+      .catch(function (err) {
+        showMessage(
+          "Profile Update",
+          "Profile was not Updated Successfully",
+          "error"
+        );
+      })
   }
+
+
+
   async function updateProfile(values: any) {
     try {
       let payload = values;
-      // Remove empty properties from the object
+
       const filteredObject = Object.fromEntries(
         Object.entries(values).filter(([key, value]) => value !== null && value !== '')
       );
-      if (filteredObject) {
-        return payload = filteredObject
-      }
-      const response = await axiosClient.patch("/api/v1/partner/profile/update", payload);
-      console.log('this is data:', payload)
+
+      console.log('payload after the filter function', filteredObject)
+      const response = await axiosClient.patch("/api/v1/partner/profile/update", filteredObject);
+      console.log('this is data:', filteredObject)
       return response;
     } catch (err) {
       console.log(err);
@@ -146,24 +165,8 @@ const Profile = () => {
         <Formik
           enableReinitialize={true}
           initialValues={formData}
-          onSubmit={(payload) => {
-            console.log('this is the payload', payload)
-            updateProfile(payload)
-              .then(function () {
-                showMessage(
-                  "Profile Update",
-                  "Profile Updated Successfully",
-                  "success"
-                );
-              })
-              .catch(function (err) {
-                showMessage(
-                  "Profile Update",
-                  "Profile was not Updated Successfully",
-                  "error"
-                );
-              })
-          }}>
+          onSubmit={handleSubmit}
+        >
           <Form>
             <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
 
@@ -203,7 +206,6 @@ const Profile = () => {
                     hasPLaceHolder={true}
                     disabled
                     placeholderTop="Email"
-                    placeholder="Enter your valid email address"
                     name="email"
                     value={user?.email}
                   />
@@ -233,19 +235,24 @@ const Profile = () => {
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
-                      value={values.firstName}
-                      onChange={(e) => setValue('firstName', e.target.value)}
-
+                      type="number"
                       name="phone"
+                      onChange={(e: any) => {
+
+                        setPhone(e.target.value);
+
+                      }}
                     />
                   </div>
 
                   <div className="mt-0 md:mt-10 w-full">
-                    <AppInput
+                    <MyTextInput
                       hasPLaceHolder={true}
                       placeholderTop="Address"
                       placeholder="Enter your current address"
                       name="address"
+
+
                     />
                   </div>
                 </div>
@@ -257,8 +264,9 @@ const Profile = () => {
                     </p>
                     <Select
                       options={state}
-                      onChange={(item) => {
+                      onChange={(item: any) => {
                         setValue(item.value);
+                        setState(item.value);
                       }}
                       styles={customStyles}
                       placeholder="Choose state"
@@ -271,14 +279,16 @@ const Profile = () => {
                     </p>
                     <Select
                       options={district}
-                      onChange={(item) => {
+                      onChange={(item: any) => {
                         setValue2(item.value);
+                        setDistrict(item.value)
                       }}
                       styles={customStyles}
                       placeholder="Choose district"
                       name="district"
                     />
                   </div>
+
                 </div>
               </div>
 
