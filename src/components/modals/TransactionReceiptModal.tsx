@@ -19,8 +19,8 @@ const TransactionReceiptModal = ({
   successModal,
   closeSuccessModal,
   rowData,
-  closeModal,
 }: any) => {
+  console.log(rowData);
   const state = useAppSelector((state) => state.bankReducer);
   const { user } = useUser();
 
@@ -81,7 +81,7 @@ const TransactionReceiptModal = ({
                         Transaction Date:
                       </p>
                       <p className="text-[10px] font-montserrat">
-                        {moment().format(rowData.realDate)}
+                        {moment().format("DD-MM-YYYY")}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -102,7 +102,7 @@ const TransactionReceiptModal = ({
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Sender:</p>
                       <p className="text-[10px] font-montserrat">
-                        {state.accountBalance?.accountName}
+                        {user?.companyName}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -120,6 +120,7 @@ const TransactionReceiptModal = ({
                         className="text-[10px] font-montserrat w-[105px]"
                       >
                         {rowData.merchant}
+                        {console.log(rowData.merchant)}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -142,8 +143,8 @@ const TransactionReceiptModal = ({
                         Transfer Fees:
                       </p>
                       <p className="text-[10px] font-montserrat">
- 
-                     {Util.CurrencyDisplay(VITE_TRANSFER_FEE)}
+
+                        {Util.CurrencyDisplay(VITE_TRANSFER_FEE)}
 
 
                       </p>
