@@ -1,4 +1,4 @@
-import { Field, Form, FormikContextType, useFormikContext } from "formik";
+import { ErrorMessage, Field, Form, FormikContextType, useFormikContext } from "formik";
 import { MySelect, MyTextInput } from "../AppInput/AppInput";
 import InputHeader from "../InputHeader/InputHeader";
 import { useEffect } from "react";
@@ -41,6 +41,7 @@ const SingleTransferForm = () => {
     setFieldValue("accountName", state.accountHolder.beneficiaryName);
   }, [state.accountHolder]);
   return (
+
     <Form>
       <div className="flex flex-col mt-8 justify-center items-center px-4 md:px-10">
         <div className="form-group flex-col md:flex-row w-full justify-center">
@@ -108,6 +109,7 @@ const SingleTransferForm = () => {
 
             <Field
               name="narration"
+              required
               id=""
               as="textarea"
               cols={30}
@@ -117,6 +119,8 @@ const SingleTransferForm = () => {
               className="bg-gray-100 w-full p-4"
               style={{ borderRadius: 18, border: 0 }}
             />
+            <ErrorMessage name="narration" component="div" />
+
           </div>
         </div>
 

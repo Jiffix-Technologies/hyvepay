@@ -78,7 +78,7 @@ export default function ChangePasswordModal({ setOpenModal, openModal }: any) {
           <div
             id="changePasswordModal"
             className="overlay hide-modal h-screen w-screen flex  fixed justify-center items-center"
-            // onClick={toggleModal}
+          // onClick={toggleModal}
           >
             <div className="modal bg-white py-8 px-20">
               <div className="modal-header bg-white p-8 py-2 relative">

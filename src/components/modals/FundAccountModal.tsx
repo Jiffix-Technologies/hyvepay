@@ -22,8 +22,7 @@ const AccountTransferSchema = Yup.object({
     .matches(/^[0-9]+$/, "Amount should be only digits")
     .required("Amount is required"),
   narration: Yup.string().max(20, "Narration exceeds 20 characters")
-    .required("Narration is required")
-    .typeError("Narration is required"),
+    .required("Narration is required"),
   email: Yup.string(),
 });
 
