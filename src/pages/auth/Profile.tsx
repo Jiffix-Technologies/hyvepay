@@ -215,6 +215,7 @@ const Profile = () => {
                   <div className="mt-5 md:mt-5  w-full relative">
                     <MyTextInput
                       hasPLaceHolder={true}
+                      disabled
                       placeholderTop="HyvePay Account Password"
                       placeholder="****************"
                       name="password"

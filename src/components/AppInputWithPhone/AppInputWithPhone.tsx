@@ -30,7 +30,7 @@ const AppInputWithPhone = ({
         <img src={flag} alt="" className="w-[30px] h-[22px] absolute left-11" />
         <span className="absolute  left-20 text-xs">NG(+234)</span>
         <input
-          min={13}
+          // max={13}
           type={type}
           onChange={onChange}
           className={
