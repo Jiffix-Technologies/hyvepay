@@ -97,14 +97,14 @@ const RegisterForm = () => {
         validationSchema={Yup.object().shape({
           firstName: Yup.string()
             .required("First name is required")
-            .matches(
-              /\b\w+\b(?:\s+\b\w+\b)*/g,
-              "First name must not contain whitespace"
-            )
+            // .matches(
+            //   /\b\w+\b(?:\s+\b\w+\b)*/g,
+            //   "First name must not contain whitespace"
+            // )
             .typeError("First name is required"),
           lastName: Yup.string()
             .required("Last name is required")
-            .matches(/^\S*$/, "Last name must not contain whitespace")
+            //  .matches(/^\S*$/, "Last name must not contain whitespace")
             .typeError("Last name is required"),
           email: Yup.string()
             .email()
