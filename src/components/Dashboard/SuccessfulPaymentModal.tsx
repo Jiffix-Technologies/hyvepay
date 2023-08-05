@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
@@ -8,7 +8,9 @@ import html2canvas from "html2canvas";
 import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Util } from "../../helpers/Util";
+import { Link } from "react-router-dom";
 
 
 const { VITE_TRANSFER_FEE } = import.meta.env
@@ -18,16 +20,18 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
 
   const { user } = useUser();
 
-
+  const bankState = useAppSelector((state) => state.bankReducer);
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
     html2canvas(pdfview).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "JPEG", 30, 50);
+      pdf.addImage(imgData, "JPEG", 12, 40, 180, 180);
       pdf.save("receipt.pdf");
     });
   };
+  const [shareButton, setShareButton] = useState(false);
+
   return (
     <>
       {successModal && (
@@ -163,7 +167,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Status:</p>
                       <p className="text-[10px] font-montserrat">
-                        {state.accountTransferResponse?.status}
+                        {bankState.getAccountTransactionStatus}
                       </p>
                     </div>
                   </div>
@@ -188,7 +192,14 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                   </button>
 
                   <div>
-                    <button className="btn btn-secondary">Share PDF</button>
+                    <button onClick={() => setShareButton(!shareButton)} className="btn btn-secondary">Share PDF</button>
+                    <div className="social-icons">
+                      {/* <!-- Add your social media icons here --> */}
+                      <Link to="#" className="social-icon">FB</Link>
+                      <Link to="#" className="social-icon">TW</Link>
+                      <Link to="#" className="social-icon">IG</Link>
+
+                    </div>
                   </div>
                 </div>
               </div>

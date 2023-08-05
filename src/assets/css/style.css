@@ -624,3 +624,91 @@ select.none {
     width: 100%;
   }
 }
+
+/* Your existing styles for the share button */
+
+
+.social-media-icons {
+  @apply hidden; /* Hide the icons by default */
+}
+
+.social-media-icons.active {
+  @apply flex /* Show the icons when active */
+  /* Add your styles to show the icons when active */
+}
+
+.social-media-icons button {
+  @apply rounded-md
+
+  /* Add styles for individual social media icons here */
+}
+
+.expand {
+  @apply transition-transform;
+}
+
+
+.share-button-container {
+  @apply flex items-center; /* Align items horizontally */
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: transform 0.10s ease, border-radius 0.11s ease; /* Add border-radius to the transition */
+}
+
+.expand {
+  @apply transform scale-100;
+}
+
+/* .shrink {
+  @apply transform scale-80;
+} */
+
+.social-media-icons {
+  @apply flex; /* Make the buttons flex container */
+}
+
+/* Hide the social media icons by default */
+.hidden {
+  @apply opacity-0 pointer-events-none;
+}
+
+/* Show the social media icons */
+.visible {
+  @apply opacity-100 pointer-events-auto;
+}
+
+
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 100px;
+  transition: transform 0.3s ease, border-radius 0.3s ease; /* Add border-radius to the transition */
+}
+
+.expand {
+  @apply rounded; /* Add rounded border to the Share PDF button */
+  transform : scale(0.9);
+}
+
+.shrink {
+  @apply rounded-none;
+    transform: scale(0.8); /* Use tpse the border radius when shrunk */
+}
+
+/* Hide the social media icons by default */
+.hidden {
+  @apply opacity-0 pointer-events-none;
+}
+
+/* Show the social media icons */
+.visible {
+  @apply opacity-100 pointer-events-auto;
+}
+
+
+
+
+

@@ -12,13 +12,14 @@ import { useUser } from "../../hooks/useUser";
 import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
 import axiosClient from '../../config/axiosClient'
 import { showMessage } from "../../helpers/notification";
+import * as Yup from "yup";
+import { FilterOutlined } from "@ant-design/icons";
 
 const Profile = () => {
 
   const { user } = useUser();
-  const [state, setState] = useState(user?.partner?.contact?.state);
-  const [district, setDistrict] = useState(user?.partner?.contact?.district);
-  const [phone, setPhone] = useState(user?.phone)
+  const [state, setState] = useState(user?.partner?.contact?.state || "");
+  const [district, setDistrict] = useState(user?.partner?.contact?.district || "");
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -60,15 +61,48 @@ const Profile = () => {
   const formData = {
     firstName: user?.firstName,
     lastName: user?.lastName,
-    phone: user?.phone,
-    state: user?.partner?.contact?.state || "",
-    district: user?.partner?.contact?.district || "",
+    phone: user?.phone || "",
+    state: user?.partner?.contact?.state,
+    district: user?.partner?.contact?.district,
     address: user?.partner?.contact?.address || "",
 
   };
+
+  // const validationSchema =
+  //   Yup.object().shape({
+  //     firstName: Yup.string()
+  //       .required("First name is required")
+  //       .matches(
+  //         /\b\w+\b(?:\s+\b\w+\b)*/g,
+  //         "First name must not contain whitespace"
+  //       )
+  //       .typeError("First name is required"),
+  //     lastName: Yup.string()
+  //       .required("Last name is required")
+  //       .matches(/^\S*$/, "Last name must not contain whitespace")
+  //       .typeError("Last name is required"),
+
+  //     phoneNumber: Yup.string()
+  //       .required("Phone number is required")
+  //       .matches(/^\S*$/, "Phone Number must not contain whitespace")
+  //       .max(13, "Must be exactly 13 digits")
+  //       .typeError("Phone number is required"),
+  //     address: Yup.string().required("Address is required"),
+
+  //     state: Yup.object({
+  //       label: Yup.string().required("State is required"),
+  //       value: Yup.string().required("State is required"),
+  //     })
+  //       .required("State is required")
+  //       .typeError("Please select city"),
+
+  //   })
+
+
+
   const handleSubmit = (payload: any) => {
-    const value = { ...payload, state, district, phone }
-    console.log(value);
+    const value = { ...payload, state, district }
+    console.log('value from the form', value);
     updateProfile(value)
       .then(function () {
         showMessage(
@@ -86,19 +120,21 @@ const Profile = () => {
       })
   }
 
-
-
   async function updateProfile(values: any) {
     try {
-      let payload = values;
+      console.log('Original values:', values);
 
-      const filteredObject = Object.fromEntries(
+
+      const filteredValues = Object.fromEntries(
         Object.entries(values).filter(([key, value]) => value !== null && value !== '')
       );
 
-      console.log('payload after the filter function', filteredObject)
-      const response = await axiosClient.patch("/api/v1/partner/profile/update", filteredObject);
-      console.log('this is data:', filteredObject)
+
+      console.log("this is before the api call ", filteredValues)
+
+
+      const response = await axiosClient.patch("/api/v1/partner/profile/update", filteredValues);
+      console.log('this is the data sent to the server:', filteredValues, response)
       return response;
     } catch (err) {
       console.log(err);
@@ -232,17 +268,11 @@ const Profile = () => {
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
                   <div className=" w-full mt-10 md:mt-10">
-                    <AppInputWithPhone
+                    <MyTextInput
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
-                      type="number"
                       name="phone"
-                      onChange={(e: any) => {
-
-                        setPhone(e.target.value);
-
-                      }}
                     />
                   </div>
 

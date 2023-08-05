@@ -29,11 +29,11 @@ const AppInput: FC<any> = ({
   name = "",
   type = "text",
   formik = null,
-  ...props 
+  ...props
 }) => {
   const [pwdField, setPwdField] = useState(false);
 
-  const [field, meta] = useField({ ...props,name });
+  const [field, meta] = useField({ ...props, name });
 
 
   const togglePassword = (e: any, val: any) => {
@@ -70,7 +70,7 @@ const AppInput: FC<any> = ({
           </button>
         )}
       </div>
-      {meta?.touched && meta.error ? <div className="error">{}</div> : null}
+      {meta?.touched && meta.error ? <div className="error">{ }</div> : null}
     </div>
   );
 };
@@ -90,7 +90,7 @@ export const MyTextInput = ({
   // which we can spread on <input>. We can use field meta to show an error
   // message if the field is invalid and it has been touched (i.e. visited)
   const [pwdfield, setPwdfield] = useState(false);
-  const [field, meta] = useField({...props});
+  const [field, meta] = useField({ ...props });
   const togglePassword = (e: any, val: any) => {
     e.preventDefault();
 
