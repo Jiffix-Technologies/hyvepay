@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
@@ -9,7 +9,6 @@ import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
 import { Util } from "../../helpers/Util";
-import { Link } from "react-router-dom";
 
 
 
@@ -23,19 +22,14 @@ const TransactionReceiptModal = ({
 }: any) => {
   console.log(rowData);
   const state = useAppSelector((state) => state.bankReducer);
-  const [showShareMenu, setShowShareMenu] = useState(false);
-
-  const toggleShareMenu = () => {
-    setShowShareMenu(!showShareMenu);
-  };
   const { user } = useUser();
-  const bankState = useAppSelector((state) => state.bankReducer);
+
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
     html2canvas(pdfview).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "JPEG", 12, 40, 180, 180);
+      pdf.addImage(imgData, "JPEG", 30, 50);
       pdf.save("receipt.pdf");
     });
   };
@@ -102,7 +96,7 @@ const TransactionReceiptModal = ({
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Amount:</p>
                       <p className="text-[10px] font-montserrat">
-                        {Util.formAmount(Number(rowData.amount), true)}
+                        {Util.CurrencyDisplay(Number(rowData.amount))}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -158,7 +152,7 @@ const TransactionReceiptModal = ({
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Status:</p>
                       <p className="text-[10px] font-montserrat">
-                        {bankState.getAccountTransactionStatus}
+                        {/* {state.accountTransferResponse?.status} */}
                       </p>
                     </div>
                   </div>
@@ -174,20 +168,9 @@ const TransactionReceiptModal = ({
                     Download PDF
                   </button>
 
-                  <div className="share-button-container">
-                    <button className={`share-button btn btn-secondary ${showShareMenu ? "shrink" : "expand"}`} id="shrinkButton" onClick={toggleShareMenu}>Share PDF</button>
-                    {/* <div className={`social-media-icons btn btn-secondary space-x-4 flex ${showShareMenu ? "visible" : "hidden"}`}> */}
-                    {/* Add your social media icons here */}
-                    {/* <button><Link to="#FB" className="social-icon">FB</Link></button>
-                      <button><Link to="#TW" className="social-icon">TW</Link></button>
-                      <button><Link to="#IG" className="social-icon">IG</Link></button>
-                      <button><Link to="#LI" className="social-icon">LinkedIn</Link></button>
-                      <button><Link to="#PT" className="social-icon">Pinterest</Link></button> */}
-                    {/* </div> */}
+                  <div>
+                    <button className="btn btn-secondary">Share PDF</button>
                   </div>
-
-
-
                 </div>
               </div>
             </div>

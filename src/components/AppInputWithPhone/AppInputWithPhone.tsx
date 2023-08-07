@@ -1,13 +1,6 @@
 import React from "react";
 import flag from "../../assets/images/flag.png";
 import InputHeader from "../InputHeader/InputHeader";
-import { useField, useFormikContext } from "formik";
-// ...
-
-
-
-
-
 const AppInputWithPhone = ({
   placeholderTop,
   hasPLaceHolder,
@@ -27,11 +20,11 @@ const AppInputWithPhone = ({
     <>
       {hasPLaceHolder && <InputHeader text={placeholderTop} />}
 
-      {hasPLaceHolder && (
+      {/* {hasPLaceHolder && (
         <span className="text[10px] inline-block font-montserrat">
           {placeholderTop}
         </span>
-      )}
+      )} */}
 
       <div className=" w-full flex items-center justify-center relative mb-5 ">
         <img src={flag} alt="" className="w-[30px] h-[22px] absolute left-11" />

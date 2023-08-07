@@ -97,14 +97,14 @@ const RegisterForm = () => {
         validationSchema={Yup.object().shape({
           firstName: Yup.string()
             .required("First name is required")
-            .matches(
-              /\b\w+\b(?:\s+\b\w+\b)*/g,
-              "First name must not contain whitespace"
-            )
+            // .matches(
+            //   /\b\w+\b(?:\s+\b\w+\b)*/g,
+            //   "First name must not contain whitespace"
+            // )
             .typeError("First name is required"),
           lastName: Yup.string()
             .required("Last name is required")
-            .matches(/^\S*$/, "Last name must not contain whitespace")
+            //  .matches(/^\S*$/, "Last name must not contain whitespace")
             .typeError("Last name is required"),
           email: Yup.string()
             .email()
@@ -148,9 +148,9 @@ const RegisterForm = () => {
           console.log("values> ", values);
           dispatch(
             garageSignUpAction({
-              firstName: values.firstName,
-              lastName: values.lastName,
-              name: values.businessName,
+              firstName: values.firstName.trim(),
+              lastName: values.lastName.trim(),
+              name: values.businessName.trim(),
               phone: values.phoneNumber,
               email: values.email.toLowerCase(),
               password: values.password,
@@ -235,7 +235,6 @@ const RegisterForm = () => {
               hasPLaceHolder={true}
               placeholderTop="Password *"
               placeholder="Min of 8 characters"
-              type="password"
               name="password"
             />
           </div>
@@ -246,7 +245,6 @@ const RegisterForm = () => {
               hasPLaceHolder={true}
               placeholderTop="Confirm Password *"
               placeholder="password must match"
-              type="password"
               name="confirmPassword"
             />
           </div>
