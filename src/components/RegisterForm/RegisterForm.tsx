@@ -235,7 +235,6 @@ const RegisterForm = () => {
               hasPLaceHolder={true}
               placeholderTop="Password *"
               placeholder="Min of 8 characters"
-              type="password"
               name="password"
             />
           </div>
@@ -246,7 +245,6 @@ const RegisterForm = () => {
               hasPLaceHolder={true}
               placeholderTop="Confirm Password *"
               placeholder="password must match"
-              type="password"
               name="confirmPassword"
             />
           </div>
