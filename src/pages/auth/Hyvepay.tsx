@@ -425,7 +425,7 @@ const Hyvepay = () => {
             <tbody>
               {/* {<Search data={bankState?.transaction?.postingsHistory} />} */}
               {bankState.transaction?.postingsHistory.map((item, i) => (
-                <tr key={i} onClick={() => setSuccessModal(!successModal)}>
+                <tr key={i} onClick={() => handleRowClick(selectedRow)}>
                   <td className="font-montserrat text-xs" style={{ whiteSpace: "nowrap" }}>
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>

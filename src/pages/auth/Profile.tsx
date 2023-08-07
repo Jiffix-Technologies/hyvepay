@@ -13,11 +13,12 @@ import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik
 import axiosClient from '../../config/axiosClient'
 import { showMessage } from "../../helpers/notification";
 
+
 const Profile = () => {
 
   const { user } = useUser();
-  const [state, setState] = useState(user?.partner?.contact?.state);
-  const [district, setDistrict] = useState(user?.partner?.contact?.district);
+  const [state, setState] = useState<any[]>([])
+  const [district, setDistrict] = useState<any[]>([])
   const [phone, setPhone] = useState(user?.phone)
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
@@ -27,6 +28,8 @@ const Profile = () => {
 
   const dropdownRef = useRef<any>(null);
 
+  const { selectedState = {} } = user?.partner?.contact?.state || "";
+  const { selectedDistrict = {} } = user?.partner?.contact?.district || "";
 
   useEffect(() => {
     let stateArray: any = [];
@@ -232,17 +235,13 @@ const Profile = () => {
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
                   <div className=" w-full mt-10 md:mt-10">
-                    <AppInputWithPhone
+                    <MyTextInput
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
                       type="number"
                       name="phone"
-                      onChange={(e: any) => {
 
-                        setPhone(e.target.value);
-
-                      }}
                     />
                   </div>
 
@@ -265,6 +264,7 @@ const Profile = () => {
                     </p>
                     <Select
                       options={state}
+                      value={selectedState}
                       onChange={(item: any) => {
                         setValue(item.value);
                         setState(item.value);
@@ -279,10 +279,13 @@ const Profile = () => {
                       District
                     </p>
                     <Select
+                      value={selectedDistrict}
                       options={district}
                       onChange={(item: any) => {
+
                         setValue2(item.value);
                         setDistrict(item.value)
+
                       }}
                       styles={customStyles}
                       placeholder="Choose district"

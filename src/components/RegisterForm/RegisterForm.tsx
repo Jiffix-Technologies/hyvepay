@@ -236,10 +236,12 @@ const RegisterForm = () => {
               placeholderTop="Password *"
               placeholder="Min of 8 characters"
               name="password"
+              type="password"
             />
           </div>
           <div className="mt-5 md:mt-10">
             <MyTextInput
+              type="password"
               rightImg={Eye}
               leftImg={Lock}
               hasPLaceHolder={true}

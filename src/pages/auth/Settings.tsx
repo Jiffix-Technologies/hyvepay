@@ -74,7 +74,7 @@ const Settings = () => {
     };
   }, []);
 
-  const data = ["User & Role Managment"];
+  const data = ["User & Role Management",];
 
   return (
     <>
@@ -95,7 +95,7 @@ const Settings = () => {
         </div>
 
         <div>
-          {view == 0 && (
+          {view == 1 && (
             <>
               {" "}
               <div className="p-5 md:p-14 hyvepay-setting rounded-3xl">
@@ -216,7 +216,7 @@ const Settings = () => {
 
           {/* {view == 1 && <AccountSettings />} */}
 
-          {view == 1 && (
+          {view == 0 && (
             <>
               <div className="py-14 border-none rounded-3xl">
                 <h5 className="font-bold font-montserrat mb-5">Roles</h5>
@@ -255,7 +255,7 @@ const Settings = () => {
                   <div className="search w-full md:w-2/4 mb-3">
                     <form action="">
                       <div className="prepend">
-                        <img src={SearchIcon} alt="" />
+                        {/* <img src={SearchIcon} alt="" /> */}
                         <input
                           type="text"
                           placeholder="Search"

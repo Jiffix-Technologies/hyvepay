@@ -90,7 +90,7 @@ const TransactionReceiptModal = ({
                       </p>
                       <p className="text-[10px] font-montserrat">
                         {/* FIXME: replace this with the value of the transaction on the row */}
-                        {rowData.transactionReference}
+                        {/* {rowData.transactionReference} */}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
