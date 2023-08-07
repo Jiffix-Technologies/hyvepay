@@ -8,7 +8,6 @@ import html2canvas from "html2canvas";
 import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Util } from "../../helpers/Util";
 import { Link } from "react-router-dom";
 
@@ -19,7 +18,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
   const state = useAppSelector((state) => state.bankReducer);
 
   const { user } = useUser();
-
+  console.log(user)
   const bankState = useAppSelector((state) => state.bankReducer);
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
