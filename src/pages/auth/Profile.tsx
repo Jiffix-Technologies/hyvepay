@@ -267,7 +267,7 @@ const Profile = () => {
                       value={selectedState}
                       onChange={(item: any) => {
                         setValue(item.value);
-                        setState(item.value);
+                        setState(item);
                       }}
                       styles={customStyles}
                       placeholder="Choose state"
@@ -284,7 +284,7 @@ const Profile = () => {
                       onChange={(item: any) => {
 
                         setValue2(item.value);
-                        setDistrict(item.value)
+                        setDistrict(item)
 
                       }}
                       styles={customStyles}

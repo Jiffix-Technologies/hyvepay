@@ -155,7 +155,6 @@ const Hyvepay = () => {
 
   console.log(successModal)
   const closeSuccessModal = () => {
-    console.log(successModal)
     setSuccessModal(!successModal);
   }
 
@@ -163,7 +162,7 @@ const Hyvepay = () => {
   const handleRowClick = (rowData: any) => {
     setSelectedRow(rowData);
     setShowModal(true);
-    console.log(showModal)
+
   };
 
   const toggleModel = () => {
@@ -206,9 +205,9 @@ const Hyvepay = () => {
             {state.userInfo?.partner?.accountProvisionStatus === "APPROVED" && (
               <>
                 <AppTabBtn
-                  title=" Initiate Transaction"
+                  title="  Transfer"
                   className="  text-[#000] btn-secondary"
-                  onClick={() => navigation("/hyvepay/initiate-transaction")}
+                  onClick={() => navigation("/hyvepay/transfer")}
                 />
                 <div className="">
                   <AppTabBtn
@@ -425,7 +424,9 @@ const Hyvepay = () => {
             <tbody>
               {/* {<Search data={bankState?.transaction?.postingsHistory} />} */}
               {bankState.transaction?.postingsHistory.map((item, i) => (
-                <tr key={i} onClick={() => handleRowClick(selectedRow)}>
+                <tr key={i} onClick={() => {
+                  handleRowClick(item); setSuccessModal(!successModal)
+                }}>
                   <td className="font-montserrat text-xs" style={{ whiteSpace: "nowrap" }}>
                     {moment(item.realDate).format("YYYY-MM-DD")}
                   </td>
@@ -473,7 +474,7 @@ const Hyvepay = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div >
 
       {successModal && (
         <TransactionReceiptModal
@@ -481,7 +482,8 @@ const Hyvepay = () => {
           closeSuccessModal={closeSuccessModal}
           rowData={selectedRow}
 
-        />)}
+        />)
+      }
       <ActivateAccountModal
         isVisible={showAccountModal}
         onCancel={() => setShowAccountModal(false)}
