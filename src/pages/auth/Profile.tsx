@@ -9,29 +9,38 @@ import AppBtn from "../../components/AppBtn/AppBtn";
 import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
 import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import { useUser } from "../../hooks/useUser";
-import { Form, Formik, FormikHelpers, useFormik, useFormikContext } from "formik";
-import axiosClient from '../../config/axiosClient'
+import {
+  Form,
+  Formik,
+  FormikHelpers,
+  useFormik,
+  useFormikContext,
+} from "formik";
+import axiosClient from "../../config/axiosClient";
 import { showMessage } from "../../helpers/notification";
+import useAppDispatch from "../../hooks/useAppDispatch";
 
 const Profile = () => {
-
-  const { user } = useUser();
-  const [state, setState] = useState(user?.partner?.contact?.state);
+  const { user, getUser } = useUser();
+  const [state, setState] = useState([]);
   const [district, setDistrict] = useState(user?.partner?.contact?.district);
-  const [phone, setPhone] = useState(user?.phone)
+  const [phone, setPhone] = useState(user?.phone);
   const [value, setValue] = useState(null);
   const [value2, setValue2] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedState, setSelectedState] = useState<{
+    label: string;
+    value: string;
+  }>(Object.create({}));
 
   const dropdownRef = useRef<any>(null);
-
 
   useEffect(() => {
     let stateArray: any = [];
     const newData = Object.entries(stateLga);
-    newData.map((item, index) => {
+    newData.forEach((item, index) => {
       stateArray.push({
         value: item[0],
         label: item[0],
@@ -57,18 +66,42 @@ const Profile = () => {
     }
   }, [value]);
 
-  const formData = {
+  const [formData, setFormData] = useState({
     firstName: user?.firstName,
     lastName: user?.lastName,
     phone: user?.phone,
-    state: user?.partner?.contact?.state || "",
+    selectedState: {},
     district: user?.partner?.contact?.district || "",
     address: user?.partner?.contact?.address || "",
+  });
 
-  };
+  useEffect(() => {
+    setFormData((state) => ({ ...state, firstName: user?.firstName }));
+  }, [user?.firstName]);
+
+  useEffect(() => {
+    setFormData((state) => ({ ...state, lastName: user?.lastName }));
+  }, [user?.lastName]);
+
+  useEffect(() => {
+    setFormData((state) => ({ ...state, phone: user?.phone }));
+  }, [user?.phone]);
+
+  useEffect(() => {
+    const foundState = state.find(
+      (item: any) => item.value === user?.partner?.contact?.state
+    );
+
+    if (foundState) {
+      setSelectedState(foundState);
+
+      setFormData((state) => ({ ...state, selectedState: foundState }));
+    }
+  }, [user?.partner?.contact?.state]);
+
   const handleSubmit = (payload: any) => {
-    const value = { ...payload, state, district, phone }
-    console.log(value);
+    const value = { ...payload, phone };
+
     updateProfile(value)
       .then(function () {
         showMessage(
@@ -83,23 +116,29 @@ const Profile = () => {
           "Profile was not Updated Successfully",
           "error"
         );
-      })
-  }
-
-
+      });
+  };
 
   async function updateProfile(values: any) {
     try {
-      let payload = values;
-
       const filteredObject = Object.fromEntries(
-        Object.entries(values).filter(([key, value]) => value !== null && value !== '')
+        Object.entries(values).filter(
+          ([key, value]) => value !== null && value !== ""
+        )
       );
 
-      console.log('payload after the filter function', filteredObject)
-      const response = await axiosClient.patch("/api/v1/partner/profile/update", filteredObject);
-      console.log('this is data:', filteredObject)
-      return response;
+      delete filteredObject.district;
+
+      if (filteredObject.selectedState) {
+        filteredObject.state = selectedState.value;
+        delete filteredObject.selectedState;
+      }
+
+      await axiosClient.patch("/api/v1/partner/profile/update", {
+        ...filteredObject,
+      });
+
+      getUser();
     } catch (err) {
       console.log(err);
       throw err;
@@ -146,8 +185,6 @@ const Profile = () => {
     }),
   };
 
-
-
   const hideOnClickOutside = (e: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
       setIsOpen(false);
@@ -169,7 +206,6 @@ const Profile = () => {
         >
           <Form>
             <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
-
               <div
                 className="absolute -top-10 w-[100%] md:w-[80%] items-center justify-center text-center flex cursor-pointer"
                 onClick={() => setOpenProfile(!openProfile)}
@@ -227,7 +263,6 @@ const Profile = () => {
                       Change Password
                     </span>
                   </div>
-
                 </div>
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
@@ -239,10 +274,9 @@ const Profile = () => {
                       type="number"
                       name="phone"
                       onChange={(e: any) => {
-
                         setPhone(e.target.value);
-
                       }}
+                      value={phone}
                     />
                   </div>
 
@@ -252,8 +286,6 @@ const Profile = () => {
                       placeholderTop="Address"
                       placeholder="Enter your current address"
                       name="address"
-
-
                     />
                   </div>
                 </div>
@@ -264,14 +296,15 @@ const Profile = () => {
                       State
                     </p>
                     <Select
-                      options={state}
+                      options={state} // []
                       onChange={(item: any) => {
-                        setValue(item.value);
-                        setState(item.value);
+                        setValue(item.value); // single item
+                        setSelectedState(item);
                       }}
                       styles={customStyles}
                       placeholder="Choose state"
-                      name="state"
+                      name="selectedState"
+                      value={selectedState}
                     />
                   </div>
                   <div className="mt-5 md:mt-5 w-full">
@@ -282,17 +315,15 @@ const Profile = () => {
                       options={district}
                       onChange={(item: any) => {
                         setValue2(item.value);
-                        setDistrict(item.value)
+                        setDistrict(item.value);
                       }}
                       styles={customStyles}
                       placeholder="Choose district"
                       name="district"
                     />
                   </div>
-
                 </div>
               </div>
-
             </div>
 
             <div className="w-full flex md:items-end md:justify-end">
@@ -304,7 +335,7 @@ const Profile = () => {
             </div>
           </Form>
         </Formik>
-      </div >
+      </div>
 
       <ChangePasswordModal openModal={openModal} setOpenModal={setOpenModal} />
       <UploadPictureModal
