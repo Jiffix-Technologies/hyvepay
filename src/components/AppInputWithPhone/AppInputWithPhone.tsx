@@ -7,7 +7,8 @@ const AppInputWithPhone = ({
   placeholder,
   className,
   type,
-  onChange
+  onChange,
+  value,
 }: any) => {
   const [pwdfield, setPwdfield] = React.useState(false);
 
@@ -38,6 +39,7 @@ const AppInputWithPhone = ({
           } ` + className
           }
           placeholder={placeholder}
+          value={value}
         />
       </div>
     </>

@@ -47,5 +47,9 @@ export const useUser = () => {
     getUserDetail();
   }, [getUserDetail]);
 
-  return { user };
+  const getUser = () => {
+    getUserDetail();
+  };
+
+  return { user, getUser };
 };
