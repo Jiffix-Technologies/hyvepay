@@ -20,9 +20,7 @@ import axiosClient from "../../config/axiosClient";
 import { showMessage } from "../../helpers/notification";
 import useAppDispatch from "../../hooks/useAppDispatch";
 
-
 const Profile = () => {
-
   const { user, getUser } = useUser();
   const [state, setState] = useState([]);
   const [district, setDistrict] = useState(user?.partner?.contact?.district);
@@ -269,18 +267,16 @@ const Profile = () => {
 
                 <div className="flex gap-5 flex-col md:flex-row  justify-between">
                   <div className=" w-full mt-10 md:mt-10">
-                    <MyTextInput
+                    <AppInputWithPhone
                       placeholderTop="Phone Number*"
                       placeholder="Phone Number* (WhatsApp)"
                       hasPLaceHolder={true}
                       type="number"
                       name="phone"
-
                       onChange={(e: any) => {
                         setPhone(e.target.value);
                       }}
                       value={phone}
-
                     />
                   </div>
 
@@ -304,7 +300,6 @@ const Profile = () => {
                       onChange={(item: any) => {
                         setValue(item.value); // single item
                         setSelectedState(item);
-
                       }}
                       styles={customStyles}
                       placeholder="Choose state"
@@ -317,14 +312,10 @@ const Profile = () => {
                       District
                     </p>
                     <Select
-                      value={selectedDistrict}
                       options={district}
                       onChange={(item: any) => {
-
                         setValue2(item.value);
-
                         setDistrict(item.value);
-
                       }}
                       styles={customStyles}
                       placeholder="Choose district"
