@@ -163,8 +163,8 @@ const RegisterForm = () => {
         }}
       >
         <Form>
-          <div className="form-group flex-col md:flex-row">
-            <div>
+          <div className="form-group flex-col md:flex-row w-full">
+            <div className="md:mt-0 mt-5 flex-1">
               <MyTextInput
                 hasPLaceHolder={true}
                 placeholderTop="First Name*"
@@ -172,7 +172,7 @@ const RegisterForm = () => {
                 name="firstName"
               />
             </div>
-            <div className="md:mt-0 -mt-5">
+            <div className="md:mt-0 mt-5 flex-1">
               <MyTextInput
                 hasPLaceHolder={true}
                 placeholderTop="Last Name*"
