@@ -15,15 +15,21 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { IAuthState } from "../../reducers/authReducer";
 import { clearLoginStatus } from "../../reducers/authReducer";
 import { showMessage } from "../../helpers/notification";
-
+import Loader from "../PageLoader/Loader"
 const LoginForm = () => {
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(false);
 
+  const [color, setColor] = useState("#ffffff");
+
+
+
   const loginState = useAppSelector(
     (state: any) => state.authReducer
   ) as IAuthState;
+
+
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -70,6 +76,7 @@ const LoginForm = () => {
             password: Yup.string().required(),
           })}
           onSubmit={(values) => {
+
             dispatch(
               loginUserAction({
                 username: values.email.toLowerCase(),

@@ -22,11 +22,10 @@ const TransactionReceiptModal = ({
   closeSuccessModal,
   rowData,
 }: any) => {
-  console.log(rowData);
+
   const state = useAppSelector((state) => state.bankReducer);
   const { user } = useUser();
 
-  console.log(rowData);
 
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
@@ -130,7 +129,6 @@ const TransactionReceiptModal = ({
                         className="text-[10px] font-montserrat w-[105px]"
                       >
                         {rowData.merchant}
-                        {console.log(rowData.merchant)}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -181,12 +179,12 @@ const TransactionReceiptModal = ({
 
 
                   <div className="share-button-container">
-                    <button className={`share-button btn btn-secondary`} id="shrinkButton" onClick={toggleShareMenu}>
+                    <button className="btn btn-secondary" onClick={toggleShareMenu}>
                       {!showShareMenu && (<span>Share PDF</span>)}
                       {showShareMenu && (
                         <div className={`space-x-4 flex`}>
-                          {/* Add your social media icons here */}
-                          <button><Link to="#" title="whatsapp icons"><img src={whatsapp} width="20" height="20" /></Link></button>
+
+                          <button><Link to="#WA" title="whatsapp icons"><img src={whatsapp} width="20" height="20" /></Link></button>
                           <button><Link to="#IG" className="social-icon"><img src={gmail} width="20" height="20" /></Link></button>
                           <button><Link to="#LI" className="social-icon"><img src={messenger} width="20" height="20" /></Link></button>
 
@@ -199,7 +197,7 @@ const TransactionReceiptModal = ({
               </div>
             </div>
           </div>
-        </div>
+        </div >
       )}
     </>
   );

@@ -7,9 +7,12 @@ import LoginModal from "../../components/modals/LoginModal";
 
 import LoginForm from "../../components/LoginForm/LoginForm";
 
+
 const WelcomeAuthenticationPage = () => {
   const [modal, setModal] = useState(false);
   const [current, setShowCurrent] = useState(0);
+
+
   return (
     <>
       <div className="grid w-full grid-cols-1 md:grid-cols-2 gap-0">

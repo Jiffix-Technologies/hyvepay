@@ -145,7 +145,6 @@ const RegisterForm = () => {
             .typeError("Business Name is required"),
         })}
         onSubmit={(values, helpers: FormikHelpers<any>) => {
-          console.log("values> ", values);
           dispatch(
             garageSignUpAction({
               firstName: values.firstName.trim(),
@@ -252,7 +251,7 @@ const RegisterForm = () => {
           </div>
 
           <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">
-            g{/* FIXME: make terms and policy a link... */}
+
             By clicking ‘Proceed’ you agree with the AutoHyve{" "}
             <Link className="text-orange-400" to={termsPage}>
               <strong>Terms</strong>

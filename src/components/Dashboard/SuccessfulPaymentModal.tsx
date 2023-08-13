@@ -26,7 +26,6 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
 
   const { user } = useUser();
 
-  console.log("i am the user of this company ", user?.companyName)
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
@@ -196,11 +195,11 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                   </button>
 
                   <div className="share-button-container">
-                    <button className={`share-button btn btn-secondary`} id="shrinkButton" onClick={toggleShareMenu}>
+                    <button className={`btn btn-secondary`} onClick={toggleShareMenu}>
                       {!showShareMenu && (<span>Share PDF</span>)}
                       {showShareMenu && (
                         <div className={`space-x-4 flex`}>
-                          {/* Add your social media icons here */}
+
                           <button><Link to="#" title="whatsapp icons"><img src={whatsapp} width="20" height="20" /></Link></button>
                           <button><Link to="#IG" className="social-icon"><img src={gmail} width="20" height="20" /></Link></button>
                           <button><Link to="#LI" className="social-icon"><img src={messenger} width="20" height="20" /></Link></button>
