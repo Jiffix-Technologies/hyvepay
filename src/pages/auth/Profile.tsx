@@ -1,41 +1,50 @@
-import React, { useEffect, useRef, useState } from "react";
-import profilePicx from "../../assets/images/profilePicx.png";
-import AppInput, { MyTextInput } from "../../components/AppInput/AppInput";
-import AppDropDown from "../../components/AppDropDown/AppDropDown";
-import AppInputWithPhone from "../../components/AppInputWithPhone/AppInputWithPhone";
-import Select from "react-select";
-import { stateLga } from "../../contsants/states";
-import AppBtn from "../../components/AppBtn/AppBtn";
-import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
-import UploadPictureModal from "../../components/modals/UploadPictureModal";
-import { useUser } from "../../hooks/useUser";
 import {
   Form,
   Formik,
-  FormikHelpers,
-  useFormik,
-  useFormikContext,
 } from "formik";
+import { useEffect, useRef, useState } from "react";
+import Select from "react-select";
+import profilePicx from "../../assets/images/profilePicx.png";
+import AppBtn from "../../components/AppBtn/AppBtn";
+import { MyTextInput } from "../../components/AppInput/AppInput";
+import AppInputWithPhone from "../../components/AppInputWithPhone/AppInputWithPhone";
+import ChangePasswordModal from "../../components/modals/ChangePasswordModal";
+import UploadPictureModal from "../../components/modals/UploadPictureModal";
 import axiosClient from "../../config/axiosClient";
+import { stateLga } from "../../contsants/states";
 import { showMessage } from "../../helpers/notification";
-import useAppDispatch from "../../hooks/useAppDispatch";
+import { useUser } from "../../hooks/useUser";
+
 
 const Profile = () => {
   const { user, getUser } = useUser();
-  const [state, setState] = useState([]);
-  const [district, setDistrict] = useState(user?.partner?.contact?.district);
-  const [phone, setPhone] = useState(user?.phone);
-  const [value, setValue] = useState(null);
-  const [value2, setValue2] = useState(null);
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState<Record<string, string>[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedState, setSelectedState] = useState<{
-    label: string;
-    value: string;
-  }>(Object.create({}));
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    state: '',
+    district: '',
+    address: '',
+  });
 
   const dropdownRef = useRef<any>(null);
+
+  useEffect(() => {
+    setFormData({
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+      phone: parsePhone(user?.phone),
+      state: user?.partner?.contact?.state || "",
+      district: user?.partner?.contact?.district || "",
+      address: user?.partner?.contact?.address || "",
+    })
+    handleDistrict(String(user?.partner?.contact?.state));
+  }, [user]);
 
   useEffect(() => {
     let stateArray: any = [];
@@ -46,63 +55,42 @@ const Profile = () => {
         label: item[0],
       });
     });
-    setState(stateArray);
+    setStates(stateArray);
   }, []);
 
-  useEffect(() => {
-    if (value != null) {
-      let districtArray: any[] = [];
-      const newData: any = Object.entries(stateLga).find(
-        (_items) => _items[0] === value
-      );
-
-      newData[1].map((item: any, index: any) => {
-        districtArray.push({
-          value: item,
-          label: item,
-        });
-      });
-      setDistrict(districtArray);
+  const handleDistrict = (value: string) => {
+    if (!value) {
+      return;
     }
-  }, [value]);
-
-  const [formData, setFormData] = useState({
-    firstName: user?.firstName,
-    lastName: user?.lastName,
-    phone: user?.phone,
-    selectedState: {},
-    district: user?.partner?.contact?.district || "",
-    address: user?.partner?.contact?.address || "",
-  });
-
-  useEffect(() => {
-    setFormData((state) => ({ ...state, firstName: user?.firstName }));
-  }, [user?.firstName]);
-
-  useEffect(() => {
-    setFormData((state) => ({ ...state, lastName: user?.lastName }));
-  }, [user?.lastName]);
-
-  useEffect(() => {
-    setFormData((state) => ({ ...state, phone: user?.phone }));
-  }, [user?.phone]);
-
-  useEffect(() => {
-    const foundState = state.find(
-      (item: any) => item.value === user?.partner?.contact?.state
+    const newData: any = Object.entries(stateLga).find(
+      (_items) => _items[0] === value
     );
 
-    if (foundState) {
-      setSelectedState(foundState);
-
-      setFormData((state) => ({ ...state, selectedState: foundState }));
+    if (!newData) {
+      return;
     }
-  }, [user?.partner?.contact?.state]);
+    const districtArray: Record<string, string>[] = newData[1]?.map((item: string) => {
+      return {
+        value: item,
+        label: item,
+      }
+    });
+    setDistricts(districtArray);
+  }
 
-  const handleSubmit = (payload: any) => {
-    const value = { ...payload, phone };
+  const parsePhone = (phone: string = ''): string => {
+    if (!phone) {
+      return '';
+    }
 
-    updateProfile(value)
+    return phone.replace("+234", "");
+  }
+
+  const handleSubmit = ({ phone, ...rest }: Record<string, unknown>) => {
+    const newPhone = `+234${phone}`;
+    const values = { ...rest, phone: newPhone }
+
+    updateProfile(values)
       .then(function () {
         showMessage(
           "Profile Update",
@@ -127,12 +115,6 @@ const Profile = () => {
         )
       );
 
-      delete filteredObject.district;
-
-      if (filteredObject.selectedState) {
-        filteredObject.state = selectedState.value;
-        delete filteredObject.selectedState;
-      }
 
       await axiosClient.patch("/api/v1/partner/profile/update", {
         ...filteredObject,
@@ -144,6 +126,8 @@ const Profile = () => {
       throw err;
     }
   }
+
+
   const customStyles = {
     placeholder: (defaultStyles: any) => {
       return {
@@ -204,136 +188,153 @@ const Profile = () => {
           initialValues={formData}
           onSubmit={handleSubmit}
         >
-          <Form>
-            <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
-              <div
-                className="absolute -top-10 w-[100%] md:w-[80%] items-center justify-center text-center flex cursor-pointer"
-                onClick={() => setOpenProfile(!openProfile)}
-              >
-                <img
-                  src={profilePicx}
-                  alt=""
-                  className="w-[100px] h-[100px] rounded-[50%]"
-                />
-              </div>
-
-              <div>
-                <div className="flex flex-col md:flex-row justify-between gap-5 mt-20">
-                  <div className="mt-0 md:mt-5 w-full">
-                    <MyTextInput
-                      hasPLaceHolder={true}
-                      placeholderTop="First Name"
-                      placeholder="Enter your first name"
-                      name="firstName"
-                    />
-                  </div>
-                  <div className=" md:mt-5  w-full">
-                    <MyTextInput
-                      hasPLaceHolder={true}
-                      placeholderTop="Last Name"
-                      placeholder="David"
-                      name="lastName"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-5 md:mt-5 w-full">
-                  <MyTextInput
-                    hasPLaceHolder={true}
-                    disabled
-                    placeholderTop="Email"
-                    name="email"
-                    value={user?.email}
+          {({
+            setFieldValue,
+            values,
+            handleChange,
+            handleBlur
+          }) => (
+            <Form>
+              <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
+                <div
+                  className="absolute -top-10 w-[100%] md:w-[80%] items-center justify-center text-center flex cursor-pointer"
+                  onClick={() => setOpenProfile(!openProfile)}
+                >
+                  <img
+                    src={profilePicx}
+                    alt=""
+                    className="w-[100px] h-[100px] rounded-[50%]"
                   />
                 </div>
 
-                <div className="flex gap-5 flex-col md:flex-row  justify-between">
-                  <div className="mt-5 md:mt-5  w-full relative">
+                <div>
+                  <div className="flex flex-col md:flex-row justify-between gap-5 mt-20">
+                    <div className="mt-0 md:mt-5 w-full">
+                      <MyTextInput
+                        hasPLaceHolder={true}
+                        placeholderTop="First Name"
+                        placeholder="Enter your first name"
+                        name="firstName"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.firstName}
+                      />
+                    </div>
+                    <div className=" md:mt-5  w-full">
+                      <MyTextInput
+                        hasPLaceHolder={true}
+                        placeholderTop="Last Name"
+                        placeholder="David"
+                        name="lastName"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.lastName}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-5 md:mt-5 w-full">
                     <MyTextInput
                       hasPLaceHolder={true}
                       disabled
-                      placeholderTop="HyvePay Account Password"
-                      placeholder="****************"
-                      name="password"
-                    />
-                    <span
-                      onClick={() => setOpenModal(!openModal)}
-                      className="text-[#FAA21B] absolute cursor-pointer font-montserrat top-[85px]"
-                    >
-                      Change Password
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex gap-5 flex-col md:flex-row  justify-between">
-                  <div className=" w-full mt-10 md:mt-10">
-                    <AppInputWithPhone
-                      placeholderTop="Phone Number*"
-                      placeholder="Phone Number* (WhatsApp)"
-                      hasPLaceHolder={true}
-                      type="number"
-                      name="phone"
-                      onChange={(e: any) => {
-                        setPhone(e.target.value);
-                      }}
-                      value={phone}
+                      placeholderTop="Email"
+                      name="email"
+                      value={user?.email}
                     />
                   </div>
 
-                  <div className="mt-0 md:mt-10 w-full">
-                    <MyTextInput
-                      hasPLaceHolder={true}
-                      placeholderTop="Address"
-                      placeholder="Enter your current address"
-                      name="address"
-                    />
+                  <div className="flex gap-5 flex-col md:flex-row  justify-between">
+                    <div className="mt-5 md:mt-5  w-full relative">
+                      <MyTextInput
+                        hasPLaceHolder={true}
+                        disabled
+                        placeholderTop="HyvePay Account Password"
+                        placeholder="****************"
+                        name="password"
+                      />
+                      <span
+                        onClick={() => setOpenModal(!openModal)}
+                        className="text-[#FAA21B] absolute cursor-pointer font-montserrat top-[85px]"
+                      >
+                        Change Password
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="flex justify-between flex-col md:flex-row  gap-5">
-                  <div className="mt-5 md:mt-5 w-full">
-                    <p className="text[10px] inline-block font-montserrat">
-                      State
-                    </p>
-                    <Select
-                      options={state} // []
-                      onChange={(item: any) => {
-                        setValue(item.value); // single item
-                        setSelectedState(item);
-                      }}
-                      styles={customStyles}
-                      placeholder="Choose state"
-                      name="selectedState"
-                      value={selectedState}
-                    />
+                  <div className="flex gap-5 flex-col md:flex-row  justify-between">
+                    <div className=" w-full mt-10 md:mt-10">
+                      <AppInputWithPhone
+                        placeholderTop="Phone Number*"
+                        placeholder="Phone Number* (WhatsApp)"
+                        hasPLaceHolder={true}
+                        type="text"
+                        name="phone"
+                        onChange={(event: any) => { setFieldValue("phone", event?.target?.value) }}
+                        onBlur={handleBlur}
+                        value={values.phone}
+                      />
+                    </div>
+
+                    <div className="mt-0 md:mt-10 w-full">
+                      <MyTextInput
+                        hasPLaceHolder={true}
+                        placeholderTop="Address"
+                        placeholder="Enter your current address"
+                        name="address"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.address}
+                      />
+                    </div>
                   </div>
-                  <div className="mt-5 md:mt-5 w-full">
-                    <p className="text[10px] inline-block font-montserrat">
-                      District
-                    </p>
-                    <Select
-                      options={district}
-                      onChange={(item: any) => {
-                        setValue2(item.value);
-                        setDistrict(item.value);
-                      }}
-                      styles={customStyles}
-                      placeholder="Choose district"
-                      name="district"
-                    />
+
+                  <div className="flex justify-between flex-col md:flex-row  gap-5">
+                    <div className="mt-5 md:mt-5 w-full">
+                      <p className="text[10px] inline-block font-montserrat">
+                        State
+                      </p>
+                      <Select
+                        options={states}
+                        styles={customStyles}
+                        placeholder="Choose state"
+                        name="state"
+                        onChange={(item: any) => { handleDistrict(String(item?.value)); setFieldValue("district", ""); setFieldValue("state", String(item?.value)) }}
+                        onBlur={handleBlur}
+                        value={{
+                          value: values.state,
+                          label: values.state
+                        }}
+                      />
+                    </div>
+                    <div className="mt-5 md:mt-5 w-full">
+                      <p className="text[10px] inline-block font-montserrat">
+                        District
+                      </p>
+                      <Select
+                        options={districts}
+                        onChange={(item: any) => setFieldValue("district", String(item?.value))}
+                        styles={customStyles}
+                        placeholder="Choose district"
+                        name="district"
+                        value={{
+                          value: values.district,
+                          label: values.district
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="w-full flex md:items-end md:justify-end">
-              <AppBtn
-                className=" bg-[#FAA21B] w-full md:w-[100px]  text-[#000] -mt-10 md:mt-3 mb-40"
-                title="SAVE"
-                type="submit"
-              />
-            </div>
-          </Form>
+              <div className="w-full flex md:items-end md:justify-end">
+                <AppBtn
+                  className=" bg-[#FAA21B] w-full md:w-[100px]  text-[#000] -mt-10 md:mt-3 mb-40"
+                  title="SAVE"
+                  type="submit"
+                />
+              </div>
+            </Form>
+          )}
         </Formik>
       </div>
 
