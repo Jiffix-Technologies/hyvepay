@@ -142,7 +142,7 @@ const SavedBeneficiaryTransferForm = () => {
               as="textarea"
               cols={30}
               rows={3}
-              maxLength={20}
+              maxLength={25}
               placeholder="Enter your message"
               className="bg-gray-100 w-full p-4"
               style={{ borderRadius: 18, border: 0 }}
@@ -158,11 +158,11 @@ const SavedBeneficiaryTransferForm = () => {
         <AppBtn
           title="Send Money"
           className="text-[#000] w-full bg-[#FAA21B] mt-2"
-          // onClick={() => {
-          //   setConfirmationmodal(!confirmationmodal);
-          //   setOpenSingleModal(false);
-          //   // setModal(false);
-          // }}
+        // onClick={() => {
+        //   setConfirmationmodal(!confirmationmodal);
+        //   setOpenSingleModal(false);
+        //   // setModal(false);
+        // }}
         />
       </div>
     </Form>

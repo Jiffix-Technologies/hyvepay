@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         path: "/logout",
       },
       {
-        path: "/hyvepay/initiate-transaction",
+        path: "/hyvepay/transfer",
         element: <NewTransaction />,
       },
       {

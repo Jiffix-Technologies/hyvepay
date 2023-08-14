@@ -1,30 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
 import hyvePay from "../../assets/images/hyvePay.png";
+import messenger from "../../assets/images/messenger.png"
+import gmail from "../../assets/images/gmail.png"
+import whatsapp from "../../assets/images/whatsapp.png"
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
 import { Util } from "../../helpers/Util";
+import { Link } from "react-router-dom";
 
 
 const { VITE_TRANSFER_FEE } = import.meta.env
 
 const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
   const state = useAppSelector((state) => state.bankReducer);
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const toggleShareMenu = () => {
+    setShowShareMenu(!showShareMenu);
+  };
 
   const { user } = useUser();
-
 
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
     html2canvas(pdfview).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "JPEG", 30, 50);
+      pdf.addImage(imgData, "JPEG", 12, 12, 180, 180);
       pdf.save("receipt.pdf");
     });
   };
@@ -187,8 +194,20 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                     Download PDF
                   </button>
 
-                  <div>
-                    <button className="btn btn-secondary">Share PDF</button>
+                  <div className="share-button-container">
+                    <button className={`btn btn-secondary`} onClick={toggleShareMenu}>
+                      {!showShareMenu && (<span>Share PDF</span>)}
+                      {showShareMenu && (
+                        <div className={`space-x-4 flex`}>
+
+                          <button><Link to="#" title="whatsapp icons"><img src={whatsapp} width="20" height="20" /></Link></button>
+                          <button><Link to="#IG" className="social-icon"><img src={gmail} width="20" height="20" /></Link></button>
+                          <button><Link to="#LI" className="social-icon"><img src={messenger} width="20" height="20" /></Link></button>
+
+
+                        </div>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>

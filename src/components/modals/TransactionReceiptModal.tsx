@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
@@ -9,8 +9,10 @@ import useAppSelector from "../../hooks/useAppSelector";
 import moment from "moment";
 import { useUser } from "../../hooks/useUser";
 import { Util } from "../../helpers/Util";
-
-
+import { Link } from "react-router-dom";
+import messenger from "../../assets/images/messenger.png"
+import gmail from "../../assets/images/gmail.png"
+import whatsapp from "../../assets/images/whatsapp.png"
 
 const { VITE_TRANSFER_FEE } = import.meta.env
 
@@ -20,19 +22,27 @@ const TransactionReceiptModal = ({
   closeSuccessModal,
   rowData,
 }: any) => {
-  console.log(rowData);
+
   const state = useAppSelector((state) => state.bankReducer);
   const { user } = useUser();
+
 
   const handlePDFDownload = () => {
     const pdfview = document.querySelector("#pdfView") as HTMLElement;
     const pdf = new jsPDF() as any;
     html2canvas(pdfview).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      pdf.addImage(imgData, "JPEG", 30, 50);
+      pdf.addImage(imgData, "JPEG", 12, 12, 180, 180);
       pdf.save("receipt.pdf");
     });
   };
+
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  const toggleShareMenu = () => {
+    setShowShareMenu(!showShareMenu);
+  };
+
+
   return (
     <>
       {successModal && (
@@ -89,8 +99,7 @@ const TransactionReceiptModal = ({
                         Reference Number:
                       </p>
                       <p className="text-[10px] font-montserrat">
-                        {/* FIXME: replace this with the value of the transaction on the row */}
-                        {rowData.transactionReference}
+                        {rowData.referenceNumber}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -120,7 +129,6 @@ const TransactionReceiptModal = ({
                         className="text-[10px] font-montserrat w-[105px]"
                       >
                         {rowData.merchant}
-                        {console.log(rowData.merchant)}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
@@ -152,7 +160,7 @@ const TransactionReceiptModal = ({
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Status:</p>
                       <p className="text-[10px] font-montserrat">
-                        {/* {state.accountTransferResponse?.status} */}
+                        {state.accountTransferResponse?.status}
                       </p>
                     </div>
                   </div>
@@ -168,14 +176,28 @@ const TransactionReceiptModal = ({
                     Download PDF
                   </button>
 
-                  <div>
-                    <button className="btn btn-secondary">Share PDF</button>
+
+
+                  <div className="share-button-container">
+                    <button className="btn btn-secondary" onClick={toggleShareMenu}>
+                      {!showShareMenu && (<span>Share PDF</span>)}
+                      {showShareMenu && (
+                        <div className={`space-x-4 flex`}>
+
+                          <button><Link to="#WA" title="whatsapp icons"><img src={whatsapp} width="20" height="20" /></Link></button>
+                          <button><Link to="#IG" className="social-icon"><img src={gmail} width="20" height="20" /></Link></button>
+                          <button><Link to="#LI" className="social-icon"><img src={messenger} width="20" height="20" /></Link></button>
+
+
+                        </div>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </div >
       )}
     </>
   );

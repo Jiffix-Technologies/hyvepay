@@ -92,10 +92,10 @@ export default function NewPassword({
 
                 <div className="flex flex-col">
                   <h2 className="font-montserrat font-bold text-[20px]">
-                    New Password
+                    New Pin
                   </h2>
                   <span className="text-[14px] font-light font-montserrat inline-block mb-[20px]">
-                    Kindly enter a new password for your AutoHyve Account
+                    Kindly enter a new PIN for your HyvePay bank accounts
                   </span>
 
                   <div className="flex flex-col md:flex-row  justify-between items-center gap-1 md:gap-5">

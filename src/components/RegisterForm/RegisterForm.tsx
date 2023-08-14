@@ -145,7 +145,6 @@ const RegisterForm = () => {
             .typeError("Business Name is required"),
         })}
         onSubmit={(values, helpers: FormikHelpers<any>) => {
-          console.log("values> ", values);
           dispatch(
             garageSignUpAction({
               firstName: values.firstName.trim(),
@@ -163,8 +162,8 @@ const RegisterForm = () => {
         }}
       >
         <Form>
-          <div className="form-group flex-col md:flex-row">
-            <div>
+          <div className="form-group flex-col md:flex-row w-full">
+            <div className="md:mt-0 mt-5 flex-1">
               <MyTextInput
                 hasPLaceHolder={true}
                 placeholderTop="First Name*"
@@ -172,7 +171,7 @@ const RegisterForm = () => {
                 name="firstName"
               />
             </div>
-            <div className="md:mt-0 -mt-5">
+            <div className="md:mt-0 mt-5 flex-1">
               <MyTextInput
                 hasPLaceHolder={true}
                 placeholderTop="Last Name*"
@@ -236,10 +235,12 @@ const RegisterForm = () => {
               placeholderTop="Password *"
               placeholder="Min of 8 characters"
               name="password"
+              type="password"
             />
           </div>
           <div className="mt-5 md:mt-10">
             <MyTextInput
+              type="password"
               rightImg={Eye}
               leftImg={Lock}
               hasPLaceHolder={true}
@@ -250,7 +251,7 @@ const RegisterForm = () => {
           </div>
 
           <span className="text-[10px] md:text-[12px] gray-color mt-8 inline-block font-montserrat italic">
-            g{/* FIXME: make terms and policy a link... */}
+
             By clicking ‘Proceed’ you agree with the AutoHyve{" "}
             <Link className="text-orange-400" to={termsPage}>
               <strong>Terms</strong>
