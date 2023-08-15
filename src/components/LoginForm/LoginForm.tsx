@@ -21,10 +21,6 @@ const LoginForm = () => {
 
   const [openModal, setOpenModal] = useState(false);
 
-
-
-
-
   const loginState = useAppSelector(
     (state: any) => state.authReducer
   ) as IAuthState;
