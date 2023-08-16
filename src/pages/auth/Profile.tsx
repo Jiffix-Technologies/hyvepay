@@ -1,7 +1,4 @@
-import {
-  Form,
-  Formik,
-} from "formik";
+import { Form, Formik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import profilePicx from "../../assets/images/profilePicx.png";
@@ -15,7 +12,6 @@ import { stateLga } from "../../contsants/states";
 import { showMessage } from "../../helpers/notification";
 import { useUser } from "../../hooks/useUser";
 
-
 const Profile = () => {
   const { user, getUser } = useUser();
   const [states, setStates] = useState([]);
@@ -24,25 +20,25 @@ const Profile = () => {
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    state: '',
-    district: '',
-    address: '',
+    firstName: "",
+    lastName: "",
+    phone: "",
+    state: "",
+    district: "",
+    address: "",
   });
 
   const dropdownRef = useRef<any>(null);
 
   useEffect(() => {
     setFormData({
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      phone: parsePhone(user?.phone),
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      phone: parsePhone(user?.partner.phone),
       state: user?.partner?.contact?.state || "",
       district: user?.partner?.contact?.district || "",
       address: user?.partner?.contact?.address || "",
-    })
+    });
     handleDistrict(String(user?.partner?.contact?.state));
   }, [user]);
 
@@ -69,26 +65,30 @@ const Profile = () => {
     if (!newData) {
       return;
     }
-    const districtArray: Record<string, string>[] = newData[1]?.map((item: string) => {
-      return {
-        value: item,
-        label: item,
+    const districtArray: Record<string, string>[] = newData[1]?.map(
+      (item: string) => {
+        return {
+          value: item,
+          label: item,
+        };
       }
-    });
+    );
     setDistricts(districtArray);
-  }
+  };
 
-  const parsePhone = (phone: string = ''): string => {
+  const parsePhone = (phone: string = ""): string => {
     if (!phone) {
-      return '';
+      return "";
     }
 
-    return phone.replace("+234", "");
-  }
+    if (phone.startsWith("+2340")) return phone.replace("+2340", "");
+
+    return phone.replace("0", "");
+  };
 
   const handleSubmit = ({ phone, ...rest }: Record<string, unknown>) => {
-    const newPhone = `+234${phone}`;
-    const values = { ...rest, phone: newPhone }
+    const newPhone = `${phone}`.startsWith("+234") ? phone : `+234${phone}`;
+    const values = { ...rest, phone: newPhone };
 
     updateProfile(values)
       .then(function () {
@@ -115,7 +115,6 @@ const Profile = () => {
         )
       );
 
-
       await axiosClient.patch("/api/v1/partner/profile/update", {
         ...filteredObject,
       });
@@ -126,7 +125,6 @@ const Profile = () => {
       throw err;
     }
   }
-
 
   const customStyles = {
     placeholder: (defaultStyles: any) => {
@@ -188,12 +186,7 @@ const Profile = () => {
           initialValues={formData}
           onSubmit={handleSubmit}
         >
-          {({
-            setFieldValue,
-            values,
-            handleChange,
-            handleBlur
-          }) => (
+          {({ setFieldValue, values, handleChange, handleBlur }) => (
             <Form>
               <div className=" w-[100%] md:border-[1px] rounded-3xl relative flex mt-52  px-0 md:px-20 flex-col pb-20  md:border-[#CACACA]">
                 <div
@@ -269,7 +262,9 @@ const Profile = () => {
                         hasPLaceHolder={true}
                         type="text"
                         name="phone"
-                        onChange={(event: any) => { setFieldValue("phone", event?.target?.value) }}
+                        onChange={(event: any) => {
+                          setFieldValue("phone", event?.target?.value);
+                        }}
                         onBlur={handleBlur}
                         value={values.phone}
                       />
@@ -298,30 +293,36 @@ const Profile = () => {
                         styles={customStyles}
                         placeholder="Choose state"
                         name="state"
-                        onChange={(item: any) => { handleDistrict(String(item?.value)); setFieldValue("district", ""); setFieldValue("state", String(item?.value)) }}
+                        onChange={(item: any) => {
+                          handleDistrict(String(item?.value));
+                          setFieldValue("district", "");
+                          setFieldValue("state", String(item?.value));
+                        }}
                         onBlur={handleBlur}
                         value={{
                           value: values.state,
-                          label: values.state
+                          label: values.state,
                         }}
                       />
                     </div>
-                    <div className="mt-5 md:mt-5 w-full">
+                    {/* <div className="mt-5 md:mt-5 w-full">
                       <p className="text[10px] inline-block font-montserrat">
                         District
                       </p>
                       <Select
                         options={districts}
-                        onChange={(item: any) => setFieldValue("district", String(item?.value))}
+                        onChange={(item: any) =>
+                          setFieldValue("district", String(item?.value))
+                        }
                         styles={customStyles}
                         placeholder="Choose district"
                         name="district"
                         value={{
                           value: values.district,
-                          label: values.district
+                          label: values.district,
                         }}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
