@@ -29,7 +29,7 @@ const AppInputWithPhone = ({
 
       <div className=" w-full flex items-center justify-center relative mb-5 ">
         <img src={flag} alt="" className="w-[30px] h-[22px] absolute left-11" />
-        <span className="absolute  left-20 text-xs">NG(+234)</span>
+
         <input
           // max={13}
           type={type}
