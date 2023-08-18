@@ -4,6 +4,17 @@ import CloseIcon from "../../assets/svgs/close-circle.svg";
 import AppBtn from "../AppBtn/AppBtn";
 import OtpInput from "react-otp-input";
 import NewPassword from "./NewPassword";
+import { Form, Formik } from "formik";
+import { MyTextInput } from "../AppInput/AppInput";
+import * as Yup from "yup";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import useAppSelector from "../../hooks/useAppSelector";
+import {
+  clearResetPasswordWithToken,
+  resetPasswordWithToken,
+} from "../../reducers/authReducer";
+import { showMessage } from "../../helpers/notification";
+import { useNavigate, useNavigation } from "react-router-dom";
 
 export default function OtpModal({
   openOtp,
@@ -24,6 +35,32 @@ export default function OtpModal({
       setOpenOtp(!openOtp);
     }
   };
+
+  const dispatch = useAppDispatch();
+
+  const selector = useAppSelector((state) => state.authReducer);
+
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    if (selector.resetPasswordWithTokenStatus === "completed") {
+      setOpenOtp(false);
+      showMessage(
+        "Operation successful",
+        "Please login with the new password",
+        "success"
+      );
+      navigation("/login");
+    } else if (selector.resetPasswordWithTokenStatus === "failed") {
+      showMessage(
+        "Operation faild",
+        selector.resetPasswordWithTokenError,
+        "error"
+      );
+    }
+
+    dispatch(clearResetPasswordWithToken());
+  }, [selector.resetPasswordWithTokenStatus]);
 
   return (
     <>
@@ -50,36 +87,79 @@ export default function OtpModal({
               <span className="text-[14px] text-center font-light font-montserrat inline-block mb-[43px]">
                 {subHeader}
               </span>
+            </div>
+            <Formik
+              initialValues={{ token: "", password: "" }}
+              onSubmit={(values) => {
+                dispatch(
+                  resetPasswordWithToken({
+                    password: values.password,
+                    token: values.token,
+                  })
+                );
+              }}
+              validationSchema={Yup.object().shape({
+                password: Yup.string()
+                  .min(8)
+                  .required("Password is required")
+                  .matches(/^\S*$/, "Password must not contain whitespace")
+                  .typeError(
+                    "Password is required and must be a minimum of 8 characters"
+                  ),
+                confirmPassword: Yup.string()
+                  .min(8)
+                  .test(
+                    "confirmPassword",
+                    "Confirm password does not match password",
+                    function (confirmPassword) {
+                      const { password } = this.parent;
+                      console.log("called oo", confirmPassword, password);
+                      return confirmPassword === password;
+                    }
+                  ),
+                token: Yup.string()
+                  .required("Token is required")
+                  .typeError("Token is required"),
+              })}
+            >
+              <Form>
+                <div className="flex flex-col items-center justify-center">
+                  <div className="w-full">
+                    <MyTextInput
+                      placeholderTop="OTP"
+                      placeholder="Enter OTP"
+                      name="token"
+                    />
+                  </div>
 
-              <div className="w-full mb-10 ">
-                <div className="otp-inputs flex justify-center items-center gap-4">
-                  <OtpInput
-                    value={otp}
-                    onChange={setOtp}
-                    numInputs={4}
-                    renderSeparator={<span className="mr-3"> </span>}
-                    // renderInput={(props) => <input {...props} />}
-                    renderInput={(props) => <input {...props} />}
+                  <div className="w-full">
+                    <MyTextInput
+                      placeholderTop="Passowrd"
+                      placeholder="Enter Password"
+                      name="password"
+                      type="password"
+                    />
+                  </div>
+                  {/* <div className="w-full">
+                    <MyTextInput
+                      placeholderTop="Confirm Passowrd"
+                      placeholder="Confirm Password"
+                      name="confirmPassword"
+                      type="password"
+                    />
+                  </div> */}
+
+                  <AppBtn
+                    type={"submit"}
+                    title="Submit"
+                    className="text-[#000] w-full bg-[#FAA21B] mt-1"
+                    spinner={
+                      selector.resetPasswordWithTokenStatus === "loading"
+                    }
                   />
                 </div>
-              </div>
-
-              {headerTitle === "Reset AutoHyve Password" ? (
-                <AppBtn
-                  title="CONFIRM OTP"
-                  onClick={() => {
-                    setNewPasswordModal(!newPasswordModal);
-                    setOpenOtp(!openOtp);
-                  }}
-                  className="text-[#000] font-medium bg-[#FAA21B] mt-1"
-                />
-              ) : (
-                <AppBtn
-                  title="CONFIRM OTP"
-                  className="text-[#000] font-medium bg-[#FAA21B] mt-1"
-                />
-              )}
-            </div>
+              </Form>
+            </Formik>
           </div>
         </div>
       )}

@@ -30,6 +30,7 @@ const AppBtn: FC<IProps> = ({
       onClick={onClick}
       type={type}
       disabled={spinner}
+      style={{ cursor: "pointer" }}
     >
       {spinner && (
         <ClipLoader
