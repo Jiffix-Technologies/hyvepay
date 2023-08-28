@@ -140,14 +140,14 @@ export default function OtpModal({
                       type="password"
                     />
                   </div>
-                  {/* <div className="w-full">
+                  <div className="w-full">
                     <MyTextInput
                       placeholderTop="Confirm Passowrd"
                       placeholder="Confirm Password"
                       name="confirmPassword"
                       type="password"
                     />
-                  </div> */}
+                  </div>
 
                   <AppBtn
                     type={"submit"}
