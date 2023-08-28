@@ -17,6 +17,7 @@ const AppInputWithPhone = ({
 
     setPwdfield(val);
   };
+
   return (
     <>
       {hasPLaceHolder && <InputHeader text={placeholderTop} />}
@@ -27,15 +28,16 @@ const AppInputWithPhone = ({
         </span>
       )} */}
 
-      <div className=" w-full flex items-center justify-center relative mb-5 ">
+      <div className="w-full flex items-center justify-center relative mb-5">
         <img src={flag} alt="" className="w-[30px] h-[22px] absolute left-11" />
 
         <input
           // max={13}
+          // inputMode="numeric"
           type={type}
           onChange={onChange}
           className={
-            `w-full placeholder-[#A5A5A5] placeholderText pl-36
+            `w-full placeholder-[#A5A5A5] placeholderText pl-20
           } ` + className
           }
           placeholder={placeholder}

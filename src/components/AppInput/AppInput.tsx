@@ -130,6 +130,50 @@ export const MyTextInput = ({
   );
 };
 
+export const MyEmailTextInput = ({
+  label,
+  className,
+  leftImg,
+  hasPLaceHolder,
+  placeholderTop,
+  rightImg,
+  type,
+  disabled = false,
+  ...props
+}: any) => {
+  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
+  // which we can spread on <input>. We can use field meta to show an error
+  // message if the field is invalid and it has been touched (i.e. visited)
+  const [field, meta] = useField({...props});
+
+  return (
+    <div className="mb-5">
+      {hasPLaceHolder && <InputHeader text={placeholderTop} />}
+      <div className="prepend w-full mb-0">
+        <input
+          className={
+            `w-full placeholder-[#A5A5A5] placeholderText font-montserrat
+          } ` + className
+          }
+          {...field}
+          {...props}
+          type={type}
+          disabled={disabled}
+          onKeyDown={(event) => {
+            if (event.key === " ") {
+              event.preventDefault(); // Prevent input of space
+            }
+          }}
+        />
+      </div>
+
+      {meta.touched && meta.error ? (
+        <div className="error-input-field ">{meta.error}</div>
+      ) : null}
+    </div>
+  );
+};
+
 export const MySelect = ({
   options,
   styles,
@@ -197,6 +241,7 @@ export const AppPhoneInput = ({
             setFieldValue(field.name, value);
           }}
           enableSearch
+          countryCodeEditable={false}
         />
       </div>
 

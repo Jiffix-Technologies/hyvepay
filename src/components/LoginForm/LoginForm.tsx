@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AppInput, { MyTextInput } from "../AppInput/AppInput";
+import AppInput, { MyEmailTextInput, MyTextInput } from "../AppInput/AppInput";
 import { Link, useNavigate } from "react-router-dom";
 import AppBtn from "../AppBtn/AppBtn";
 import User from "../../assets/svgs/user.svg";
@@ -91,7 +91,7 @@ const LoginForm = () => {
           account"
               />
 
-              <MyTextInput
+              <MyEmailTextInput
                 name="email"
                 placeholder={"Your Email"}
                 leftImg={User}
