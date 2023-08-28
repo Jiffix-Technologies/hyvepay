@@ -37,7 +37,7 @@ const ProfileDropDown = ({ setOpen, open }: any) => {
         Profile
       </li>
 
-      <li
+      {/* <li
         onClick={() => {
           navigate("/settings");
           setOpen(!open);
@@ -46,7 +46,7 @@ const ProfileDropDown = ({ setOpen, open }: any) => {
       >
         <img src={SettingIcon} alt="" style={{ width: 20 }} />
         Settings
-      </li>
+      </li> */}
     </ul>
   );
 };

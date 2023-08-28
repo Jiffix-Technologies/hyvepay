@@ -11,12 +11,15 @@ import axiosClient from "../../config/axiosClient";
 import { stateLga } from "../../contsants/states";
 import { showMessage } from "../../helpers/notification";
 import { useUser } from "../../hooks/useUser";
+import ChangeEmailModal from "../../components/modals/ChangeEmailModal";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const { user, getUser } = useUser();
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState<Record<string, string>[]>([]);
   const [openModal, setOpenModal] = useState(false);
+  const [openChangeEmailModal, setOpenChangeEmailModal] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,6 +30,7 @@ const Profile = () => {
     district: "",
     address: "",
   });
+  const navigate = useNavigate();
 
   const dropdownRef = useRef<any>(null);
 
@@ -81,13 +85,18 @@ const Profile = () => {
       return "";
     }
 
-    if (phone.startsWith("+2340")) return phone.replace("+2340", "");
+    if (phone.startsWith("0")) return phone.replace("0", "234");
 
-    return phone.replace("0", "");
+    // return phone.replace("0", "");
+    return phone;
   };
 
   const handleSubmit = ({ phone, ...rest }: Record<string, unknown>) => {
-    const newPhone = `${phone}`.startsWith("+234") ? phone : `+234${phone}`;
+    const newPhone = `${phone}`.startsWith("234")
+                        ? phone
+                        : `${phone}`.startsWith("0")
+                          ? `${phone}`.replace("0", "234")
+                          : `${phone}`.replace("", "234") //`234${phone}`;
     const values = { ...rest, phone: newPhone };
 
     updateProfile(values)
@@ -105,6 +114,7 @@ const Profile = () => {
           "error"
         );
       });
+      navigate('/profile')
   };
 
   async function updateProfile(values: any) {
@@ -226,7 +236,7 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className="mt-5 md:mt-5 w-full">
+                  <div className="mt-5 md:mt-5 w-full relative mb-10">
                     <MyTextInput
                       hasPLaceHolder={true}
                       disabled
@@ -234,6 +244,12 @@ const Profile = () => {
                       name="email"
                       value={user?.email}
                     />
+                    <span
+                      onClick={() => setOpenChangeEmailModal(!openChangeEmailModal)}
+                      className="text-[#FAA21B] absolute cursor-pointer font-montserrat top-[85px]"
+                    >
+                      Change/Edit Primary Email
+                    </span>
                   </div>
 
                   <div className="flex gap-5 flex-col md:flex-row  justify-between">
@@ -254,7 +270,7 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-5 flex-col md:flex-row  justify-between">
+                  <div className="flex gap-5 flex-col md:flex-row justify-between">
                     <div className=" w-full mt-10 md:mt-10">
                       <AppInputWithPhone
                         placeholderTop="Phone Number*"
@@ -263,6 +279,10 @@ const Profile = () => {
                         type="text"
                         name="phone"
                         onChange={(event: any) => {
+                          // if (/^\d*(\.\d*)?$/.test(event?.target?.value)) {
+                            console.log(event?.target?.value, 'value')
+                          //   setFieldValue("phone", event?.target?.value);
+                          // }
                           setFieldValue("phone", event?.target?.value);
                         }}
                         onBlur={handleBlur}
@@ -329,7 +349,7 @@ const Profile = () => {
 
               <div className="w-full flex md:items-end md:justify-end">
                 <AppBtn
-                  className=" bg-[#FAA21B] w-full md:w-[100px]  text-[#000] -mt-10 md:mt-3 mb-40"
+                  className="bg-[#FAA21B] w-full md:w-[100px] text-[#000] md:mt-10 md:mt-3 mb-40"
                   title="SAVE"
                   type="submit"
                 />
@@ -340,6 +360,7 @@ const Profile = () => {
       </div>
 
       <ChangePasswordModal openModal={openModal} setOpenModal={setOpenModal} />
+      <ChangeEmailModal openChangeEmailModal={openChangeEmailModal} setOpenChangeEmailModal={setOpenChangeEmailModal} />
       <UploadPictureModal
         openProfile={openProfile}
         setOpenProfile={setOpenProfile}
