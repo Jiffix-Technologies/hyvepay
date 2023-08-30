@@ -105,7 +105,8 @@ const TransactionReceiptModal = ({
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Amount:</p>
                       <p className="text-[10px] font-montserrat">
-                        {Util.CurrencyDisplay(Number(rowData.amount))}
+                        {/* {Util.CurrencyDisplay(Number(rowData.amount))} */}
+                        {Util.formAmount(rowData.amount, true)}
                       </p>
                     </div>
                     <div className="flex justify-between mb-2 items-center">
