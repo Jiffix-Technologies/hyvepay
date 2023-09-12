@@ -63,12 +63,12 @@ const FundAccountModal = ({
   };
 
   const handleSingleTransfer = (values: any) => {
-    console.log(values);
+    // console.log(values);
     dispatch(saveAccountTransferInfo(values));
     setOpenSingleModal(false);
     setConfirmationmodal(true);
   };
-
+ 
   return (
     <>
       {openSingleModal && (
@@ -95,7 +95,8 @@ const FundAccountModal = ({
 
               {currentModal && (
                 <>
-                  <div className="ml-12 mb-5 w-full flex items-center gap-5">
+                  {/* <TabComponent /> */}
+                  {/* <div className="ml-12 mb-5 w-full flex items-center gap-5">
                     <div>
                       <span className="font-montserrat">Transfer 1</span>
                     </div>
@@ -106,7 +107,7 @@ const FundAccountModal = ({
                     <img src={add} alt="" className="w-[20px] h-[20px]" />
                   </div>
 
-                  <div className="customLine"></div>
+                  <div className="customLine"></div> */}
                 </>
               )}
 

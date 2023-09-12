@@ -9,6 +9,7 @@ interface IProps {
   className?: any;
   type?: any;
   spinner?: boolean;
+  savedBen?: boolean;
 }
 
 const AppBtn: FC<IProps> = ({
@@ -18,6 +19,7 @@ const AppBtn: FC<IProps> = ({
   image,
   className,
   type = "submit",
+  savedBen = false,
   spinner = false,
 }) => {
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,7 @@ const AppBtn: FC<IProps> = ({
       }
       onClick={onClick}
       type={type}
-      disabled={spinner}
+      disabled={spinner || savedBen}
       style={{ cursor: "pointer" }}
     >
       {spinner && (

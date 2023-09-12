@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import "./notification.css";
 
 export const extractErrors = (error: any) => {
   if (typeof error.response.data.error === "string")
