@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SuccessIcon from "../../assets/svgs/success-icon.svg";
 import CloseIcon from "../../assets/svgs/close-circle.svg";
 import HyveIcon2 from "../../assets/svgs/hyve-icon2.svg";
@@ -17,12 +17,18 @@ import { Link } from "react-router-dom";
 
 const { VITE_TRANSFER_FEE } = import.meta.env
 
-const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
+const SuccessfulPaymentModal = ({
+  successModal,
+  closeSuccessModal,
+  totalAmount,
+  setSuccessModal
+}: any) => {
   const state = useAppSelector((state) => state.bankReducer);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const toggleShareMenu = () => {
     setShowShareMenu(!showShareMenu);
   };
+  const [isBulkPayment, setIsBulkPayment] = useState<boolean>(false);
 
   const { user } = useUser();
 
@@ -35,6 +41,13 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
       pdf.save("receipt.pdf");
     });
   };
+
+  useEffect(() => {
+    if (state.performBulkAccountTransferRequestStatus === "completed") {
+      setIsBulkPayment(true)
+    }
+  },[state.performBulkAccountTransferRequestStatus]);
+
   return (
     <>
       {successModal && (
@@ -48,7 +61,12 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
           >
             <div className="modal-header pt-0 bg-white px-8">
               <div className="flex justify-end w-full">
-                <button onClick={() => closeSuccessModal()}>
+                <button onClick={() => {
+                    setSuccessModal(false)
+                    setIsBulkPayment(false)
+                    sessionStorage.removeItem('bulk-narration')
+                  }}
+                >
                   <img src={CloseIcon} alt="" />
                 </button>
               </div>
@@ -60,7 +78,7 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                 <h5 className="text-center mt-3 text-[#494949] text-[14px] font-semibold">
                   Payment Successful
                 </h5>
-                <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
+                {!isBulkPayment && <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
                   Yay! Congratulations...
                   {Util.CurrencyDisplay(
                     Number(state.accountTransferInfo?.amount)
@@ -72,11 +90,18 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                     {state.accountTransferInfo?.bank.label} |
                     {state.accountHolder?.beneficiaryAccountNumber}
                   </strong>
-                </h5>
+                </h5>}
+                {isBulkPayment && <h5 className="text-center md:text-sm text-[9px] max-w-[95%]  text-[#494949] font-montserrat">
+                  Yay! Congratulations...{" "}
+                  {Util.CurrencyDisplay(totalAmount)}{" "}
+                  was successfully sent to{" "}
+                  <strong>
+                    {state.bulkAccountTransferInfo.length}{" "}Account(s)
+                  </strong>
+                </h5>}
               </div>
             </div>
             <div className="body">
-
 
               <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
                 <div
@@ -103,33 +128,37 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       <p className="text-[10px] font-montserrat">
                         Reference Number:
                       </p>
-                      <p className="text-[10px] font-montserrat">
+                      {!isBulkPayment && <p className="text-[10px] font-montserrat">
                         {state.accountTransferResponse?.transactionReference}
-                      </p>
+                      </p>}
+                      {isBulkPayment && <p className="text-[10px] font-montserrat">
+                        {state.bulkAccountTransferResponse?.requestReference}
+                      </p>}
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Amount:</p>
-                      <p className="text-[10px] font-montserrat">
+                      {!isBulkPayment && <p className="text-[10px] font-montserrat">
                         {Util.CurrencyDisplay(
                           Number(state.accountTransferInfo?.amount)
                         )}
-                      </p>
+                      </p>}
+                      {isBulkPayment && <p className="text-[10px] font-montserrat">
+                        {Util.CurrencyDisplay(totalAmount)}
+                      </p>}
                     </div>
                     <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Sender:</p>
                       <p className="text-[10px] font-montserrat">
                         {user?.companyName}
-
-
                       </p>
                     </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Recipient:</p>
                       <p className="text-[10px] font-montserrat">
                         {state.accountHolder?.beneficiaryName}
                       </p>
-                    </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    </div>}
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
                         Recipient Bank Name:
                       </p>
@@ -139,8 +168,8 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       >
                         {state.accountTransferInfo?.bank.label}
                       </p>
-                    </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    </div>}
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[11px] font-montserrat">
                         {" "}
                         Account Number:
@@ -148,31 +177,47 @@ const SuccessfulPaymentModal = ({ successModal, closeSuccessModal }: any) => {
                       <p className="text-[11px] font-montserrat">
                         {state.accountHolder?.beneficiaryAccountNumber}
                       </p>
-                    </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    </div>}
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Narration:</p>
                       <p className="text-[10px] font-montserrat w-[150px] text-right">
                         {state.accountTransferInfo?.narration}
-
                       </p>
-                    </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    </div>}
+                    {isBulkPayment && <div className="flex justify-between mb-2 items-center">
+                      <p className="text-[10px] font-montserrat"> Narration:</p>
+                      <p className="text-[10px] font-montserrat w-[150px] text-right">
+                        {sessionStorage.getItem('bulk-narration')}
+                      </p>
+                    </div>}
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat">
                         Transfer Fees:
                       </p>
                       <p className="text-[10px] font-montserrat">
-
                         {Util.CurrencyDisplay(VITE_TRANSFER_FEE)}
-
-
                       </p>
-                    </div>
-                    <div className="flex justify-between mb-2 items-center">
+                    </div>}
+                    {isBulkPayment && <div className="flex justify-between mb-2 items-center">
+                      <p className="text-[10px] font-montserrat">
+                        Transfer Fees:
+                      </p>
+                      <p className="text-[10px] font-montserrat">
+                        {Util.CurrencyDisplay(VITE_TRANSFER_FEE * state.bulkAccountTransferInfo.length)}
+                      </p>
+                    </div>}
+                    {!isBulkPayment && <div className="flex justify-between mb-2 items-center">
                       <p className="text-[10px] font-montserrat"> Status:</p>
                       <p className="text-[10px] font-montserrat">
                         {state.accountTransferResponse?.status}
                       </p>
-                    </div>
+                    </div>}
+                    {isBulkPayment && <div className="flex justify-between mb-2 items-center">
+                      <p className="text-[10px] font-montserrat"> Status:</p>
+                      <p className="text-[10px] font-montserrat">
+                        {state.bulkAccountTransferResponse?.status && 'Successful'}
+                      </p>
+                    </div>}
                   </div>
 
                   <hr className="mb-4" />

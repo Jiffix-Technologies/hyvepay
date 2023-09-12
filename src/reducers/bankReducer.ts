@@ -5,8 +5,11 @@ import {
   AccountTransferDTO,
   AccountTransferResponseDTO,
   ApiResponseSuccess,
+  BulkAccountResponseDTO,
+  BulkAccountTransferDTO,
   IBank,
   IBeneficiary,
+  IBulkTransfer,
   IThunkAPIStatus,
 } from "@app-model";
 
@@ -21,6 +24,7 @@ import {
   GET_USER_ACCOUNT_BALANCE,
   PERFORM_ACCOUNT_TRANSFER,
   PERFORM_NAME_ENQUIRY,
+  PERFORM_BULK_ACCOUNT_TRANSFER
 } from "./types";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -113,6 +117,15 @@ export const initiateAccountTranfer = asyncThunkWrapper<
   return response.data;
 });
 
+export const initiateBulkAccountTransfer = asyncThunkWrapper<
+  ApiResponseSuccess<AccountTransferResponseDTO>,
+  BulkAccountTransferDTO
+>(PERFORM_BULK_ACCOUNT_TRANSFER, async (args: BulkAccountTransferDTO) => {
+  const response = await axiosClient.post(`/api/v1/bulk/account/transfer`, args);
+
+  return response.data;
+});
+
 export interface IBankState {
   accountBalance: AccountBalanceDTO | null;
 
@@ -148,11 +161,16 @@ export interface IBankState {
   performAccountTransferRequestSuccess: string;
   performAccountTransferRequestError: string;
 
+  performBulkAccountTransferRequestStatus: IThunkAPIStatus;
+  performBulkAccountTransferRequestSuccess: string;
+  performBulkAccountTransferRequestError: string;
+
   requestActivationStatus: IThunkAPIStatus;
   requestActivationSuccess: string;
   requestActivationError: string;
 
   banks: IBank[];
+  bulkAccountTransferInfo: IBulkTransfer[];
 
   accountHolder: AccountHolder | null;
 
@@ -170,6 +188,7 @@ export interface IBankState {
   } | null;
 
   accountTransferResponse: AccountTransferResponseDTO | null;
+  bulkAccountTransferResponse: BulkAccountResponseDTO | null;
 }
 
 const initialState: IBankState = {
@@ -186,6 +205,10 @@ const initialState: IBankState = {
   performAccountTransferRequestStatus: "idle",
   performAccountTransferRequestSuccess: "",
   performAccountTransferRequestError: "",
+
+  performBulkAccountTransferRequestStatus: "idle",
+  performBulkAccountTransferRequestSuccess: "",
+  performBulkAccountTransferRequestError: "",
 
   getAccountTransactionStatus: "idle",
   getAccountTransactionSuccess: "",
@@ -211,12 +234,15 @@ const initialState: IBankState = {
   requestActivationError: "",
 
   banks: [],
+  bulkAccountTransferInfo: [],
 
   accountHolder: null,
 
   accountTransferInfo: null,
 
   accountTransferResponse: null,
+
+  bulkAccountTransferResponse: null,
 };
 
 const bankSlice = createSlice({
@@ -234,12 +260,29 @@ const bankSlice = createSlice({
       state.requestActivationSuccess = "";
       state.requestActivationError = "";
     },
+
+    clearPerformAccountTransferRequestStatus(state: IBankState) {
+      state.performAccountTransferRequestStatus = "idle";
+      state.performAccountTransferRequestSuccess = "";
+      state.performAccountTransferRequestError = "";
+    },
+
+    clearPerformBulkAccountTransferRequestStatus(state: IBankState) {
+      state.performBulkAccountTransferRequestStatus = "idle";
+      state.performBulkAccountTransferRequestSuccess = "";
+      state.performBulkAccountTransferRequestError = "";
+    },
+
     clearAccountHolder(state: IBankState) {
       state.accountHolder = null;
     },
 
     saveAccountTransferInfo(state: IBankState, action) {
       state.accountTransferInfo = action.payload;
+    },
+
+    saveBulkAccountTransferInfo(state: IBankState, action) {
+      state.bulkAccountTransferInfo = action.payload as IBulkTransfer[];
     },
   },
 
@@ -344,6 +387,21 @@ const bankSlice = createSlice({
       state.performAccountTransferRequestError = action.payload
         ?.message as string;
     });
+
+    builder.addCase(initiateBulkAccountTransfer.pending, (state, action) => {
+      state.performBulkAccountTransferRequestStatus = "loading";
+    });
+    builder.addCase(initiateBulkAccountTransfer.fulfilled, (state, action) => {
+      state.performBulkAccountTransferRequestStatus = "completed";
+      state.performBulkAccountTransferRequestSuccess = action.payload.message;
+      state.bulkAccountTransferResponse = action.payload
+        .result as any;
+    });
+    builder.addCase(initiateBulkAccountTransfer.rejected, (state, action) => {
+      state.performBulkAccountTransferRequestStatus = "failed";
+      state.performBulkAccountTransferRequestError = action.payload
+        ?.message as string;
+    });
   },
 });
 
@@ -352,6 +410,9 @@ export const {
   clearAccountActivationStatus,
   clearAccountHolder,
   saveAccountTransferInfo,
+  saveBulkAccountTransferInfo,
+  clearPerformAccountTransferRequestStatus,
+  clearPerformBulkAccountTransferRequestStatus
 } = bankSlice.actions;
 
 export default bankSlice.reducer;

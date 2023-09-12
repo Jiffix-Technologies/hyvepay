@@ -252,4 +252,59 @@ export const AppPhoneInput = ({
   );
 };
 
+export const MyTextInputBulk = ({
+  label,
+  className,
+  leftImg,
+  hasPLaceHolder,
+  placeholderTop,
+  rightImg,
+  type = "text",
+  disabled = false,
+  ...props
+}: any) => {
+  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
+  // which we can spread on <input>. We can use field meta to show an error
+  // message if the field is invalid and it has been touched (i.e. visited)
+  const [pwdfield, setPwdfield] = useState(false);
+  const [field, meta] = useField({...props});
+  const togglePassword = (e: any, val: any) => {
+    e.preventDefault();
+
+    setPwdfield((state) => !state);
+  };
+
+  return (
+    <div className="mb-5">
+      {hasPLaceHolder && <InputHeader text={placeholderTop} />}
+      <div className="prepend w-full mb-0">
+        {/* <img src={leftImg} alt="" /> */}
+        <input
+          className={
+            `w-full placeholder-[#A5A5A5] placeholderText font-montserrat
+          } ` + className
+          }
+          {...field}
+          {...props}
+          type={pwdfield ? "text" : type}
+          disabled={disabled}
+        />
+        {type === "password" && (
+          <button onClick={(e) => togglePassword(e, !pwdfield)}>
+            {pwdfield ? (
+              <BsEyeSlash color="black" size={25} />
+            ) : (
+              <EyeOutlined color="black" size={25} />
+            )}
+          </button>
+        )}
+      </div>
+
+      {/* {meta.touched && meta.error ? (
+        <div className="error-input-field ">{meta.error}</div>
+      ) : null} */}
+    </div>
+  );
+};
+
 export default AppInput;

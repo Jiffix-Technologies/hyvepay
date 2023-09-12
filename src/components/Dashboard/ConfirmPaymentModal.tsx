@@ -3,21 +3,21 @@ import CloseIcon from "../../assets/svgs/close-circle.svg";
 import SuccessfulPaymentModal from "./SuccessfulPaymentModal";
 import AppBtn from "../AppBtn/AppBtn";
 import AppInput, { MyTextInput } from "../AppInput/AppInput";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import useAppSelector from "../../hooks/useAppSelector";
 import * as Yup from "yup";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { initiateAccountTranfer } from "../../reducers/bankReducer";
+import { initiateAccountTranfer, initiateBulkAccountTransfer } from "../../reducers/bankReducer";
 import { showMessage } from "../../helpers/notification";
 import {Util} from "../../helpers/Util";
+import InputHeader from "../InputHeader/InputHeader";
 
 const ConfirmPaymentModal = ({
   confirmationmodal,
   setConfirmationmodal,
-  closeConfirmModal,
+  isBulkTransfer
 }: any) => {
   const [successModal, setSuccessModal] = useState(false);
-
   const closeSuccessModal = () => setSuccessModal(!successModal);
 
   const state = useAppSelector((state) => state.bankReducer);
@@ -25,14 +25,22 @@ const ConfirmPaymentModal = ({
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (state.performAccountTransferRequestStatus === "completed") {
-      showMessage("Transfer successful", "", "success");
-      setSuccessModal(!successModal);
+    if (state.performAccountTransferRequestStatus === "completed" || state.performBulkAccountTransferRequestStatus === "completed") {
+      // showMessage("Transfer successful", "", "success");
+      setSuccessModal(true);
       setConfirmationmodal(false);
     } else if (state.performAccountTransferRequestStatus === "failed") {
+      setConfirmationmodal(false);
       showMessage(state.performAccountTransferRequestError, "", "error");
+    } else if (state.performBulkAccountTransferRequestStatus === "failed") {
+      setConfirmationmodal(false);
+      // setIsBulkTransfer(false);
+      showMessage(state.performBulkAccountTransferRequestError, "", "error");
     }
-  }, [state.performAccountTransferRequestStatus]);
+  }, [
+    state.performAccountTransferRequestStatus,
+    state.performBulkAccountTransferRequestStatus
+  ]);
 
   const handleOnSubmit = (values: any) => {
     dispatch(
@@ -49,11 +57,30 @@ const ConfirmPaymentModal = ({
       })
     );
   };
+
+  const handleBulkTransferOnSubmit = (values: any) => {
+    sessionStorage.setItem('bulk-narration', values.narration)
+    dispatch(
+      initiateBulkAccountTransfer({
+        narration: values.narration,
+        BeneficiaryPaymentData: state.bulkAccountTransferInfo as any,
+        pin: values.pin,
+      })
+    );
+  };
+  
+  let totalAmount: number = 0;
+  state.bulkAccountTransferInfo.forEach((elem: any) => {
+    totalAmount += +elem.amount
+  });
+
   return (
     <>
       <SuccessfulPaymentModal
         successModal={successModal}
         closeSuccessModal={closeSuccessModal}
+        totalAmount={totalAmount}
+        setSuccessModal={setSuccessModal}
       />
       {confirmationmodal && (
         <Formik
@@ -64,7 +91,7 @@ const ConfirmPaymentModal = ({
               .length(4, "PIN must be 4 digits")
               .required("PIN is required"),
           })}
-          onSubmit={handleOnSubmit}
+          onSubmit={isBulkTransfer ? handleBulkTransferOnSubmit : handleOnSubmit}
         >
           <Form>
             <div
@@ -83,10 +110,14 @@ const ConfirmPaymentModal = ({
                     <h5 className="text-center heading-five">
                       Confirm Payment
                     </h5>
-                    <h5 className="text-center text-sm gray-color">
+                    {!isBulkTransfer && <h5 className="text-center text-sm gray-color">
   You're about to send {Util.formAmount(Number(state.accountTransferInfo?.amount))} to {state.accountTransferInfo?.accountName}.<br />
   Enter your PIN below to confirm and complete this transaction
-</h5>
+                    </h5>}
+                    {isBulkTransfer && <h5 className="text-center text-sm gray-color">
+  You're about to send {Util.formAmount(totalAmount)} to {state.bulkAccountTransferInfo.length} account(s).<br />
+  Enter your PIN below to confirm and complete this transaction
+                    </h5>}
                     {/* </div> */}
                   </div>
                 </div>
@@ -94,7 +125,7 @@ const ConfirmPaymentModal = ({
                   {/* view */}
 
                   <div className=" flex flex-col mt-4 justify-center items-center px-4 md:px-10">
-                    <div className="w-full mb-1 md:mb-3">
+                    <div className="w-full mb-1 md:mb-2">
                       <MyTextInput
                         type="password"
                         placeholderTop=" Enter your pin"
@@ -106,8 +137,29 @@ const ConfirmPaymentModal = ({
                       />
                     </div>
 
+                    {isBulkTransfer &&
+                      <div className="w-full mb-3 md:mt-0 md:mb-6">
+                        <InputHeader text="Narration" />
+            
+                        <Field
+                          name="narration"
+                          required
+                          id="bulk-narration"
+                          as="textarea"
+                          cols={30}
+                          rows={3}
+                          maxLength={20}
+                          placeholder="Enter your message"
+                          className="bg-gray-100 w-full p-4"
+                          style={{ borderRadius: 18, border: 0 }}
+                        />
+                        <ErrorMessage name="narration" component="div" />
+            
+                      </div>
+                    }
+
                     <div className="form-group w-full justify-center">
-                      <AppBtn
+                      {!isBulkTransfer && <AppBtn
                         title="Confirm payment"
                         className="text-[#000] w-full bg-[#FAA21B] mt-2"
                         type={"submit"}
@@ -115,7 +167,15 @@ const ConfirmPaymentModal = ({
                           state.performAccountTransferRequestStatus ===
                           "loading"
                         }
-                      />
+                      />}
+                      {isBulkTransfer && <AppBtn
+                        title="Confirm bulk payment"
+                        className="text-[#000] w-full bg-[#FAA21B] mt-2"
+                        type={"submit"}
+                        spinner={
+                          state.performBulkAccountTransferRequestStatus === "loading"
+                        }
+                      />}
                     </div>
                   </div>
                 </div>

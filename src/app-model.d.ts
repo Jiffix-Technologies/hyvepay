@@ -199,6 +199,19 @@ declare module "@app-model" {
     bankCode: string;
   }
 
+  interface IBulkTransfer {
+    accountNumber: string;
+    bank: {
+      label: string;
+      value: string;
+    };
+    accountName: string;
+    amount: string;
+    narration: string;
+    saveAsBeneficiary?: boolean;
+    pin?: string;
+  } 
+
   interface AccountHolder {
     beneficiaryAccountNumber: string;
     beneficiaryName: string;
@@ -234,5 +247,35 @@ declare module "@app-model" {
     saveAsBeneficiary?: boolean;
     bankName?: string;
     pin: string;
+  }
+  
+  interface BeneficiaryPaymentData {
+    accountNumber: string;
+    AmountInKobo: number;
+    FeeAmountInKobo: number;
+    DestinationAccountName: string;
+    bankCode: string;
+    Narration: string,
+    nameEnquirySessionId: string
+  }
+  
+  export interface BulkAccountTransferDTO {
+    ClientAccountNumber?: string;
+    TrackingReference?: string;
+    TotalAmount?: string;
+    NotificationEmail?: string;
+    narration: string;
+    BeneficiaryPaymentData: BeneficiaryPaymentData[];
+    pin: string;
+  }
+
+  export interface BulkAccountResponseDTO {
+    requestReference: string,
+    transactionReference: string,
+    instrumentNumber: string,
+    responseCode: string,
+    status: boolean,
+    message: string,
+    data: any
   }
 }
