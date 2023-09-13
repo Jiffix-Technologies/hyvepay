@@ -15,6 +15,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { IAuthState } from "../../reducers/authReducer";
 import { clearLoginStatus } from "../../reducers/authReducer";
 import { showMessage } from "../../helpers/notification";
+import { APP_BASE_URL } from "../../contsants";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const LoginForm = () => {
       );
     },
   });
-
+  console.log(APP_BASE_URL, 'base url')
   return (
     <>
       <div className="flex flex-col h-full items-center mt-28 px-10 md:px-28 justify-center">
