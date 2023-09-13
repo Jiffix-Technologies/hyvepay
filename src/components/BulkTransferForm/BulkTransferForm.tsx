@@ -186,7 +186,6 @@ const BulkTransferForm = ({
               onChange={handleInputChange}
             />
             <ErrorMessage name="narration" component="div" />
-
           </div>
         </div>
 
@@ -200,12 +199,6 @@ const BulkTransferForm = ({
           <span className="pl-2">Save Beneficiary</span>
         </div>
 
-        {/* <AppBtn
-          title="Send Money"
-          className="text-[#000] w-full bg-[#FAA21B] mt-2"
-          type="submit"
-          spinner={state.performAccountEnquiryStatus === "loading"}
-        /> */}
       </div>
     </Form>
   );
