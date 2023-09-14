@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import Media from "react-media";
 import { Tabs } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import { saveAccountTransferInfo, saveBulkAccountTransferInfo } from "../../../reducers/bankReducer";
+import { clearBulkAccountHolder, clearPerformBulkAccountEnquiryStatus, performBulkNameEnquiryAction, saveAccountTransferInfo, saveBulkAccountTransferInfo } from "../../../reducers/bankReducer";
 import AppBtn from "../../../components/AppBtn/AppBtn";
 // import ConfirmPaymentModal from "../Dashboard/ConfirmPaymentModal";
 import { Form, Formik, useFormikContext } from "formik";
@@ -12,6 +12,7 @@ import BulkTransferForm from "../../../components/BulkTransferForm/BulkTransferF
 import SavedBulkBeneficiaryTransferForm from "../../../components/BulkTransferForm/SavedBulkBeneficiaryTransfer";
 import useAppSelector from "../../../hooks/useAppSelector";
 import ConfirmPaymentModal from "../../../components/Dashboard/ConfirmPaymentModal";
+import NameEnquiryModal from "../../../components/modals/NameEnquiryModal";
 
 const AccountTransferSchema = Yup.object({
     accountNumber: Yup.string().required("Account number is required"),
@@ -41,6 +42,8 @@ function BulkTransaction({
     const [selected, setSelected] = useState("New Beneficiary");
     const [clearField, setClearField] = useState<boolean>(false);
     const [isBulkTransfer, setIsBulkTransfer] = useState<boolean>(false);
+    // const [nameEnquiry, setNameEnquiry] = useState<boolean>(false);
+
     const state = useAppSelector((state) => state.bankReducer);
 
     const [formState] = useState({
@@ -53,6 +56,7 @@ function BulkTransaction({
         amount: "",
         narration: "",
         saveAsBeneficiary: false,
+        nameEnquirySessionId: ""
       });
     
       const tab = ["New Beneficiary", "Saved Beneficiary"];
@@ -60,11 +64,10 @@ function BulkTransaction({
       const dispatch = useAppDispatch();
 
       const handleBulkTransfer = () => {
-        // console.log(Object.values(inputValues), 'inside');
-        setConfirmationmodal(true);
+        // setConfirmationmodal(true);
         dispatch(saveBulkAccountTransferInfo(Object.values(inputValues)));
+        dispatch(performBulkNameEnquiryAction({Data: Object.values(inputValues)}))
         setIsBulkTransfer(true)
-        // setOpenBulkModal(false);
         
       };
 
@@ -72,6 +75,33 @@ function BulkTransaction({
         setSelected(item)
         setClearField(true)
       };
+
+    useEffect(() => {
+      if(state.performBulkAccountEnquiryStatus === 'completed') {
+        const data = Object.values(inputValues);
+        //@ts-ignore
+        const beneficiaries = state.bulkAccountHolder?.data.beneficiaries;
+
+        const dataMap = {} as any;
+        beneficiaries.forEach((item: any) => {
+          dataMap[item.accountNumber] = item.nameEnquirySessionId;
+        });
+
+        const updatedResource = data.map((item: any) => ({
+          ...item,
+          nameEnquirySessionId: dataMap[item.accountNumber] || item.nameEnquirySessionId,
+        }));
+
+        dispatch(saveBulkAccountTransferInfo(updatedResource));
+      }
+
+    },[state.performBulkAccountEnquiryStatus])
+
+    useEffect(() => {
+      if(state.performBulkAccountEnquiryStatus === 'completed') {
+        setConfirmationmodal(true);
+      }
+    }, [state.performBulkAccountEnquiryStatus]);
 
     return (
         <div className="body">
@@ -170,8 +200,7 @@ function BulkTransaction({
               title="Send Money"
               className="text-[#000] w-[86%] bg-[#FAA21B] mt-2"
               onClick={handleBulkTransfer}
-              // type="submit"
-              spinner={state.performAccountEnquiryStatus === "loading"}
+              spinner={state.performAccountEnquiryStatus === "loading" || state.performBulkAccountEnquiryStatus === "loading"}
             />
           </div>
 
@@ -180,6 +209,13 @@ function BulkTransaction({
             setConfirmationmodal={setConfirmationmodal}
             isBulkTransfer={isBulkTransfer}
           />
+
+          {/* <NameEnquiryModal 
+            nameEnquiry={nameEnquiry}
+            setNameEnquiry={setNameEnquiry}
+            inputValues={inputValues}
+            setConfirmationmodal={setConfirmationmodal}
+          /> */}
           
         </div>
     )

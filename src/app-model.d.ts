@@ -225,6 +225,26 @@ declare module "@app-model" {
     sessionID: string;
   }
 
+  export interface BulkNameEnquiryResponseDTO  {
+    narration: string;
+    totalAmount: number;
+    expectedFee: number;
+    paidFee: number;
+    accountNumber: string;
+    accountName: string;
+    transactionStatus: string;
+    beneficiaries: BulkNameEnquiryBeneficiary[]
+  }
+
+  interface BulkNameEnquiry {
+    AccountNumber: string;
+    BankCode: string;
+  }
+  
+  export interface BulkNameEnquiryDTO {
+    Data: BulkNameEnquiry[]
+  }
+
   export interface AccountTransferResponseDTO {
     requestReference: string;
     transactionReference: string;

@@ -59,7 +59,7 @@ const LoginForm = () => {
       );
     },
   });
-  console.log(APP_BASE_URL, 'base url')
+
   return (
     <>
       <div className="flex flex-col h-full items-center mt-28 px-10 md:px-28 justify-center">
