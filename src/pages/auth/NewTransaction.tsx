@@ -8,6 +8,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { showMessage } from "../../helpers/notification";
 import { clearPerformAccountTransferRequestStatus, clearPerformBulkAccountTransferRequestStatus } from "../../reducers/bankReducer";
 import useAppDispatch from "../../hooks/useAppDispatch";
+import BulkTransactionModal from "../../../../../TabComponentForBulkTransfer/BulkTransactionModal";
 
 const NewTransaction = () => {
   const [modal, setModal] = React.useState(false);
@@ -93,6 +94,11 @@ const NewTransaction = () => {
         openBulkModal={openBulkModal}
         setOpenBulkModal={setOpenBulkModal}
       />
+
+      {/* <BulkTransactionModal
+        openBulkModal={openBulkModal}
+        setOpenBulkModal={setOpenBulkModal}
+      /> */}
 
       {/* <FundModal
         modal={modal}

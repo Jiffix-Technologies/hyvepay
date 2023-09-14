@@ -28,18 +28,6 @@ const BulkTransferForm = ({
   const state = useAppSelector((state) => state.bankReducer);
 
   useEffect(() => {
-    if (values.accountNumber.length < 10 || values.bank?.value?.trim() === "")
-      return;
-    dispatch(clearAccountHolder());
-    dispatch(
-      performNameEnquiryAction({
-        beneficiaryBankCode: values.bank.value,
-        beneficiaryAccountNumber: values.accountNumber,
-      })
-    );
-  }, [values.accountNumber, values.bank?.value]);
-
-  useEffect(() => {
     dispatch(getAllBankAction());
   }, []);
 
@@ -99,7 +87,8 @@ const BulkTransferForm = ({
           beneficiary: { label: '', value: '' },
           accountNumber: '',
           amount: '',
-          saveAsBeneficiary: false
+          saveAsBeneficiary: false,
+          nameEnquirySessionId: ''
         },
       }));
     }
@@ -141,7 +130,7 @@ const BulkTransferForm = ({
 
         <div className="form-group flex-col md:flex-row  w-full justify-center">
           <div className="w-full ">
-            <MyTextInputBulk
+             <MyTextInputBulk
               type="text"
               placeholderTop=" Account Name"
               placeholder="Enter your account Name"
@@ -166,7 +155,6 @@ const BulkTransferForm = ({
             />
           </div>
         </div>
-
         <div className="form-group w-full justify-center">
           <div className="w-full mb-3 md:mt-0 md:mb-6">
             <InputHeader text="Narration" />

@@ -14,14 +14,15 @@ function BulkAccountModal({openBulkModal, setOpenBulkModal}: any) {
   const initialInputValues = tabs.reduce((acc: any, tab: any) => {
     acc[tab] = {
       accountNumber: "",
-        bank: {
-          label: "",
-          value: "",
-        },
-        accountName: "",
-        amount: "",
-        narration: "",
-        saveAsBeneficiary: false,
+      bank: {
+        label: "",
+        value: "",
+      },
+      accountName: "",
+      amount: "",
+      narration: "",
+      saveAsBeneficiary: false,
+      nameEnquirySessionId: ""
     };
     return acc;
   }, {});
@@ -68,7 +69,8 @@ function BulkAccountModal({openBulkModal, setOpenBulkModal}: any) {
         accountName: "",
         amount: "",
         narration: "",
-        saveAsBeneficiary: false
+        saveAsBeneficiary: false,
+        nameEnquirySessionId: ""
       },
     }));
   };

@@ -7,7 +7,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import useAppSelector from "../../hooks/useAppSelector";
 import * as Yup from "yup";
 import useAppDispatch from "../../hooks/useAppDispatch";
-import { initiateAccountTranfer, initiateBulkAccountTransfer } from "../../reducers/bankReducer";
+import { clearPerformBulkAccountEnquiryStatus, initiateAccountTranfer, initiateBulkAccountTransfer } from "../../reducers/bankReducer";
 import { showMessage } from "../../helpers/notification";
 import {Util} from "../../helpers/Util";
 import InputHeader from "../InputHeader/InputHeader";
@@ -73,6 +73,12 @@ const ConfirmPaymentModal = ({
   state.bulkAccountTransferInfo.forEach((elem: any) => {
     totalAmount += +elem.amount
   });
+
+  useEffect(() => {
+    if(state.performBulkAccountEnquiryStatus === 'completed') {
+        dispatch(clearPerformBulkAccountEnquiryStatus())
+      }
+  },[state.performBulkAccountEnquiryStatus]);
 
   return (
     <>

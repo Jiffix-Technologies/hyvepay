@@ -7,6 +7,8 @@ import {
   ApiResponseSuccess,
   BulkAccountResponseDTO,
   BulkAccountTransferDTO,
+  BulkNameEnquiryDTO,
+  BulkNameEnquiryResponseDTO,
   IBank,
   IBeneficiary,
   IBulkTransfer,
@@ -24,7 +26,8 @@ import {
   GET_USER_ACCOUNT_BALANCE,
   PERFORM_ACCOUNT_TRANSFER,
   PERFORM_NAME_ENQUIRY,
-  PERFORM_BULK_ACCOUNT_TRANSFER
+  PERFORM_BULK_ACCOUNT_TRANSFER,
+  PERFORM_BULK_NAME_ENQUIRY
 } from "./types";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -108,6 +111,24 @@ export const performNameEnquiryAction = asyncThunkWrapper<
   }
 );
 
+export const performBulkNameEnquiryAction = asyncThunkWrapper<
+  ApiResponseSuccess<BulkNameEnquiryResponseDTO>,
+  BulkNameEnquiryDTO
+>(
+  PERFORM_BULK_NAME_ENQUIRY,
+  async (args: BulkNameEnquiryDTO) => {
+    const values = args.Data.map((item: any) => ({
+      AccountNumber: item.accountNumber,
+      BankCode: item.bank.value,
+    }));
+    const requestBody = { Data: values }
+
+    const response = await axiosClient.post(`/api/v1/bulk/account/enquiry`, requestBody);
+
+    return response.data;
+  }
+);
+
 export const initiateAccountTranfer = asyncThunkWrapper<
   ApiResponseSuccess<AccountTransferResponseDTO>,
   AccountTransferDTO
@@ -157,6 +178,10 @@ export interface IBankState {
   performAccountEnquirySuccess: string;
   performAccountEnquiryError: string;
 
+  performBulkAccountEnquiryStatus: IThunkAPIStatus;
+  performBulkAccountEnquirySuccess: string;
+  performBulkAccountEnquiryError: string;
+
   performAccountTransferRequestStatus: IThunkAPIStatus;
   performAccountTransferRequestSuccess: string;
   performAccountTransferRequestError: string;
@@ -173,6 +198,7 @@ export interface IBankState {
   bulkAccountTransferInfo: IBulkTransfer[];
 
   accountHolder: AccountHolder | null;
+  bulkAccountHolder: BulkNameEnquiryResponseDTO | null
 
   accountTransferInfo: {
     accountNumber: string;
@@ -201,6 +227,10 @@ const initialState: IBankState = {
   performAccountEnquiryStatus: "idle",
   performAccountEnquirySuccess: "",
   performAccountEnquiryError: "",
+
+  performBulkAccountEnquiryStatus: "idle",
+  performBulkAccountEnquirySuccess: "",
+  performBulkAccountEnquiryError: "",
 
   performAccountTransferRequestStatus: "idle",
   performAccountTransferRequestSuccess: "",
@@ -237,6 +267,7 @@ const initialState: IBankState = {
   bulkAccountTransferInfo: [],
 
   accountHolder: null,
+  bulkAccountHolder: null,
 
   accountTransferInfo: null,
 
@@ -275,6 +306,16 @@ const bankSlice = createSlice({
 
     clearAccountHolder(state: IBankState) {
       state.accountHolder = null;
+    },
+
+    clearPerformBulkAccountEnquiryStatus(state: IBankState) {
+      state.performBulkAccountEnquiryStatus = "idle";
+      state.performBulkAccountEnquirySuccess = "";
+      state.performBulkAccountEnquiryError = "";
+    },
+
+    clearBulkAccountHolder(state: IBankState) {
+      state.bulkAccountHolder = null;
     },
 
     saveAccountTransferInfo(state: IBankState, action) {
@@ -373,6 +414,19 @@ const bankSlice = createSlice({
       state.performAccountEnquiryError = action.payload?.error as string;
     });
 
+    builder.addCase(performBulkNameEnquiryAction.pending, (state, action) => {
+      state.performBulkAccountEnquiryStatus = "loading";
+    });
+    builder.addCase(performBulkNameEnquiryAction.fulfilled, (state, action) => {
+      state.performBulkAccountEnquiryStatus = "completed";
+      state.performBulkAccountEnquirySuccess = action.payload.message;
+      state.bulkAccountHolder = action.payload.result as BulkNameEnquiryResponseDTO;
+    });
+    builder.addCase(performBulkNameEnquiryAction.rejected, (state, action) => {
+      state.performBulkAccountEnquiryStatus = "failed";
+      state.performBulkAccountEnquiryError = action.payload?.error as string;
+    });
+
     builder.addCase(initiateAccountTranfer.pending, (state, action) => {
       state.performAccountTransferRequestStatus = "loading";
     });
@@ -412,7 +466,9 @@ export const {
   saveAccountTransferInfo,
   saveBulkAccountTransferInfo,
   clearPerformAccountTransferRequestStatus,
-  clearPerformBulkAccountTransferRequestStatus
+  clearPerformBulkAccountTransferRequestStatus,
+  clearPerformBulkAccountEnquiryStatus,
+  clearBulkAccountHolder
 } = bankSlice.actions;
 
 export default bankSlice.reducer;

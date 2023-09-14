@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "../../TabComponentForBulkTransfer/BulkTransactionModal.tsx", "../../TabComponentForBulkTransfer/CustomizedSteppers.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
