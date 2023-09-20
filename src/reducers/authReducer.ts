@@ -239,10 +239,24 @@ export const {
   clearResetPasswordWithToken,
 } = authSlice.actions;
 
+const authTransform = {
+  in: (state: IAuthState, key: string) => {
+    return {
+      accessToken: state.accessToken
+    };
+  },
+  out: (state: IAuthState, key: string) => {
+    return {
+      accessToken: state.accessToken
+    };
+  },
+}; 
+
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["authReducer"], // <-- Corrected property name here
+  // transforms: [authTransform], // Chooses what to persist
 };
 
 const reducers = combineReducers({
@@ -250,6 +264,7 @@ const reducers = combineReducers({
   bankReducer,
 });
 
+//@ts-ignore
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({

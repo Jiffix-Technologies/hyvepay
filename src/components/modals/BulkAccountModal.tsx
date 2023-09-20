@@ -237,6 +237,7 @@ function BulkAccountModal({openBulkModal, setOpenBulkModal}: any) {
                   </div>
                 ))}
                 <IconButton onClick={handleAddTab}
+                  disabled={!inputValues[activeTab].narration}
                   sx={{
                     backgroundColor: '#FAA21B',
                     '&:hover': {color: '#FAA21B'},
