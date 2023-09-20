@@ -88,6 +88,7 @@ const BulkTransferForm = ({
           accountNumber: '',
           amount: '',
           saveAsBeneficiary: false,
+          narration: '',
           nameEnquirySessionId: ''
         },
       }));
@@ -161,7 +162,6 @@ const BulkTransferForm = ({
 
             <Field
               name="narration"
-              required
               id=""
               as="textarea"
               cols={30}

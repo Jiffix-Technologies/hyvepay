@@ -101,6 +101,7 @@ const SavedBulkBeneficiaryTransferForm = ({
           bank: { label: '', value: '' },
           beneficiary: { label: '', value: '' },
           accountNumber: '',
+          narration: '',
           amount: ''
         },
       }));
