@@ -13,6 +13,11 @@ declare module "@app-model" {
     data: T;
     result?: T;
     results?: T[];
+    tokens?: {
+      jwt: string;
+      accessToken: string;
+      refreshToken: string;
+    }
   }
 
   type IThunkAPIStatus = "idle" | "loading" | "completed" | "failed";
@@ -262,7 +267,7 @@ declare module "@app-model" {
     beneficiaryBankCode: string;
     beneficiaryName: string;
     senderName?: string;
-    nameEnquiryId: string;
+    nameEnquirySessionID: string;
     clientFeeCharge?: number;
     saveAsBeneficiary?: boolean;
     bankName?: string;

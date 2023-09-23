@@ -164,7 +164,7 @@ const authSlice = createSlice({
 
     builder.addCase(loginUserAction.fulfilled, (state, action) => {
       state.loginStatus = "completed";
-      state.accessToken = action.payload.result;
+      state.accessToken = action.payload.tokens?.jwt as string;
       console.log(action.payload);
     });
 

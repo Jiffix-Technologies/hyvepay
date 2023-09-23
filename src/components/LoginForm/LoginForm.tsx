@@ -26,8 +26,6 @@ const LoginForm = () => {
     (state: any) => state.authReducer
   ) as IAuthState;
 
-
-
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(clearLoginStatus());

@@ -50,7 +50,7 @@ const ConfirmPaymentModal = ({
         beneficiaryBankCode: state.accountTransferInfo?.bank.value as string,
         beneficiaryName: state.accountHolder?.beneficiaryName as string,
         narration: state.accountTransferInfo?.narration as string,
-        nameEnquiryId: state.accountHolder?.nameEnquiryID as string,
+        nameEnquirySessionID: state.accountHolder?.sessionID as string,
         saveAsBeneficiary: state.accountTransferInfo?.saveAsBeneficiary,
         bankName: state.accountTransferInfo?.bank.label as string,
         pin: values.pin,
