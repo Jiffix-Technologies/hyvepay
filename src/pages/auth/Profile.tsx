@@ -87,7 +87,6 @@ const Profile = () => {
 
     if (phone.startsWith("0")) return phone.replace("0", "234");
 
-    // return phone.replace("0", "");
     return phone;
   };
 
@@ -325,11 +324,12 @@ const Profile = () => {
                         }}
                       />
                     </div>
-                    {/* <div className="mt-5 md:mt-5 w-full">
+                    <div className="mt-5 md:mt-5 w-full">
                       <p className="text[10px] inline-block font-montserrat">
                         District
                       </p>
                       <Select
+                        //@ts-ignore
                         options={districts}
                         onChange={(item: any) =>
                           setFieldValue("district", String(item?.value))
@@ -342,7 +342,7 @@ const Profile = () => {
                           label: values.district,
                         }}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -360,7 +360,10 @@ const Profile = () => {
       </div>
 
       <ChangePasswordModal openModal={openModal} setOpenModal={setOpenModal} />
-      <ChangeEmailModal openChangeEmailModal={openChangeEmailModal} setOpenChangeEmailModal={setOpenChangeEmailModal} />
+      <ChangeEmailModal
+        openChangeEmailModal={openChangeEmailModal}
+        setOpenChangeEmailModal={setOpenChangeEmailModal}
+      />
       <UploadPictureModal
         openProfile={openProfile}
         setOpenProfile={setOpenProfile}

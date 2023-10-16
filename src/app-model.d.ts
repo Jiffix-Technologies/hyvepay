@@ -62,6 +62,7 @@ declare module "@app-model" {
     createdAt: Date;
     updatedAt: Date;
     partner: IPartner;
+    accountType: string;
   }
 
   interface IPartner {
@@ -267,7 +268,7 @@ declare module "@app-model" {
     beneficiaryBankCode: string;
     beneficiaryName: string;
     senderName?: string;
-    NameEnquirySessionID: string;
+    nameEnquirySessionID: string;
     clientFeeCharge?: number;
     saveAsBeneficiary?: boolean;
     bankName?: string;
