@@ -25,6 +25,7 @@ import { useUser } from "../../hooks/useUser";
 import moment from "moment";
 import { showMessage } from "../../helpers/notification";
 import Search from "../../components/FilterSearch/Search";
+import ActivateIndividualAccountModal from "../../components/modals/ActivateIndividualAccountModal";
 
 const Hyvepay = () => {
   const [accountDetails, showAccountDetails] = useState(false);
@@ -39,6 +40,7 @@ const Hyvepay = () => {
   const state = useAppSelector((state) => state.authReducer);
 
   const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showIndividualAccountModal, setShowIndividualAccountModal] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -145,15 +147,12 @@ const Hyvepay = () => {
     document.body.removeChild(element);
   };
 
-
-
   const [query, setQuery] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const [successModal, setSuccessModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  console.log(successModal)
   const closeSuccessModal = () => {
     setSuccessModal(!successModal);
   }
@@ -181,8 +180,6 @@ const Hyvepay = () => {
     });
   };
 
-
-
   return (
     <>
       <div className="mb-20 mt-20 md:mt-32 w-full">
@@ -198,7 +195,10 @@ const Hyvepay = () => {
                 <AppTabBtn
                   title="Activate Account"
                   className="bg-[#FAA21B] text-[#000] "
-                  onClick={() => setShowAccountModal(true)}
+                  onClick={() => { state.userInfo?.accountType === 'individual' 
+                                  ? setShowIndividualAccountModal(true)
+                                  : setShowAccountModal(true)
+                          }}
                 />
               )}
 
@@ -488,6 +488,13 @@ const Hyvepay = () => {
         isVisible={showAccountModal}
         onCancel={() => setShowAccountModal(false)}
         onOk={() => setShowAccountModal(false)}
+      />
+
+      <ActivateIndividualAccountModal
+        isVisible={showIndividualAccountModal}
+        onCancel={() => setShowIndividualAccountModal(false)}
+        onOk={() => setShowIndividualAccountModal(false)}
+        accountName={`${state.userInfo?.firstName} ${state.userInfo?.lastName}` }
       />
 
       <CustomDatePickerModal openDate={openDate} setOpenDate={setOpenDate} />

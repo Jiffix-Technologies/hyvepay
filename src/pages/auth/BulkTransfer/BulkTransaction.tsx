@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import Media from "react-media";
 import { Tabs } from "antd";
-import { useEffect, useMemo, useState } from "react";
-import { clearBulkAccountHolder, clearPerformBulkAccountEnquiryStatus, performBulkNameEnquiryAction, saveAccountTransferInfo, saveBulkAccountTransferInfo } from "../../../reducers/bankReducer";
+import { useEffect, useState } from "react";
+import { performBulkNameEnquiryAction, saveBulkAccountTransferInfo } from "../../../reducers/bankReducer";
 import AppBtn from "../../../components/AppBtn/AppBtn";
 // import ConfirmPaymentModal from "../Dashboard/ConfirmPaymentModal";
 import { Form, Formik, useFormikContext } from "formik";
