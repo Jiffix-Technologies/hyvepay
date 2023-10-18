@@ -193,11 +193,13 @@ declare module "@app-model" {
     name: string;
     email: string;
     phone: string;
-    dialCode: string;
+    dialCode?: string;
     state: string;
     isRegistered?: boolean;
-    address: string;
+    address?: string;
     password: string;
+    district: string;
+    accountType: string;
   }
 
   interface IBank {

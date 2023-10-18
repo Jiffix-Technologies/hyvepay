@@ -106,10 +106,10 @@ const LoginForm = () => {
                   formik={formik}
                   type="password"
                 />
-                <div className="justify-end  flex">
+                <div className="justify-end flex">
                   <p
                     onClick={() => setOpenModal(true)}
-                    className="text-[14px] italic font-montserrat font-extralight relative -mt-5 text-[#A5A5A5] cursor-pointer"
+                    className="text-[14px] italic font-montserrat font-extralight relative text-[#A5A5A5] cursor-pointer"
                   >
                     Forgot Password?
                   </p>
