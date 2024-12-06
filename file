@@ -1,0 +1,4 @@
+for file in **/*.jsx
+do
+  mv "$file" "${file%}.tsx"
+done
